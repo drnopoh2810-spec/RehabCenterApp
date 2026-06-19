@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RehabCenterApp.ViewModels"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        x:Class="RehabCenterApp.Views.LoginWindow"
+        x:DataType="vm:LoginViewModel"
+        Title="تسجيل الدخول - مركز التأهيل"
+        Width="420" Height="520"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Design.DataContext>
+        <vm:LoginViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="*,Auto,*">
+        <Border Grid.Row="1" Classes="Card" Width="380" VerticalAlignment="Center">
+            <StackPanel Spacing="20">
+                <!-- Logo -->
+                <Border Background="{StaticResource PrimaryBrush}" CornerRadius="50" Width="80" Height="80" HorizontalAlignment="Center">
+                    <materialIcons:MaterialIcon Kind="HospitalBuilding" Width="40" Height="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="مركز التأهيل" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource PrimaryBrush}"/>
+                <TextBlock Text="نظام الإدارة المتكامل" FontSize="14" HorizontalAlignment="Center" Classes="Subtitle"/>
+
+                <!-- Error Message -->
+                <Border Background="#fff5f5" BorderBrush="#feb2b2" BorderThickness="1" CornerRadius="6" Padding="12" IsVisible="{Binding HasError}">
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextAlignment="Center"/>
+                </Border>
+
+                <!-- Username -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="اسم المستخدم" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding Username}" Watermark="أدخل اسم المستخدم">
+                        <TextBox.InnerLeftContent>
+                            <materialIcons:MaterialIcon Kind="Account" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+                </StackPanel>
+
+                <!-- Password -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="كلمة المرور" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding Password}" PasswordChar="*" Watermark="أدخل كلمة المرور">
+                        <TextBox.InnerLeftContent>
+                            <materialIcons:MaterialIcon Kind="Lock" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+                </StackPanel>
+
+                <!-- Login Button -->
+                <Button Classes="Accent" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" Height="44">
+                    <TextBlock Text="تسجيل الدخول" FontSize="16" FontWeight="Bold"/>
+                </Button>
+
+                <TextBlock Text="نسيت كلمة المرور؟" HorizontalAlignment="Center" Classes="Subtitle" Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="2" Text="v1.0.0 - RehabCenterApp" HorizontalAlignment="Center" Classes="Subtitle" FontSize="12" Margin="0,16"/>
+    </Grid>
+</Window>

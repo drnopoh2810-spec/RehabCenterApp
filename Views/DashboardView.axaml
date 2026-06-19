@@ -1,0 +1,152 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <Design.DataContext>
+        <vm:DashboardViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto,*" Margin="24">
+            <!-- Header -->
+            <TextBlock Grid.Row="0" Text="لوحة التحكم" Classes="Title" Margin="0,0,0,24"/>
+
+            <!-- Stats Cards -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,24">
+                <Border Classes="Card" Grid.Column="0">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+                            <Border Background="#e6f7ff" CornerRadius="8" Padding="12">
+                                <materialIcons:MaterialIcon Kind="AccountGroup" Width="28" Height="28" Foreground="#1e3a5f"/>
+                            </Border>
+                            <TextBlock Text="المستفيدين" Classes="Subtitle" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding BeneficiariesCount}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+
+                <Border Classes="Card" Grid.Column="1">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+                            <Border Background="#e6fffa" CornerRadius="8" Padding="12">
+                                <materialIcons:MaterialIcon Kind="CalendarCheck" Width="28" Height="28" Foreground="#48bb78"/>
+                            </Border>
+                            <TextBlock Text="جلسات اليوم" Classes="Subtitle" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding TodaySessionsCount}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+
+                <Border Classes="Card" Grid.Column="2">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+                            <Border Background="#fffaf0" CornerRadius="8" Padding="12">
+                                <materialIcons:MaterialIcon Kind="CashMultiple" Width="28" Height="28" Foreground="#ed8936"/>
+                            </Border>
+                            <TextBlock Text="إيرادات الشهر" Classes="Subtitle" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding MonthRevenue, StringFormat='{}{0:C}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource WarningBrush}" Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+
+                <Border Classes="Card" Grid.Column="3">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+                            <Border Background="#fff5f5" CornerRadius="8" Padding="12">
+                                <materialIcons:MaterialIcon Kind="TrendingDown" Width="28" Height="28" Foreground="#e53e3e"/>
+                            </Border>
+                            <TextBlock Text="مصروفات الشهر" Classes="Subtitle" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding MonthExpenses, StringFormat='{}{0:C}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource ErrorBrush}" Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Charts and Lists -->
+            <Grid Grid.Row="2" ColumnDefinitions="2*,1*">
+                <!-- Charts Area -->
+                <StackPanel Grid.Column="0" Spacing="16">
+                    <Border Classes="Card">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0" Text="الإيرادات vs المصروفات" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <lvc:CartesianChart Grid.Row="1" 
+                                                Series="{Binding RevenueExpensesSeries}"
+                                                XAxes="{Binding XAxes}"
+                                                Height="250"/>
+                        </Grid>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,*">
+                        <Border Classes="Card" Grid.Column="0">
+                            <Grid RowDefinitions="Auto,*">
+                                <TextBlock Grid.Row="0" Text="المستفيدين شهرياً" FontWeight="Bold" Margin="0,0,0,12"/>
+                                <lvc:CartesianChart Grid.Row="1" 
+                                                    Series="{Binding MonthlyBeneficiariesSeries}"
+                                                    XAxes="{Binding XAxes}"
+                                                    Height="200"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Classes="Card" Grid.Column="1">
+                            <Grid RowDefinitions="Auto,*">
+                                <TextBlock Grid.Row="0" Text="توزيع الإعاقات" FontWeight="Bold" Margin="0,0,0,12"/>
+                                <lvc:PieChart Grid.Row="1" 
+                                              Series="{Binding DisabilityDistributionSeries}"
+                                              Height="200"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Side Panel -->
+                <StackPanel Grid.Column="1" Spacing="16">
+                    <Border Classes="Card">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0" Text="تذكيرات قادمة" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <ListBox Grid.Row="1" ItemsSource="{Binding UpcomingReminders}" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*" Margin="4">
+                                            <Border Grid.Column="0" Background="#edf2f7" CornerRadius="4" Padding="8" Margin="0,0,8,0">
+                                                <materialIcons:MaterialIcon Kind="Bell" Width="16" Foreground="{StaticResource PrimaryBrush}"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding DateTime, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Classes="Subtitle" FontSize="12"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="Card">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0" Text="جلسات اليوم" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <ListBox Grid.Row="1" ItemsSource="{Binding TodaySessions}" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*" Margin="4">
+                                            <Border Grid.Column="0" Background="#e6fffa" CornerRadius="4" Padding="8" Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding Time, StringFormat='{}{0:hh\:mm}'}" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding Beneficiary.Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding SessionType}" Classes="Subtitle" FontSize="12"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.DocumentArchiveView"
+             x:DataType="vm:DocumentArchiveViewModel">
+    <Grid RowDefinitions="Auto,*">
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                <TextBox Grid.Column="0" Text="{Binding SearchQuery}" Watermark="Search documents..." Margin="0,0,16,0">
+                    <TextBox.InnerLeftContent>
+                        <materialIcons:MaterialIcon Kind="Magnify" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </TextBox.InnerLeftContent>
+                </TextBox>
+                <ComboBox Grid.Column="1" SelectedItem="{Binding FilterCategory}" Margin="0,0,8,0" Width="120">
+                    <ComboBoxItem>All</ComboBoxItem>
+                    <ComboBoxItem>Medical</ComboBoxItem>
+                    <ComboBoxItem>Legal</ComboBoxItem>
+                    <ComboBoxItem>Financial</ComboBoxItem>
+                    <ComboBoxItem>Educational</ComboBoxItem>
+                </ComboBox>
+                <Button Grid.Column="2" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
+                        <TextBlock Text="Add Document"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding OcrCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Ocr" Width="18"/>
+                        <TextBlock Text="OCR"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="4" Classes="Danger" Command="{Binding DeleteCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Delete" Width="18"/>
+                        <TextBlock Text="Delete"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
+            <DataGrid ItemsSource="{Binding Documents}" SelectedItem="{Binding SelectedDocument}" IsReadOnly="True" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="120"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding DocumentType}" Width="100"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding DocumentDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="Confidentiality" Binding="{Binding Confidentiality}" Width="120"/>
+                    <DataGridTextColumn Header="Indexed" Binding="{Binding IsIndexed}" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

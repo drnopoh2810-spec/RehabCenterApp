@@ -1,0 +1,29 @@
+# Build outputs
+bin/
+obj/
+publish/
+Publish/
+
+# IDE
+.vs/
+*.user
+*.suo
+
+# NuGet
+*.nupkg
+packages/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database
+data.db
+*.db-shm
+*.db-wal
+
+# Backup
+Backups/

@@ -1,0 +1,145 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.SessionsView"
+             x:DataType="vm:SessionsViewModel">
+
+    <Design.DataContext>
+        <vm:SessionsViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Toolbar -->
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto">
+                <DatePicker Grid.Column="0" 
+                            SelectedDate="{Binding SelectedDate}"
+                            Margin="0,0,16,0"/>
+
+                <TextBlock Grid.Column="1" Text="" />
+
+                <Button Grid.Column="2" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
+                        <TextBlock Text="موعد جديد"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding MarkPresentCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Check" Width="18"/>
+                        <TextBlock Text="حضور"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="4" Classes="Danger" Command="{Binding MarkAbsentCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                        <TextBlock Text="غياب"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="5" Classes="Primary" Command="{Binding MarkCancelledCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Cancel" Width="18"/>
+                        <TextBlock Text="إلغاء"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Sessions List -->
+        <Border Classes="Card" Grid.Row="1" Margin="16">
+            <DataGrid ItemsSource="{Binding Sessions}"
+                      SelectedItem="{Binding SelectedSession}"
+                      IsReadOnly="True"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="الوقت" Binding="{Binding Time, StringFormat='{}{0:hh\:mm}'}" Width="80" />
+                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Beneficiary.Name}" Width="*" />
+                    <DataGridTextColumn Header="نوع الجلسة" Binding="{Binding SessionType}" Width="150" />
+                    <DataGridTextColumn Header="المعالج" Binding="{Binding Therapist.Name}" Width="150" />
+                    <DataGridTextColumn Header="المدة" Binding="{Binding Duration}" Width="80" />
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100" />
+                    <DataGridTextColumn Header="ملاحظات" Binding="{Binding Notes}" Width="200" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Add Session Modal -->
+        <Border Grid.Row="0" Grid.RowSpan="2" 
+                Background="#80000000"
+                IsVisible="{Binding IsFormOpen}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border Classes="Card" 
+                    Width="500" 
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Row="0" Text="إضافة موعد جديد" Classes="Title" Margin="0,0,0,16"/>
+
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="المستفيد *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0" 
+                                  ItemsSource="{Binding Beneficiaries}"
+                                  SelectedItem="{Binding SelectedBeneficiary}"
+                                  Margin="0,0,8,12">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="المعالج *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" 
+                                  ItemsSource="{Binding Therapists}"
+                                  SelectedItem="{Binding SelectedTherapist}"
+                                  Margin="0,0,0,12">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="نوع الجلسة *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="3" Grid.Column="0" Text="{Binding SessionType}" Margin="0,0,8,12">
+                            <ComboBoxItem>علاج طبيعي</ComboBoxItem>
+                            <ComboBoxItem>علاج وظيفي</ComboBoxItem>
+                            <ComboBoxItem>علاج نطق</ComboBoxItem>
+                            <ComboBoxItem>علاج نفسي</ComboBoxItem>
+                            <ComboBoxItem>تربية خاصة</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="الوقت" Margin="0,0,0,4"/>
+                        <TimePicker Grid.Row="3" Grid.Column="1" SelectedTime="{Binding SessionTime}" Margin="0,0,0,12"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="المدة (دقيقة)" Margin="0,0,0,4"/>
+                        <NumericUpDown Grid.Row="5" Grid.Column="0" Value="{Binding Duration}" Minimum="15" Maximum="180" Margin="0,0,8,12"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="ملاحظات" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Notes}" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    </Grid>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

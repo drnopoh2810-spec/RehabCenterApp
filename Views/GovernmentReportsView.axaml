@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.GovernmentReportsView"
+             x:DataType="vm:GovernmentReportsViewModel">
+    <Grid RowDefinitions="Auto,*">
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="*,*,*,*,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Report Type" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Grid.Column="1" SelectedItem="{Binding ReportType}" Margin="0,0,8,0">
+                    <ComboBoxItem>Monthly</ComboBoxItem>
+                    <ComboBoxItem>Quarterly</ComboBoxItem>
+                    <ComboBoxItem>Annual</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Grid.Column="2" Text="Authority" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Grid.Column="3" SelectedItem="{Binding Authority}" Margin="0,0,16,0">
+                    <ComboBoxItem>Ministry</ComboBoxItem>
+                    <ComboBoxItem>Insurance</ComboBoxItem>
+                    <ComboBoxItem>Municipality</ComboBoxItem>
+                </ComboBox>
+                <Button Grid.Column="4" Classes="Accent" Command="{Binding GenerateCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="FileDocumentPlus" Width="18"/>
+                        <TextBlock Text="Generate"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="5" Classes="Primary" Command="{Binding ExportCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="FileExport" Width="18"/>
+                        <TextBlock Text="Export PDF"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="6" Classes="Primary" Command="{Binding SubmitCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Send" Width="18"/>
+                        <TextBlock Text="Submit"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
+            <DataGrid ItemsSource="{Binding Reports}" IsReadOnly="True" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Report Type" Binding="{Binding ReportType}" Width="120"/>
+                    <DataGridTextColumn Header="Authority" Binding="{Binding Authority}" Width="150"/>
+                    <DataGridTextColumn Header="Period Start" Binding="{Binding PeriodStart, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="Period End" Binding="{Binding PeriodEnd, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="Submission Date" Binding="{Binding SubmissionDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

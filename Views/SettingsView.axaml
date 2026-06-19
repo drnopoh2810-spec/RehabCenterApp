@@ -1,0 +1,137 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <Design.DataContext>
+        <vm:SettingsViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="16">
+            <TextBlock Text="الإعدادات" Classes="Title" Margin="0,0,0,16"/>
+
+            <!-- Center Info -->
+            <Border Classes="Card">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Grid.Row="0" Text="بيانات المركز" FontWeight="Bold" FontSize="16" Margin="0,0,0,16"/>
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="اسم المركز" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CenterName}" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="العنوان" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CenterAddress}" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="الجوال" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding CenterPhone}" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="البريد الإلكتروني" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CenterEmail}" Margin="0,0,0,12"/>
+                        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Classes="Accent" Command="{Binding SaveCenterInfoCommand}" HorizontalAlignment="Left" Width="150">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Users -->
+            <Border Classes="Card">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Row="0" Text="المستخدمين والصلاحيات" FontWeight="Bold" FontSize="16" Margin="0,0,0,16"/>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" IsReadOnly="True" AutoGenerateColumns="False" Margin="0,0,0,12">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="*"/>
+                            <DataGridTextColumn Header="الدور" Binding="{Binding Role}" Width="150"/>
+                            <DataGridTextColumn Header="الحالة" Binding="{Binding IsActive}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="2" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*,Auto">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="اسم المستخدم" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding NewUsername}" Margin="0,0,8,0"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="كلمة المرور" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewPassword}" PasswordChar="*" Margin="0,0,8,0"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="الدور" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="2" SelectedItem="{Binding NewRole}" Margin="0,0,8,0">
+                            <ComboBoxItem>Admin</ComboBoxItem>
+                            <ComboBoxItem>Receptionist</ComboBoxItem>
+                            <ComboBoxItem>Therapist</ComboBoxItem>
+                            <ComboBoxItem>Accountant</ComboBoxItem>
+                        </ComboBox>
+                        <Button Grid.Row="1" Grid.Column="3" Classes="Accent" Command="{Binding AddUserCommand}" VerticalAlignment="Bottom">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
+                                <TextBlock Text="إضافة"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Categories -->
+            <Border Classes="Card">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Text="التصنيفات المخصصة" FontWeight="Bold" FontSize="16" Margin="0,0,0,16"/>
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*" Margin="0,0,0,12">
+                        <StackPanel Grid.Column="0" Spacing="8" Margin="0,0,8,0">
+                            <TextBlock Text="أنواع الإعاقة" FontWeight="SemiBold"/>
+                            <ListBox ItemsSource="{Binding DisabilityTypes}" BorderThickness="0" Height="120">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate><TextBlock Text="{Binding .}"/></DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox Text="{Binding NewDisabilityType}" Watermark="جديد..." Width="120"/>
+                                <Button Classes="Primary" Command="{Binding AddDisabilityTypeCommand}" Padding="8,4">
+                                    <materialIcons:MaterialIcon Kind="Plus" Width="16"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="8" Margin="0,0,8,0">
+                            <TextBlock Text="أنواع الجلسات" FontWeight="SemiBold"/>
+                            <ListBox ItemsSource="{Binding SessionTypes}" BorderThickness="0" Height="120">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate><TextBlock Text="{Binding .}"/></DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox Text="{Binding NewSessionType}" Watermark="جديد..." Width="120"/>
+                                <Button Classes="Primary" Command="{Binding AddSessionTypeCommand}" Padding="8,4">
+                                    <materialIcons:MaterialIcon Kind="Plus" Width="16"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Spacing="8">
+                            <TextBlock Text="تصنيفات المصروفات" FontWeight="SemiBold"/>
+                            <ListBox ItemsSource="{Binding ExpenseCategories}" BorderThickness="0" Height="120">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate><TextBlock Text="{Binding .}"/></DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox Text="{Binding NewExpenseCategory}" Watermark="جديد..." Width="120"/>
+                                <Button Classes="Primary" Command="{Binding AddExpenseCategoryCommand}" Padding="8,4">
+                                    <materialIcons:MaterialIcon Kind="Plus" Width="16"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Backup -->
+            <Border Classes="Card">
+                <Grid RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0" Text="النسخ الاحتياطي" FontWeight="Bold" FontSize="16" Margin="0,0,0,16"/>
+                    <Button Grid.Row="1" Classes="Primary" Command="{Binding BackupCommand}" Width="220">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="BackupRestore" Width="18"/>
+                            <TextBlock Text="إنشاء نسخة احتياطية"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

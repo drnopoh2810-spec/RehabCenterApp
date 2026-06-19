@@ -1,0 +1,112 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.AssessmentsView"
+             x:DataType="vm:AssessmentsViewModel">
+    <Grid RowDefinitions="Auto,*">
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Standardized Assessments" Classes="Title" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
+                        <TextBlock Text="New Assessment"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="2" Classes="Primary" Command="{Binding ViewProgressCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="ChartLine" Width="18"/>
+                        <TextBlock Text="Track Progress"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding ExportCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="FileExport" Width="18"/>
+                        <TextBlock Text="Export"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" ColumnDefinitions="2*,1*" Margin="16">
+            <Border Classes="Card" Grid.Column="0" Padding="0">
+                <DataGrid ItemsSource="{Binding Assessments}" SelectedItem="{Binding SelectedAssessment}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Beneficiary" Binding="{Binding Beneficiary.Name}" Width="*"/>
+                        <DataGridTextColumn Header="Assessment" Binding="{Binding AssessmentName}" Width="150"/>
+                        <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="120"/>
+                        <DataGridTextColumn Header="Score" Binding="{Binding StandardScore}" Width="80"/>
+                        <DataGridTextColumn Header="Severity" Binding="{Binding SeverityLevel}" Width="100"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding AssessmentDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            <StackPanel Grid.Column="1" Spacing="16">
+                <Border Classes="Card">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Grid.Row="0" Text="Progress Chart" FontWeight="Bold" Margin="0,0,0,12"/>
+                        <lvc:CartesianChart Grid.Row="1" Series="{Binding ProgressSeries}" XAxes="{Binding XAxes}" Height="200"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Row="0" Text="New Assessment" Classes="Title" Margin="0,0,0,16"/>
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Beneficiary *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding SelectedBeneficiary}" Margin="0,0,8,12">
+                            <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Assessment *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding AssessmentName}" Margin="0,0,0,12">
+                            <ComboBoxItem>GARS-2</ComboBoxItem>
+                            <ComboBoxItem>WISC-V</ComboBoxItem>
+                            <ComboBoxItem>GMFM</ComboBoxItem>
+                            <ComboBoxItem>PEP-3</ComboBoxItem>
+                            <ComboBoxItem>ABAS-3</ComboBoxItem>
+                            <ComboBoxItem>Other</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Category" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="3" Grid.Column="0" SelectedItem="{Binding Category}" Margin="0,0,8,12">
+                            <ComboBoxItem>Cognitive</ComboBoxItem>
+                            <ComboBoxItem>Motor</ComboBoxItem>
+                            <ComboBoxItem>Behavioral</ComboBoxItem>
+                            <ComboBoxItem>Speech</ComboBoxItem>
+                            <ComboBoxItem>Sensory</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Raw Score" Margin="0,0,0,4"/>
+                        <NumericUpDown Grid.Row="3" Grid.Column="1" Value="{Binding RawScore}" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Standard Score" Margin="0,0,0,4"/>
+                        <NumericUpDown Grid.Row="5" Grid.Column="0" Value="{Binding StandardScore}" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="Severity Level" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" SelectedItem="{Binding SeverityLevel}" Margin="0,0,0,12">
+                            <ComboBoxItem>Mild</ComboBoxItem>
+                            <ComboBoxItem>Moderate</ComboBoxItem>
+                            <ComboBoxItem>Severe</ComboBoxItem>
+                            <ComboBoxItem>Profound</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="Recommendations" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Recommendations}" Height="60" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="Notes" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Notes}" Height="60" TextWrapping="Wrap"/>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

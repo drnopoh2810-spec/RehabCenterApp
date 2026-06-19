@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.ClinicalReportsView"
+             x:DataType="vm:ClinicalReportsViewModel">
+    <Grid RowDefinitions="Auto,*">
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="Clinical Reports" Classes="Title" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
+                        <TextBlock Text="New Report"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="2" Classes="Primary" Command="{Binding ApproveCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Check" Width="18"/>
+                        <TextBlock Text="Approve"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding PrintCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
+                        <TextBlock Text="Print"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="4" Classes="Accent" Command="{Binding SignDigitallyCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="Signature" Width="18"/>
+                        <TextBlock Text="Sign"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
+            <DataGrid ItemsSource="{Binding Reports}" SelectedItem="{Binding SelectedReport}" IsReadOnly="True" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Beneficiary" Binding="{Binding Beneficiary.Name}" Width="*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding ReportType}" Width="120"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding ReportDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="Prepared By" Binding="{Binding PreparedBy.Name}" Width="150"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="600" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Row="0" Text="New Clinical Report" Classes="Title" Margin="0,0,0,16"/>
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Text="Beneficiary *" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding SelectedBeneficiary}" Margin="0,0,0,12">
+                            <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Grid.Row="2" Text="Report Type" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="3" SelectedItem="{Binding ReportType}" Margin="0,0,0,12">
+                            <ComboBoxItem>Initial</ComboBoxItem>
+                            <ComboBoxItem>Progress</ComboBoxItem>
+                            <ComboBoxItem>Discharge</ComboBoxItem>
+                            <ComboBoxItem>Referral</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Grid.Row="4" Text="Content *" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="5" Text="{Binding Content}" Height="150" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

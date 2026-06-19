@@ -1,0 +1,266 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RehabCenterApp.ViewModels"
+        xmlns:views="using:RehabCenterApp.Views"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        x:Class="RehabCenterApp.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="مركز التأهيل المتكامل - نظام الإدارة المتقدم" 
+        Width="1600" Height="1000"
+        MinWidth="1200" MinHeight="800"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <SplitView IsPaneOpen="{Binding IsPaneOpen}" 
+               DisplayMode="CompactInline"
+               OpenPaneLength="300"
+               CompactPaneLength="56">
+        <SplitView.Pane>
+            <Border Background="{StaticResource PrimaryBrush}">
+                <Grid RowDefinitions="Auto,*">
+                    <Button Grid.Row="0" 
+                            Command="{Binding TogglePaneCommand}" 
+                            Background="Transparent" 
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Padding="16">
+                        <materialIcons:MaterialIcon Kind="Menu" Width="24" Height="24" Foreground="White"/>
+                    </Button>
+
+                    <ScrollViewer Grid.Row="1">
+                        <StackPanel Spacing="1" Margin="0,4">
+
+                            <!-- Core Operations -->
+                            <TextBlock Text="العمليات الأساسية" Foreground="#ffffff80" FontSize="10" Margin="16,8,0,4" IsVisible="{Binding IsPaneOpen}"/>
+
+                            <Button Command="{Binding NavigateToDashboardCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="ViewDashboard" Width="22" Foreground="White"/>
+                                    <TextBlock Text="لوحة التحكم" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToBeneficiariesCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="AccountGroup" Width="22" Foreground="White"/>
+                                    <TextBlock Text="المستفيدين" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToWaitingListCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="ClipboardList" Width="22" Foreground="White"/>
+                                    <TextBlock Text="قائمة الانتظار" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToSessionsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="CalendarCheck" Width="22" Foreground="White"/>
+                                    <TextBlock Text="الجلسات" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToTelehealthCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Video" Width="22" Foreground="#48bb78"/>
+                                    <TextBlock Text="جلسات عن بعد" Foreground="#48bb78" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Clinical -->
+                            <TextBlock Text="السريري والعلاجي" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+
+                            <Button Command="{Binding NavigateToAssessmentsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="ChartBar" Width="22" Foreground="White"/>
+                                    <TextBlock Text="التقييمات المعيارية" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToInterventionPlansCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="ClipboardText" Width="22" Foreground="White"/>
+                                    <TextBlock Text="خطط التدخل (IEP)" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToClinicalReportsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="FileCertificate" Width="22" Foreground="White"/>
+                                    <TextBlock Text="التقارير السريرية" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToMDTMeetingsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="AccountMultiple" Width="22" Foreground="White"/>
+                                    <TextBlock Text="اجتماعات الفريق" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToGamificationCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Trophy" Width="22" Foreground="#ed8936"/>
+                                    <TextBlock Text="نظام التحفيز" Foreground="#ed8936" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Financial -->
+                            <TextBlock Text="المالية والإدارية" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+
+                            <Button Command="{Binding NavigateToAccountingCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="CashRegister" Width="22" Foreground="White"/>
+                                    <TextBlock Text="المحاسبة" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToInventoryCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="PackageVariant" Width="22" Foreground="White"/>
+                                    <TextBlock Text="المخزون" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToHRManagementCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="AccountTie" Width="22" Foreground="White"/>
+                                    <TextBlock Text="الموارد البشرية" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Communication -->
+                            <TextBlock Text="التواصل والمستندات" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+
+                            <Button Command="{Binding NavigateToCorrespondenceCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Email" Width="22" Foreground="White"/>
+                                    <TextBlock Text="الصادر والوارد" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToParentPortalCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="MessageText" Width="22" Foreground="White"/>
+                                    <TextBlock Text="تواصل أولياء الأمور" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToRemindersCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="BellRing" Width="22" Foreground="White"/>
+                                    <TextBlock Text="التذكيرات" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToDocumentArchiveCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Archive" Width="22" Foreground="White"/>
+                                    <TextBlock Text="أرشفة المستندات" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Reports & Analytics -->
+                            <TextBlock Text="التقارير والتحليلات" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+
+                            <Button Command="{Binding NavigateToAnalyticsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="ChartAreaspline" Width="22" Foreground="#48bb78"/>
+                                    <TextBlock Text="التحليلات المتقدمة" Foreground="#48bb78" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToGovernmentReportsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="FileDocumentCheck" Width="22" Foreground="White"/>
+                                    <TextBlock Text="التقارير الحكومية" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding NavigateToFormsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="FileDocument" Width="22" Foreground="White"/>
+                                    <TextBlock Text="الاستمارات" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Settings -->
+                            <Separator Margin="8,8" Background="#ffffff30"/>
+
+                            <Button Command="{Binding NavigateToSettingsCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Cog" Width="22" Foreground="White"/>
+                                    <TextBlock Text="الإعدادات" Foreground="White" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding LogoutCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Logout" Width="22" Foreground="#feb2b2"/>
+                                    <TextBlock Text="تسجيل الخروج" Foreground="#feb2b2" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </SplitView.Pane>
+
+        <SplitView.Content>
+            <Border Background="{StaticResource BackgroundBrush}">
+                <TransitioningContentControl Content="{Binding CurrentViewModel}">
+                    <TransitioningContentControl.DataTemplates>
+                        <DataTemplate DataType="vm:DashboardViewModel"><views:DashboardView/></DataTemplate>
+                        <DataTemplate DataType="vm:BeneficiariesViewModel"><views:BeneficiariesView/></DataTemplate>
+                        <DataTemplate DataType="vm:SessionsViewModel"><views:SessionsView/></DataTemplate>
+                        <DataTemplate DataType="vm:AccountingViewModel"><views:AccountingView/></DataTemplate>
+                        <DataTemplate DataType="vm:RemindersViewModel"><views:RemindersView/></DataTemplate>
+                        <DataTemplate DataType="vm:FormsViewModel"><views:FormsView/></DataTemplate>
+                        <DataTemplate DataType="vm:CorrespondenceViewModel"><views:CorrespondenceView/></DataTemplate>
+                        <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView/></DataTemplate>
+                        <DataTemplate DataType="vm:AssessmentsViewModel"><views:AssessmentsView/></DataTemplate>
+                        <DataTemplate DataType="vm:InterventionPlansViewModel"><views:InterventionPlansView/></DataTemplate>
+                        <DataTemplate DataType="vm:WaitingListViewModel"><views:WaitingListView/></DataTemplate>
+                        <DataTemplate DataType="vm:InventoryViewModel"><views:InventoryView/></DataTemplate>
+                        <DataTemplate DataType="vm:ParentPortalViewModel"><views:ParentPortalView/></DataTemplate>
+                        <DataTemplate DataType="vm:MDTMeetingsViewModel"><views:MDTMeetingsView/></DataTemplate>
+                        <DataTemplate DataType="vm:AnalyticsViewModel"><views:AnalyticsView/></DataTemplate>
+                        <DataTemplate DataType="vm:TelehealthViewModel"><views:TelehealthView/></DataTemplate>
+                        <DataTemplate DataType="vm:ClinicalReportsViewModel"><views:ClinicalReportsView/></DataTemplate>
+                        <DataTemplate DataType="vm:GamificationViewModel"><views:GamificationView/></DataTemplate>
+                        <DataTemplate DataType="vm:GovernmentReportsViewModel"><views:GovernmentReportsView/></DataTemplate>
+                        <DataTemplate DataType="vm:DocumentArchiveViewModel"><views:DocumentArchiveView/></DataTemplate>
+                        <DataTemplate DataType="vm:HRManagementViewModel"><views:HRManagementView/></DataTemplate>
+                    </TransitioningContentControl.DataTemplates>
+                </TransitioningContentControl>
+            </Border>
+        </SplitView.Content>
+    </SplitView>
+</Window>

@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.FormsView"
+             x:DataType="vm:FormsViewModel">
+
+    <Design.DataContext>
+        <vm:FormsViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+        <TextBlock Grid.Row="0" Text="الاستمارات والطباعة" Classes="Title" Margin="24,24,24,0"/>
+        <Grid Grid.Row="1" ColumnDefinitions="250,*" Margin="24">
+            <Border Classes="Card" Grid.Column="0">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="قوالب الاستمارات" FontWeight="Bold" Margin="0,0,0,12"/>
+                    <ListBox SelectedIndex="{Binding SelectedFormIndex}">
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
+                                <TextBlock Text="استمارة تسجيل مستفيد"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
+                                <TextBlock Text="استمارة تقييم أولي"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
+                                <TextBlock Text="خطة علاجية (IEP)"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
+                                <TextBlock Text="تقرير متابعة"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
+                                <TextBlock Text="موافقة ولي الأمر"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+            <Border Classes="Card" Grid.Column="1">
+                <Grid RowDefinitions="*,Auto">
+                    <Border Grid.Row="0" Background="#f7fafc" BorderBrush="#e2e8f0" BorderThickness="1" CornerRadius="8" Margin="0,0,0,16">
+                        <TextBlock Text="معاينة الطباعة" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="Subtitle"/>
+                    </Border>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
+                        <Button Classes="Primary" Command="{Binding PrintCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
+                                <TextBlock Text="طباعة"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Accent" Command="{Binding ExportPdfCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
+                                <TextBlock Text="تصدير PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
