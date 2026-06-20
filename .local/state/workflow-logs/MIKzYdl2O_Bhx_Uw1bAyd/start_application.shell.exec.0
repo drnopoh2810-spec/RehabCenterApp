@@ -1,0 +1,36 @@
+[?1h=[39;49m[93m/home/runner/workspace/ViewModels/TelehealthViewModel.cs(83,71): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/PrintService.cs(19,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/SettingsViewModel.cs(173,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/SettingsViewModel.cs(183,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/PrintService.cs(61,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/MainWindowViewModel.cs(124,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/DatabaseService.cs(710,69): warning CS8602: Dereference of a possibly null reference. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/DatabaseService.cs(710,98): warning CS8602: Dereference of a possibly null reference. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/CorrespondenceViewModel.cs(60,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49mUnhandled exception. System.TypeInitializationException: The type initializer for 'SkiaSharp.SKImageInfo' threw an exception.
+ ---> System.DllNotFoundException: Unable to load shared library 'libSkiaSharp' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+libfontconfig.so.1: cannot open shared object file: No such file or directory
+/nix/store/1blv644vinali34masnw6g5fjjjaa4y6-dotnet-sdk-8.0.416/share/dotnet/shared/Microsoft.NETCore.App/8.0.22/libSkiaSharp.so: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/libSkiaSharp.so: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/runtimes/linux-x64/native/liblibSkiaSharp.so: cannot open shared object file: No such file or directory
+/nix/store/1blv644vinali34masnw6g5fjjjaa4y6-dotnet-sdk-8.0.416/share/dotnet/shared/Microsoft.NETCore.App/8.0.22/liblibSkiaSharp.so: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/liblibSkiaSharp.so: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp: cannot open shared object file: No such file or directory
+/nix/store/1blv644vinali34masnw6g5fjjjaa4y6-dotnet-sdk-8.0.416/share/dotnet/shared/Microsoft.NETCore.App/8.0.22/libSkiaSharp: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/libSkiaSharp: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/runtimes/linux-x64/native/liblibSkiaSharp: cannot open shared object file: No such file or directory
+/nix/store/1blv644vinali34masnw6g5fjjjaa4y6-dotnet-sdk-8.0.416/share/dotnet/shared/Microsoft.NETCore.App/8.0.22/liblibSkiaSharp: cannot open shared object file: No such file or directory
+/home/runner/workspace/bin/Debug/net8.0/liblibSkiaSharp: cannot open shared object file: No such file or directory
+
+   at SkiaSharp.SkiaApi.sk_colortype_get_default_8888()
+   at SkiaSharp.SKImageInfo..cctor()
+   --- End of inner exception stack trace ---
+   at Avalonia.Skia.PlatformRenderInterface..ctor(Nullable`1 maxResourceBytes)
+   at Avalonia.Skia.SkiaPlatform.Initialize(SkiaOptions options)
+   at Avalonia.SkiaApplicationExtensions.<>c.<UseSkia>b__0_0()
+   at Avalonia.AppBuilder.SetupUnsafe()
+   at Avalonia.AppBuilder.Setup()
+   at Avalonia.AppBuilder.SetupWithLifetime(IApplicationLifetime lifetime)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, Action`1 lifetimeBuilder)
+   at RehabCenterApp.Program.Main(String[] args) in /home/runner/workspace/Program.cs:line 11
+[?1h=

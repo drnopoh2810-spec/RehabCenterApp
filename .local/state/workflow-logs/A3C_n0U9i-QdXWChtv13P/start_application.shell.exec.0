@@ -1,0 +1,4 @@
+[?1h=[39;49m[91m/home/runner/workspace/Views/SessionsView.axaml(52,53,52,53): Avalonia error AVLN2000: Unable to resolve "MaterialIconKind.FilePdf" as static field, property, constant or enum value Line 52, position 53. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[91m/home/runner/workspace/Views/TherapistDashboardView.axaml(259,65,259,65): Avalonia error AVLN2000: Unable to resolve "MaterialIconKind.FilePdf" as static field, property, constant or enum value Line 259, position 65. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m
+[39;49m[91mThe build failed. Fix the build errors and run again.[39;49m
