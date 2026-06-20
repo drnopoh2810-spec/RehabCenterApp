@@ -1,0 +1,4 @@
+[?1h=[39;49m[91m/home/runner/workspace/App.axaml(9,23,9,23): Avalonia error AVLN2000: Unable to resolve XAML resource "avares://Material.Icons.Avalonia/App.axaml" in the "Material.Icons.Avalonia" assembly. Make sure this file exists and is public. Line 9, position 23. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[91m/home/runner/workspace/App.axaml(9,23,9,23): Avalonia error AVLN2000: Unable to resolve XAML resource "avares://Material.Icons.Avalonia/App.axaml" in the "Material.Icons.Avalonia" assembly. Make sure this file exists and is public. Line 9, position 23. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m
+[39;49m[91mThe build failed. Fix the build errors and run again.[39;49m

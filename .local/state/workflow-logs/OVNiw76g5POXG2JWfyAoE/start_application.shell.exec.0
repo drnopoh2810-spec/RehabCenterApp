@@ -1,0 +1,23 @@
+[?1h=[39;49m[93m/home/runner/workspace/ViewModels/TelehealthViewModel.cs(83,71): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/SettingsViewModel.cs(173,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/SettingsViewModel.cs(183,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/PrintService.cs(19,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/PrintService.cs(61,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/MainWindowViewModel.cs(124,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/DatabaseService.cs(710,69): warning CS8602: Dereference of a possibly null reference. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/Services/DatabaseService.cs(710,98): warning CS8602: Dereference of a possibly null reference. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49m[39;49m[93m/home/runner/workspace/ViewModels/CorrespondenceViewModel.cs(60,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/workspace/RehabCenterApp.csproj]
+[39;49mUnhandled exception. System.Collections.Generic.KeyNotFoundException: Static resource 'PrimaryBrush' not found.
+   at Avalonia.Markup.Xaml.MarkupExtensions.StaticResourceExtension.ProvideValue(IServiceProvider serviceProvider, Object resourceKey)
+   at Avalonia.Markup.Xaml.MarkupExtensions.StaticResourceExtension.ProvideValue(IServiceProvider serviceProvider)
+   at CompiledAvaloniaXaml.!AvaloniaResources.Populate:/Styles/CustomStyles.axaml(IServiceProvider, Styles) in /home/runner/workspace/Styles/CustomStyles.axaml:line 5
+   at CompiledAvaloniaXaml.!AvaloniaResources.Build:/Styles/CustomStyles.axaml(IServiceProvider) in /home/runner/workspace/Styles/CustomStyles.axaml:line 1
+   at RehabCenterApp.App.!XamlIlPopulate(IServiceProvider, App) in /home/runner/workspace/App.axaml:line 10
+   at RehabCenterApp.App.!XamlIlPopulateTrampoline(App)
+   at RehabCenterApp.App.Initialize() in /home/runner/workspace/App.axaml.cs:line 18
+   at Avalonia.AppBuilder.SetupUnsafe()
+   at Avalonia.AppBuilder.Setup()
+   at Avalonia.AppBuilder.SetupWithLifetime(IApplicationLifetime lifetime)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, Action`1 lifetimeBuilder)
+   at RehabCenterApp.Program.Main(String[] args) in /home/runner/workspace/Program.cs:line 11
+[?1h=
