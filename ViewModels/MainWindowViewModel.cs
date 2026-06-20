@@ -61,6 +61,7 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> NavigateToDocumentArchiveCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToHRManagementCommand { get; }
     public ReactiveCommand<Unit, Unit> TogglePaneCommand { get; }
+    public ReactiveCommand<Unit, Unit> ToggleLanguageCommand { get; }
     public ReactiveCommand<Unit, Unit> LogoutCommand { get; }
 
     public MainWindowViewModel(
@@ -102,6 +103,7 @@ public class MainWindowViewModel : ViewModelBase
         NavigateToDocumentArchiveCommand = ReactiveCommand.Create(() => _navigationService.NavigateToDocumentArchive());
         NavigateToHRManagementCommand = ReactiveCommand.Create(() => _navigationService.NavigateToHRManagement());
         TogglePaneCommand = ReactiveCommand.Create(() => { IsPaneOpen = !IsPaneOpen; });
+        ToggleLanguageCommand = ReactiveCommand.Create(() => Services.LocalizationService.Instance.ToggleLanguage());
         LogoutCommand = ReactiveCommand.CreateFromTask(LogoutAsync);
 
         _notificationService.ReminderTriggered += (s, r) =>

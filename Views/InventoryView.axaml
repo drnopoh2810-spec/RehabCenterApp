@@ -7,24 +7,24 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Inventory Management" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[InventoryManagement]}" Classes="Title" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="1" Text="{Binding LowStockCount, StringFormat='Low Stock: {0}'}" Foreground="{StaticResource ErrorBrush}" VerticalAlignment="Center" Margin="0,0,16,0" FontWeight="Bold"/>
                 <Button Grid.Column="2" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="Add Item"/>
+                        <TextBlock Text="{Binding L[AddItem]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding AddStockCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="ArrowUpBold" Width="18"/>
-                        <TextBlock Text="+1 Stock"/>
+                        <TextBlock Text="{Binding L[AddStock]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="4" Classes="Danger" Command="{Binding RemoveStockCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="ArrowDownBold" Width="18"/>
-                        <TextBlock Text="-1 Stock"/>
+                        <TextBlock Text="{Binding L[RemoveStock]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -32,45 +32,45 @@
         <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="120"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="80"/>
-                    <DataGridTextColumn Header="Min Stock" Binding="{Binding MinStockLevel}" Width="80"/>
-                    <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost, StringFormat='{}{0:C}'}" Width="100"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="التصنيف" Binding="{Binding Category}" Width="120"/>
+                    <DataGridTextColumn Header="الكمية" Binding="{Binding Quantity}" Width="80"/>
+                    <DataGridTextColumn Header="الحد الأدنى" Binding="{Binding MinStockLevel}" Width="80"/>
+                    <DataGridTextColumn Header="تكلفة الوحدة" Binding="{Binding UnitCost, StringFormat='{}{0:C}'}" Width="100"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="Add Inventory Item" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[AddInventoryItem]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding L[NameReq]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ItemName}" Margin="0,0,8,12"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Category" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding L[Category]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding Category}" Margin="0,0,0,12">
                             <ComboBoxItem>Equipment</ComboBoxItem>
                             <ComboBoxItem>Supplies</ComboBoxItem>
                             <ComboBoxItem>Toys</ComboBoxItem>
                             <ComboBoxItem>Furniture</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Quantity" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding L[Quantity]}" Margin="0,0,0,4"/>
                         <NumericUpDown Grid.Row="3" Grid.Column="0" Value="{Binding Quantity}" Minimum="0" Margin="0,0,8,12"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Min Stock Level" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding L[MinStock]}" Margin="0,0,0,4"/>
                         <NumericUpDown Grid.Row="3" Grid.Column="1" Value="{Binding MinStock}" Minimum="1" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Unit Cost" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding L[UnitCost]}" Margin="0,0,0,4"/>
                         <NumericUpDown Grid.Row="5" Grid.Column="0" Value="{Binding UnitCost}" Minimum="0" Margin="0,0,8,12"/>
                     </Grid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[Save]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

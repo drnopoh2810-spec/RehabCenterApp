@@ -10,79 +10,76 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
-        <!-- Toolbar -->
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto">
-                <DatePicker Grid.Column="0" 
+                <DatePicker Grid.Column="0"
                             SelectedDate="{Binding SelectedDate}"
                             Margin="0,0,16,0"/>
 
-                <TextBlock Grid.Column="1" Text="" />
+                <TextBlock Grid.Column="1" Text=""/>
 
                 <Button Grid.Column="2" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="موعد جديد"/>
+                        <TextBlock Text="{Binding L[NewAppointment]}"/>
                     </StackPanel>
                 </Button>
 
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding MarkPresentCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Check" Width="18"/>
-                        <TextBlock Text="حضور"/>
+                        <TextBlock Text="{Binding L[Present]}"/>
                     </StackPanel>
                 </Button>
 
                 <Button Grid.Column="4" Classes="Danger" Command="{Binding MarkAbsentCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Close" Width="18"/>
-                        <TextBlock Text="غياب"/>
+                        <TextBlock Text="{Binding L[Absent]}"/>
                     </StackPanel>
                 </Button>
 
                 <Button Grid.Column="5" Classes="Primary" Command="{Binding MarkCancelledCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Cancel" Width="18"/>
-                        <TextBlock Text="إلغاء"/>
+                        <TextBlock Text="{Binding L[Cancelled]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
 
-        <!-- Sessions List -->
         <Border Classes="Card" Grid.Row="1" Margin="16">
             <DataGrid ItemsSource="{Binding Sessions}"
                       SelectedItem="{Binding SelectedSession}"
                       IsReadOnly="True"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="الوقت" Binding="{Binding Time, StringFormat='{}{0:hh\:mm}'}" Width="80" />
-                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Beneficiary.Name}" Width="*" />
-                    <DataGridTextColumn Header="نوع الجلسة" Binding="{Binding SessionType}" Width="150" />
-                    <DataGridTextColumn Header="المعالج" Binding="{Binding Therapist.Name}" Width="150" />
-                    <DataGridTextColumn Header="المدة" Binding="{Binding Duration}" Width="80" />
-                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100" />
-                    <DataGridTextColumn Header="ملاحظات" Binding="{Binding Notes}" Width="200" />
+                    <DataGridTextColumn Header="الوقت" Binding="{Binding Time, StringFormat='{}{0:hh\:mm}'}" Width="80"/>
+                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Beneficiary.Name}" Width="*"/>
+                    <DataGridTextColumn Header="نوع الجلسة" Binding="{Binding SessionType}" Width="150"/>
+                    <DataGridTextColumn Header="المعالج" Binding="{Binding Therapist.Name}" Width="150"/>
+                    <DataGridTextColumn Header="المدة" Binding="{Binding Duration}" Width="80"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="ملاحظات" Binding="{Binding Notes}" Width="200"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
 
-        <!-- Add Session Modal -->
-        <Border Grid.Row="0" Grid.RowSpan="2" 
+        <Border Grid.Row="0" Grid.RowSpan="2"
                 Background="#80000000"
                 IsVisible="{Binding IsFormOpen}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
-            <Border Classes="Card" 
-                    Width="500" 
+            <Border Classes="Card"
+                    Width="500"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="إضافة موعد جديد" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[AddSession]}" Classes="Title" Margin="0,0,0,16"/>
 
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="المستفيد *" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="1" Grid.Column="0" 
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding L[BeneficiaryReq]}" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0"
                                   ItemsSource="{Binding Beneficiaries}"
                                   SelectedItem="{Binding SelectedBeneficiary}"
                                   Margin="0,0,8,12">
@@ -93,8 +90,8 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="المعالج *" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" 
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding L[TherapistReq]}" Margin="0,0,0,4"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1"
                                   ItemsSource="{Binding Therapists}"
                                   SelectedItem="{Binding SelectedTherapist}"
                                   Margin="0,0,0,12">
@@ -105,7 +102,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="نوع الجلسة *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding L[SessionTypeReq]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="3" Grid.Column="0" SelectedItem="{Binding SessionType}" Margin="0,0,8,12">
                             <ComboBoxItem>علاج طبيعي</ComboBoxItem>
                             <ComboBoxItem>علاج وظيفي</ComboBoxItem>
@@ -114,13 +111,13 @@
                             <ComboBoxItem>تربية خاصة</ComboBoxItem>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="الوقت" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding L[Time]}" Margin="0,0,0,4"/>
                         <TimePicker Grid.Row="3" Grid.Column="1" SelectedTime="{Binding SessionTime}" Margin="0,0,0,12"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="المدة (دقيقة)" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding L[DurationMinutes]}" Margin="0,0,0,4"/>
                         <NumericUpDown Grid.Row="5" Grid.Column="0" Value="{Binding Duration}" Minimum="15" Maximum="180" Margin="0,0,8,12"/>
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="ملاحظات" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding L[Notes]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Notes}" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
                     </Grid>
 
@@ -128,13 +125,13 @@
                         <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
-                                <TextBlock Text="حفظ"/>
+                                <TextBlock Text="{Binding L[Save]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="Close" Width="18"/>
-                                <TextBlock Text="إلغاء"/>
+                                <TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

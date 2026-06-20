@@ -48,12 +48,14 @@ public class LoginViewModel : ViewModelBase
     }
 
     public ReactiveCommand<Unit, Unit> LoginCommand { get; }
+    public ReactiveCommand<Unit, Unit> ToggleLangCommand { get; }
 
     public LoginViewModel(DatabaseService dbService, Action onLoginSuccess)
     {
         _dbService = dbService;
         _onLoginSuccess = onLoginSuccess;
         LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync);
+        ToggleLangCommand = ReactiveCommand.Create(() => LocalizationService.Instance.ToggleLanguage());
     }
 
     private async Task LoginAsync()

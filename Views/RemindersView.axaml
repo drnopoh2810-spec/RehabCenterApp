@@ -5,40 +5,37 @@
              x:Class="RehabCenterApp.Views.RemindersView"
              x:DataType="vm:RemindersViewModel">
     <Grid RowDefinitions="Auto,*">
-        <!-- Toolbar -->
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Reminders" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[Reminders]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="New Reminder"/>
+                        <TextBlock Text="{Binding L[NewReminder]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding CompleteCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Check" Width="18"/>
-                        <TextBlock Text="Complete"/>
+                        <TextBlock Text="{Binding L[Complete]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding SnoozeCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="AlarmSnooze" Width="18"/>
-                        <TextBlock Text="Snooze"/>
+                        <TextBlock Text="{Binding L[Snooze]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
 
-        <!-- Grouped Lists -->
         <ScrollViewer Grid.Row="1" Margin="16">
             <StackPanel Spacing="16">
-                <!-- Overdue -->
                 <Border Classes="Card" Background="#fff5f5">
                     <Grid RowDefinitions="Auto,*">
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
                             <materialIcons:MaterialIcon Kind="AlertCircle" Width="24" Foreground="{StaticResource ErrorBrush}"/>
-                            <TextBlock Text="Overdue" FontWeight="Bold" Foreground="{StaticResource ErrorBrush}" FontSize="16"/>
+                            <TextBlock Text="{Binding L[Overdue]}" FontWeight="Bold" Foreground="{StaticResource ErrorBrush}" FontSize="16"/>
                             <TextBlock Text="{Binding OverdueReminders.Count, StringFormat='({0})'}" Foreground="{StaticResource ErrorBrush}"/>
                         </StackPanel>
                         <ListBox Grid.Row="1" ItemsSource="{Binding OverdueReminders}" BorderThickness="0">
@@ -58,12 +55,11 @@
                     </Grid>
                 </Border>
 
-                <!-- Today -->
                 <Border Classes="Card" Background="#fffaf0">
                     <Grid RowDefinitions="Auto,*">
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
                             <materialIcons:MaterialIcon Kind="CalendarToday" Width="24" Foreground="{StaticResource WarningBrush}"/>
-                            <TextBlock Text="Today" FontWeight="Bold" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
+                            <TextBlock Text="{Binding L[Today]}" FontWeight="Bold" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
                             <TextBlock Text="{Binding TodayReminders.Count, StringFormat='({0})'}" Foreground="{StaticResource WarningBrush}"/>
                         </StackPanel>
                         <ListBox Grid.Row="1" ItemsSource="{Binding TodayReminders}" BorderThickness="0">
@@ -83,12 +79,11 @@
                     </Grid>
                 </Border>
 
-                <!-- Upcoming -->
                 <Border Classes="Card">
                     <Grid RowDefinitions="Auto,*">
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
                             <materialIcons:MaterialIcon Kind="CalendarClock" Width="24" Foreground="{StaticResource AccentBrush}"/>
-                            <TextBlock Text="Upcoming" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" FontSize="16"/>
+                            <TextBlock Text="{Binding L[Upcoming]}" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" FontSize="16"/>
                             <TextBlock Text="{Binding UpcomingReminders.Count, StringFormat='({0})'}" Foreground="{StaticResource AccentBrush}"/>
                         </StackPanel>
                         <ListBox Grid.Row="1" ItemsSource="{Binding UpcomingReminders}" BorderThickness="0">
@@ -110,34 +105,33 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Add Reminder Modal -->
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="New Reminder" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[NewReminder]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Title *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding L[TitleReq]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Description" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding L[Description]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Description}" Height="60" TextWrapping="Wrap" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Date *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding L[DateReq]}" Margin="0,0,0,4"/>
                         <DatePicker Grid.Row="5" Grid.Column="0" SelectedDate="{Binding ReminderDate}" Margin="0,0,8,12"/>
-                        <TextBlock Grid.Row="4" Grid.Column="1" Text="Time *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding L[TimeReq]}" Margin="0,0,0,4"/>
                         <TimePicker Grid.Row="5" Grid.Column="1" SelectedTime="{Binding ReminderTime}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="6" Grid.Column="0" Text="Type" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding L[Type]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="7" Grid.Column="0" SelectedItem="{Binding Type}" Margin="0,0,8,12">
                             <ComboBoxItem>Session</ComboBoxItem>
                             <ComboBoxItem>Payment</ComboBoxItem>
                             <ComboBoxItem>FollowUp</ComboBoxItem>
                             <ComboBoxItem>General</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="6" Grid.Column="1" Text="Priority" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding L[Priority]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="7" Grid.Column="1" SelectedItem="{Binding Priority}" Margin="0,0,0,12">
                             <ComboBoxItem>High</ComboBoxItem>
                             <ComboBoxItem>Medium</ComboBoxItem>
                             <ComboBoxItem>Low</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="Link to Beneficiary (optional)" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding L[LinkBeneficiary]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding LinkedBeneficiary}">
                             <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
                         </ComboBox>
@@ -145,12 +139,12 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[Save]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

@@ -7,23 +7,23 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="MDT Team Meetings" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[MDTMeetings]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="Schedule Meeting"/>
+                        <TextBlock Text="{Binding L[NewMeeting]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding CompleteCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Check" Width="18"/>
-                        <TextBlock Text="Complete"/>
+                        <TextBlock Text="{Binding L[Complete]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding PrintMinutesCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
-                        <TextBlock Text="Print Minutes"/>
+                        <TextBlock Text="{Binding L[ViewMinutes]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -31,36 +31,36 @@
         <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Meetings}" SelectedItem="{Binding SelectedMeeting}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Beneficiary" Binding="{Binding Beneficiary.Name}" Width="*"/>
-                    <DataGridTextColumn Header="Meeting Date" Binding="{Binding MeetingDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                    <DataGridTextColumn Header="Attendees" Binding="{Binding Attendees.Count}" Width="100"/>
+                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Beneficiary.Name}" Width="*"/>
+                    <DataGridTextColumn Header="التاريخ" Binding="{Binding MeetingDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="المشاركون" Binding="{Binding Attendees.Count}" Width="100"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="Schedule MDT Meeting" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[NewMeeting]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0" Text="Beneficiary *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Text="{Binding L[BeneficiaryReq]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="1" ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding SelectedBeneficiary}" Margin="0,0,0,12">
                             <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBlock Grid.Row="2" Text="Meeting Date *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Text="{Binding L[MeetingDate]}" Margin="0,0,0,4"/>
                         <DatePicker Grid.Row="3" SelectedDate="{Binding MeetingDate}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="4" Text="Discussion Points" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Text="{Binding L[Agenda]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="5" Text="{Binding DiscussionPoints}" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
                     </Grid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[Save]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

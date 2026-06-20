@@ -4,10 +4,11 @@
         xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         x:Class="RehabCenterApp.Views.LoginWindow"
         x:DataType="vm:LoginViewModel"
-        Title="تسجيل الدخول - مركز التأهيل"
-        Width="420" Height="520"
+        Title="{Binding L[LoginTitle]}"
+        Width="420" Height="540"
         CanResize="False"
         WindowStartupLocation="CenterScreen"
+        FlowDirection="{Binding L.FlowDir}"
         Background="{StaticResource BackgroundBrush}">
 
     <Design.DataContext>
@@ -17,45 +18,49 @@
     <Grid RowDefinitions="*,Auto,*">
         <Border Grid.Row="1" Classes="Card" Width="380" VerticalAlignment="Center">
             <StackPanel Spacing="20">
-                <!-- Logo -->
                 <Border Background="{StaticResource PrimaryBrush}" CornerRadius="50" Width="80" Height="80" HorizontalAlignment="Center">
                     <materialIcons:MaterialIcon Kind="HospitalBuilding" Width="40" Height="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
-                <TextBlock Text="مركز التأهيل" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource PrimaryBrush}"/>
-                <TextBlock Text="نظام الإدارة المتكامل" FontSize="14" HorizontalAlignment="Center" Classes="Subtitle"/>
+                <TextBlock Text="{Binding L[AppName]}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource PrimaryBrush}"/>
+                <TextBlock Text="{Binding L[AppSubtitle]}" FontSize="14" HorizontalAlignment="Center" Classes="Subtitle"/>
 
-                <!-- Error Message -->
                 <Border Background="#fff5f5" BorderBrush="#feb2b2" BorderThickness="1" CornerRadius="6" Padding="12" IsVisible="{Binding HasError}">
                     <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextAlignment="Center"/>
                 </Border>
 
-                <!-- Username -->
                 <StackPanel Spacing="4">
-                    <TextBlock Text="اسم المستخدم" FontWeight="SemiBold"/>
-                    <TextBox Text="{Binding Username}" Watermark="أدخل اسم المستخدم">
+                    <TextBlock Text="{Binding L[Username]}" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding Username}" Watermark="{Binding L[UsernamePlaceholder]}">
                         <TextBox.InnerLeftContent>
                             <materialIcons:MaterialIcon Kind="Account" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
                         </TextBox.InnerLeftContent>
                     </TextBox>
                 </StackPanel>
 
-                <!-- Password -->
                 <StackPanel Spacing="4">
-                    <TextBlock Text="كلمة المرور" FontWeight="SemiBold"/>
-                    <TextBox Text="{Binding Password}" PasswordChar="*" Watermark="أدخل كلمة المرور">
+                    <TextBlock Text="{Binding L[Password]}" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding Password}" PasswordChar="*" Watermark="{Binding L[PasswordPlaceholder]}">
                         <TextBox.InnerLeftContent>
                             <materialIcons:MaterialIcon Kind="Lock" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
                         </TextBox.InnerLeftContent>
                     </TextBox>
                 </StackPanel>
 
-                <!-- Login Button -->
                 <Button Classes="Accent" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" Height="44">
-                    <TextBlock Text="تسجيل الدخول" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding L[LoginBtn]}" FontSize="16" FontWeight="Bold"/>
                 </Button>
 
-                <TextBlock Text="نسيت كلمة المرور؟" HorizontalAlignment="Center" Classes="Subtitle" Cursor="Hand"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
+                    <TextBlock Text="{Binding L[ForgotPassword]}" Classes="Subtitle" Cursor="Hand"/>
+                    <Button Background="Transparent" BorderThickness="0" Padding="4,0"
+                            Command="{Binding ToggleLangCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <materialIcons:MaterialIcon Kind="Translate" Width="16" Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text="{Binding L.LangToggleLabel}" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </Border>
 

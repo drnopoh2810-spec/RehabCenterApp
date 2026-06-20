@@ -5,26 +5,22 @@
         xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         x:Class="RehabCenterApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="مركز التأهيل المتكامل - نظام الإدارة المتقدم" 
+        Title="{Binding L[AppTitle]}"
         Width="1600" Height="1000"
         MinWidth="1200" MinHeight="800"
-        FlowDirection="RightToLeft"
+        FlowDirection="{Binding L.FlowDir}"
         Background="{StaticResource BackgroundBrush}">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
-    <SplitView IsPaneOpen="{Binding IsPaneOpen}" 
+    <SplitView IsPaneOpen="{Binding IsPaneOpen}"
                DisplayMode="CompactInline"
                OpenPaneLength="300"
                CompactPaneLength="56">
         <SplitView.Pane>
             <Border Background="{StaticResource PrimaryBrush}">
                 <Grid RowDefinitions="Auto,*">
-                    <Button Grid.Row="0" 
-                            Command="{Binding TogglePaneCommand}" 
-                            Background="Transparent" 
+                    <Button Grid.Row="0"
+                            Command="{Binding TogglePaneCommand}"
+                            Background="Transparent"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             Padding="16">
@@ -34,14 +30,13 @@
                     <ScrollViewer Grid.Row="1">
                         <StackPanel Spacing="1" Margin="0,4">
 
-                            <!-- Core Operations -->
-                            <TextBlock Text="العمليات الأساسية" Foreground="#ffffff80" FontSize="10" Margin="16,8,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <TextBlock Text="{Binding L[NavCoreOps]}" Foreground="#ffffff80" FontSize="10" Margin="16,8,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToDashboardCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ViewDashboard" Width="22" Foreground="White"/>
-                                    <TextBlock Text="لوحة التحكم" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavDashboard]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -49,7 +44,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountGroup" Width="22" Foreground="White"/>
-                                    <TextBlock Text="المستفيدين" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavBeneficiaries]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -57,7 +52,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ClipboardList" Width="22" Foreground="White"/>
-                                    <TextBlock Text="قائمة الانتظار" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavWaitingList]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -65,7 +60,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="CalendarCheck" Width="22" Foreground="White"/>
-                                    <TextBlock Text="الجلسات" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavSessions]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -73,18 +68,17 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Video" Width="22" Foreground="#48bb78"/>
-                                    <TextBlock Text="جلسات عن بعد" Foreground="#48bb78" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavTelehealth]}" Foreground="#48bb78" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <!-- Clinical -->
-                            <TextBlock Text="السريري والعلاجي" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <TextBlock Text="{Binding L[NavClinical]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAssessmentsCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ChartBar" Width="22" Foreground="White"/>
-                                    <TextBlock Text="التقييمات المعيارية" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavAssessments]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -92,7 +86,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ClipboardText" Width="22" Foreground="White"/>
-                                    <TextBlock Text="خطط التدخل (IEP)" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavInterventionPlans]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -100,7 +94,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileCertificate" Width="22" Foreground="White"/>
-                                    <TextBlock Text="التقارير السريرية" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavClinicalReports]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -108,7 +102,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountMultiple" Width="22" Foreground="White"/>
-                                    <TextBlock Text="اجتماعات الفريق" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavMDT]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -116,18 +110,17 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Trophy" Width="22" Foreground="#ed8936"/>
-                                    <TextBlock Text="نظام التحفيز" Foreground="#ed8936" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavGamification]}" Foreground="#ed8936" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <!-- Financial -->
-                            <TextBlock Text="المالية والإدارية" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <TextBlock Text="{Binding L[NavFinancial]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAccountingCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="CashRegister" Width="22" Foreground="White"/>
-                                    <TextBlock Text="المحاسبة" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavAccounting]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -135,7 +128,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="PackageVariant" Width="22" Foreground="White"/>
-                                    <TextBlock Text="المخزون" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavInventory]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -143,18 +136,17 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountTie" Width="22" Foreground="White"/>
-                                    <TextBlock Text="الموارد البشرية" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavHR]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <!-- Communication -->
-                            <TextBlock Text="التواصل والمستندات" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <TextBlock Text="{Binding L[NavCommunication]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToCorrespondenceCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Email" Width="22" Foreground="White"/>
-                                    <TextBlock Text="الصادر والوارد" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavCorrespondence]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -162,7 +154,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="MessageText" Width="22" Foreground="White"/>
-                                    <TextBlock Text="تواصل أولياء الأمور" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavParentPortal]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -170,7 +162,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="BellRing" Width="22" Foreground="White"/>
-                                    <TextBlock Text="التذكيرات" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavReminders]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -178,18 +170,17 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Archive" Width="22" Foreground="White"/>
-                                    <TextBlock Text="أرشفة المستندات" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavDocuments]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <!-- Reports & Analytics -->
-                            <TextBlock Text="التقارير والتحليلات" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <TextBlock Text="{Binding L[NavReports]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAnalyticsCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ChartAreaspline" Width="22" Foreground="#48bb78"/>
-                                    <TextBlock Text="التحليلات المتقدمة" Foreground="#48bb78" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavAnalytics]}" Foreground="#48bb78" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -197,7 +188,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileDocumentCheck" Width="22" Foreground="White"/>
-                                    <TextBlock Text="التقارير الحكومية" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavGovernmentReports]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -205,18 +196,25 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileDocument" Width="22" Foreground="White"/>
-                                    <TextBlock Text="الاستمارات" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavForms]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <!-- Settings -->
                             <Separator Margin="8,8" Background="#ffffff30"/>
+
+                            <Button Command="{Binding ToggleLanguageCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Translate" Width="22" Foreground="#90cdf4"/>
+                                    <TextBlock Text="{Binding L.LangToggleLabel}" Foreground="#90cdf4" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
 
                             <Button Command="{Binding NavigateToSettingsCommand}"
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Cog" Width="22" Foreground="White"/>
-                                    <TextBlock Text="الإعدادات" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavSettings]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
@@ -224,7 +222,7 @@
                                     Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Logout" Width="22" Foreground="#feb2b2"/>
-                                    <TextBlock Text="تسجيل الخروج" Foreground="#feb2b2" FontSize="13"/>
+                                    <TextBlock Text="{Binding L[NavLogout]}" Foreground="#feb2b2" FontSize="13"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>

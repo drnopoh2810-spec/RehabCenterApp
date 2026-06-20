@@ -10,40 +10,40 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0" Text="الاستمارات والطباعة" Classes="Title" Margin="24,24,24,0"/>
+        <TextBlock Grid.Row="0" Text="{Binding L[FormsAndPrinting]}" Classes="Title" Margin="24,24,24,0"/>
         <Grid Grid.Row="1" ColumnDefinitions="250,*" Margin="24">
             <Border Classes="Card" Grid.Column="0">
                 <StackPanel Spacing="8">
-                    <TextBlock Text="قوالب الاستمارات" FontWeight="Bold" Margin="0,0,0,12"/>
+                    <TextBlock Text="{Binding L[FormTemplates]}" FontWeight="Bold" Margin="0,0,0,12"/>
                     <ListBox SelectedIndex="{Binding SelectedFormIndex}">
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
-                                <TextBlock Text="استمارة تسجيل مستفيد"/>
+                                <TextBlock Text="{Binding L[BeneficiaryRegistration]}"/>
                             </StackPanel>
                         </ListBoxItem>
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
-                                <TextBlock Text="استمارة تقييم أولي"/>
+                                <TextBlock Text="{Binding L[InitialAssessment]}"/>
                             </StackPanel>
                         </ListBoxItem>
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
-                                <TextBlock Text="خطة علاجية (IEP)"/>
+                                <TextBlock Text="{Binding L[IEPPlan]}"/>
                             </StackPanel>
                         </ListBoxItem>
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
-                                <TextBlock Text="تقرير متابعة"/>
+                                <TextBlock Text="{Binding L[FollowUpReport]}"/>
                             </StackPanel>
                         </ListBoxItem>
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileDocument" Width="20"/>
-                                <TextBlock Text="موافقة ولي الأمر"/>
+                                <TextBlock Text="{Binding L[GuardianConsent]}"/>
                             </StackPanel>
                         </ListBoxItem>
                     </ListBox>
@@ -52,19 +52,19 @@
             <Border Classes="Card" Grid.Column="1">
                 <Grid RowDefinitions="*,Auto">
                     <Border Grid.Row="0" Background="#f7fafc" BorderBrush="#e2e8f0" BorderThickness="1" CornerRadius="8" Margin="0,0,0,16">
-                        <TextBlock Text="معاينة الطباعة" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="Subtitle"/>
+                        <TextBlock Text="{Binding L[PrintPreview]}" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="Subtitle"/>
                     </Border>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
                         <Button Classes="Primary" Command="{Binding PrintCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
-                                <TextBlock Text="طباعة"/>
+                                <TextBlock Text="{Binding L[Print]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Accent" Command="{Binding ExportPdfCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <materialIcons:MaterialIcon Kind="FileExport" Width="18"/>
-                                <TextBlock Text="تصدير PDF"/>
+                                <TextBlock Text="{Binding L[ExportPDF]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

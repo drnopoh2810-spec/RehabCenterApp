@@ -7,17 +7,17 @@
     <Grid RowDefinitions="Auto,Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Gamification &amp; Achievement System" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[Gamification]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AwardAchievementCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Trophy" Width="18"/>
-                        <TextBlock Text="Award Achievement"/>
+                        <TextBlock Text="{Binding L[AddAchievement]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding PrintCertificateCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Certificate" Width="18"/>
-                        <TextBlock Text="Print Certificate"/>
+                        <TextBlock Text="{Binding L[Print]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -26,19 +26,19 @@
             <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*">
                 <materialIcons:MaterialIcon Grid.Column="0" Kind="Account" Width="48" Height="48" Foreground="{StaticResource PrimaryBrush}"/>
                 <StackPanel Grid.Column="1" Margin="8,0">
-                    <TextBlock Text="Selected Child" Classes="Subtitle"/>
+                    <TextBlock Text="{Binding L[Beneficiary]}" Classes="Subtitle"/>
                     <ComboBox ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding SelectedBeneficiary}">
                         <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
                 <materialIcons:MaterialIcon Grid.Column="2" Kind="Star" Width="48" Height="48" Foreground="{StaticResource WarningBrush}"/>
                 <StackPanel Grid.Column="3" Margin="8,0">
-                    <TextBlock Text="Total Points" Classes="Subtitle"/>
+                    <TextBlock Text="{Binding L[Points]}" Classes="Subtitle"/>
                     <TextBlock Text="{Binding TotalPoints}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource WarningBrush}"/>
                 </StackPanel>
                 <materialIcons:MaterialIcon Grid.Column="4" Kind="Trophy" Width="48" Height="48" Foreground="{StaticResource AccentBrush}"/>
                 <StackPanel Grid.Column="5" Margin="8,0">
-                    <TextBlock Text="Level" Classes="Subtitle"/>
+                    <TextBlock Text="{Binding L[Level]}" Classes="Subtitle"/>
                     <TextBlock Text="{Binding LevelTitle}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
                 </StackPanel>
             </Grid>
@@ -46,11 +46,11 @@
         <Border Classes="Card" Grid.Row="2" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Achievements}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="120"/>
-                    <DataGridTextColumn Header="Points" Binding="{Binding Points}" Width="80"/>
-                    <DataGridTextColumn Header="Date" Binding="{Binding AchievementDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTextColumn Header="العنوان" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="التصنيف" Binding="{Binding Category}" Width="120"/>
+                    <DataGridTextColumn Header="النقاط" Binding="{Binding Points}" Width="80"/>
+                    <DataGridTextColumn Header="التاريخ" Binding="{Binding AchievementDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="الوصف" Binding="{Binding Description}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

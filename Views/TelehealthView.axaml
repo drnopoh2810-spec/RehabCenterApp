@@ -7,23 +7,23 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Telehealth Sessions" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[Telehealth]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="VideoPlus" Width="18"/>
-                        <TextBlock Text="Schedule Remote"/>
+                        <TextBlock Text="{Binding L[ScheduleSession]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding StartSessionCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Video" Width="18"/>
-                        <TextBlock Text="Start Session"/>
+                        <TextBlock Text="{Binding L[StartSession]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding SendLinkCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Link" Width="18"/>
-                        <TextBlock Text="Send Link"/>
+                        <TextBlock Text="{Binding L[Link]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -31,41 +31,41 @@
         <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Beneficiary" Binding="{Binding Session.Beneficiary.Name}" Width="*"/>
-                    <DataGridTextColumn Header="Platform" Binding="{Binding Platform}" Width="100"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                    <DataGridTextColumn Header="Connection" Binding="{Binding ConnectionQuality}" Width="100"/>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Session.Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Session.Beneficiary.Name}" Width="*"/>
+                    <DataGridTextColumn Header="المنصة" Binding="{Binding Platform}" Width="100"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="الاتصال" Binding="{Binding ConnectionQuality}" Width="100"/>
+                    <DataGridTextColumn Header="التاريخ" Binding="{Binding Session.Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="Schedule Telehealth Session" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[ScheduleSession]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0" Text="Session *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Text="{Binding L[SessionType]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="1" ItemsSource="{Binding AvailableSessions}" SelectedItem="{Binding SelectedSessionBase}" Margin="0,0,0,12">
                             <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Beneficiary.Name}"/></DataTemplate></ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBlock Grid.Row="2" Text="Platform" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Text="{Binding L[Platform]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="3" SelectedItem="{Binding Platform}" Margin="0,0,0,12">
                             <ComboBoxItem>Zoom</ComboBoxItem>
                             <ComboBoxItem>Teams</ComboBoxItem>
                             <ComboBoxItem>Google Meet</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="4" Text="Meeting Link" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Text="{Binding L[Link]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="5" Text="{Binding MeetingLink}" Watermark="https://..."/>
                     </Grid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Save"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[Save]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

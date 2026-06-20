@@ -7,7 +7,7 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,*,*,*,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Report Type" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[ReportType]}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                 <ComboBox Grid.Column="1" SelectedItem="{Binding ReportType}" Margin="0,0,8,0">
                     <ComboBoxItem>Monthly</ComboBoxItem>
                     <ComboBoxItem>Quarterly</ComboBoxItem>
@@ -22,19 +22,19 @@
                 <Button Grid.Column="4" Classes="Accent" Command="{Binding GenerateCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="FileDocumentPlus" Width="18"/>
-                        <TextBlock Text="Generate"/>
+                        <TextBlock Text="{Binding L[GenerateReport]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="5" Classes="Primary" Command="{Binding ExportCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="FileExport" Width="18"/>
-                        <TextBlock Text="Export PDF"/>
+                        <TextBlock Text="{Binding L[ExportPDF]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="6" Classes="Primary" Command="{Binding SubmitCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Send" Width="18"/>
-                        <TextBlock Text="Submit"/>
+                        <TextBlock Text="{Binding L[SubmitReport]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -42,12 +42,12 @@
         <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Reports}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Report Type" Binding="{Binding ReportType}" Width="120"/>
-                    <DataGridTextColumn Header="Authority" Binding="{Binding Authority}" Width="150"/>
-                    <DataGridTextColumn Header="Period Start" Binding="{Binding PeriodStart, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                    <DataGridTextColumn Header="Period End" Binding="{Binding PeriodEnd, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                    <DataGridTextColumn Header="Submission Date" Binding="{Binding SubmissionDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="نوع التقرير" Binding="{Binding ReportType}" Width="120"/>
+                    <DataGridTextColumn Header="الجهة" Binding="{Binding Authority}" Width="150"/>
+                    <DataGridTextColumn Header="بداية الفترة" Binding="{Binding PeriodStart, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="نهاية الفترة" Binding="{Binding PeriodEnd, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="تاريخ الرفع" Binding="{Binding SubmissionDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

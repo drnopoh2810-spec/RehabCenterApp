@@ -12,7 +12,7 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto">
-                <TextBox Grid.Column="0" Text="{Binding SearchQuery}" Watermark="بحث..." Margin="0,0,16,0">
+                <TextBox Grid.Column="0" Text="{Binding SearchQuery}" Watermark="{Binding L[SearchPlaceholder2]}" Margin="0,0,16,0">
                     <TextBox.InnerLeftContent>
                         <materialIcons:MaterialIcon Kind="Magnify" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
                     </TextBox.InnerLeftContent>
@@ -20,13 +20,13 @@
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="معاملة جديدة"/>
+                        <TextBlock Text="{Binding L[NewTransaction]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Danger" Command="{Binding DeleteCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Delete" Width="18"/>
-                        <TextBlock Text="حذف"/>
+                        <TextBlock Text="{Binding L[Delete]}"/>
                     </StackPanel>
                 </Button>
             </Grid>

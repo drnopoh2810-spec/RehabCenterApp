@@ -12,10 +12,8 @@
 
     <ScrollViewer>
         <Grid RowDefinitions="Auto,Auto,*" Margin="24">
-            <!-- Header -->
-            <TextBlock Grid.Row="0" Text="لوحة التحكم" Classes="Title" Margin="0,0,0,24"/>
+            <TextBlock Grid.Row="0" Text="{Binding L[Dashboard]}" Classes="Title" Margin="0,0,0,24"/>
 
-            <!-- Stats Cards -->
             <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,24">
                 <Border Classes="Card" Grid.Column="0">
                     <Grid RowDefinitions="Auto,Auto">
@@ -23,7 +21,7 @@
                             <Border Background="#e6f7ff" CornerRadius="8" Padding="12">
                                 <materialIcons:MaterialIcon Kind="AccountGroup" Width="28" Height="28" Foreground="#1e3a5f"/>
                             </Border>
-                            <TextBlock Text="المستفيدين" Classes="Subtitle" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding L[Beneficiaries]}" Classes="Subtitle" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Row="1" Text="{Binding BeneficiariesCount}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" Margin="0,8,0,0"/>
                     </Grid>
@@ -35,7 +33,7 @@
                             <Border Background="#e6fffa" CornerRadius="8" Padding="12">
                                 <materialIcons:MaterialIcon Kind="CalendarCheck" Width="28" Height="28" Foreground="#48bb78"/>
                             </Border>
-                            <TextBlock Text="جلسات اليوم" Classes="Subtitle" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding L[TodaySessions]}" Classes="Subtitle" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Row="1" Text="{Binding TodaySessionsCount}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Margin="0,8,0,0"/>
                     </Grid>
@@ -47,7 +45,7 @@
                             <Border Background="#fffaf0" CornerRadius="8" Padding="12">
                                 <materialIcons:MaterialIcon Kind="CashMultiple" Width="28" Height="28" Foreground="#ed8936"/>
                             </Border>
-                            <TextBlock Text="إيرادات الشهر" Classes="Subtitle" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding L[MonthRevenue]}" Classes="Subtitle" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Row="1" Text="{Binding MonthRevenue, StringFormat='{}{0:C}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource WarningBrush}" Margin="0,8,0,0"/>
                     </Grid>
@@ -59,21 +57,19 @@
                             <Border Background="#fff5f5" CornerRadius="8" Padding="12">
                                 <materialIcons:MaterialIcon Kind="TrendingDown" Width="28" Height="28" Foreground="#e53e3e"/>
                             </Border>
-                            <TextBlock Text="مصروفات الشهر" Classes="Subtitle" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding L[MonthExpenses]}" Classes="Subtitle" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Row="1" Text="{Binding MonthExpenses, StringFormat='{}{0:C}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource ErrorBrush}" Margin="0,8,0,0"/>
                     </Grid>
                 </Border>
             </Grid>
 
-            <!-- Charts and Lists -->
             <Grid Grid.Row="2" ColumnDefinitions="2*,1*">
-                <!-- Charts Area -->
                 <StackPanel Grid.Column="0" Spacing="16">
                     <Border Classes="Card">
                         <Grid RowDefinitions="Auto,*">
-                            <TextBlock Grid.Row="0" Text="الإيرادات vs المصروفات" FontWeight="Bold" Margin="0,0,0,12"/>
-                            <lvc:CartesianChart Grid.Row="1" 
+                            <TextBlock Grid.Row="0" Text="{Binding L[RevenueVsExpenses]}" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <lvc:CartesianChart Grid.Row="1"
                                                 Series="{Binding RevenueExpensesSeries}"
                                                 XAxes="{Binding XAxes}"
                                                 Height="250"/>
@@ -83,8 +79,8 @@
                     <Grid ColumnDefinitions="*,*">
                         <Border Classes="Card" Grid.Column="0">
                             <Grid RowDefinitions="Auto,*">
-                                <TextBlock Grid.Row="0" Text="المستفيدين شهرياً" FontWeight="Bold" Margin="0,0,0,12"/>
-                                <lvc:CartesianChart Grid.Row="1" 
+                                <TextBlock Grid.Row="0" Text="{Binding L[MonthlyBeneficiaries]}" FontWeight="Bold" Margin="0,0,0,12"/>
+                                <lvc:CartesianChart Grid.Row="1"
                                                     Series="{Binding MonthlyBeneficiariesSeries}"
                                                     XAxes="{Binding XAxes}"
                                                     Height="200"/>
@@ -93,8 +89,8 @@
 
                         <Border Classes="Card" Grid.Column="1">
                             <Grid RowDefinitions="Auto,*">
-                                <TextBlock Grid.Row="0" Text="توزيع الإعاقات" FontWeight="Bold" Margin="0,0,0,12"/>
-                                <lvc:PieChart Grid.Row="1" 
+                                <TextBlock Grid.Row="0" Text="{Binding L[DisabilityDistribution]}" FontWeight="Bold" Margin="0,0,0,12"/>
+                                <lvc:PieChart Grid.Row="1"
                                               Series="{Binding DisabilityDistributionSeries}"
                                               Height="200"/>
                             </Grid>
@@ -102,11 +98,10 @@
                     </Grid>
                 </StackPanel>
 
-                <!-- Side Panel -->
                 <StackPanel Grid.Column="1" Spacing="16">
                     <Border Classes="Card">
                         <Grid RowDefinitions="Auto,*">
-                            <TextBlock Grid.Row="0" Text="تذكيرات قادمة" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <TextBlock Grid.Row="0" Text="{Binding L[UpcomingReminders]}" FontWeight="Bold" Margin="0,0,0,12"/>
                             <ListBox Grid.Row="1" ItemsSource="{Binding UpcomingReminders}" BorderThickness="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -127,7 +122,7 @@
 
                     <Border Classes="Card">
                         <Grid RowDefinitions="Auto,*">
-                            <TextBlock Grid.Row="0" Text="جلسات اليوم" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <TextBlock Grid.Row="0" Text="{Binding L[TodaySessions]}" FontWeight="Bold" Margin="0,0,0,12"/>
                             <ListBox Grid.Row="1" ItemsSource="{Binding TodaySessions}" BorderThickness="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>

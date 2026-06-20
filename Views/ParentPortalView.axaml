@@ -7,17 +7,17 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Parent Communication Portal" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[ParentPortal]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="MessagePlus" Width="18"/>
-                        <TextBlock Text="Send Message"/>
+                        <TextBlock Text="{Binding L[SendMessage]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding SendAutoReportCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="FileSend" Width="18"/>
-                        <TextBlock Text="Auto Report"/>
+                        <TextBlock Text="{Binding L[SurveyResults]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -25,43 +25,43 @@
         <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Communications}" SelectedItem="{Binding SelectedCommunication}" IsReadOnly="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Beneficiary" Binding="{Binding Beneficiary.Name}" Width="*"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding CommunicationType}" Width="100"/>
-                    <DataGridTextColumn Header="Direction" Binding="{Binding Direction}" Width="80"/>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                    <DataGridTextColumn Header="Is Report" Binding="{Binding IsReport}" Width="80"/>
+                    <DataGridTextColumn Header="المستفيد" Binding="{Binding Beneficiary.Name}" Width="*"/>
+                    <DataGridTextColumn Header="النوع" Binding="{Binding CommunicationType}" Width="100"/>
+                    <DataGridTextColumn Header="الاتجاه" Binding="{Binding Direction}" Width="80"/>
+                    <DataGridTextColumn Header="التاريخ" Binding="{Binding Date, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="تقرير" Binding="{Binding IsReport}" Width="80"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="Send Message to Parent" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[SendMessage]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0" Text="Beneficiary *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Text="{Binding L[BeneficiaryReq]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="1" ItemsSource="{Binding Beneficiaries}" SelectedItem="{Binding SelectedBeneficiary}" Margin="0,0,0,12">
                             <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBlock Grid.Row="2" Text="Communication Type" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Text="{Binding L[Type]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="3" SelectedItem="{Binding CommunicationType}" Margin="0,0,0,12">
                             <ComboBoxItem>WhatsApp</ComboBoxItem>
                             <ComboBoxItem>SMS</ComboBoxItem>
                             <ComboBoxItem>Email</ComboBoxItem>
                             <ComboBoxItem>Call</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="4" Text="Message Content *" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Text="{Binding L[Message]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="5" Text="{Binding MessageContent}" Height="100" TextWrapping="Wrap" AcceptsReturn="True"/>
                     </Grid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding SendCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Send" Width="18"/><TextBlock Text="Send"/>
+                                <materialIcons:MaterialIcon Kind="Send" Width="18"/><TextBlock Text="{Binding L[SendMessage]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

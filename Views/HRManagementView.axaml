@@ -7,58 +7,58 @@
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="HR Management" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding L[HRManagement]}" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddEmployeeCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="AccountPlus" Width="18"/>
-                        <TextBlock Text="Add Employee"/>
+                        <TextBlock Text="{Binding L[AddEmployee]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="2" Classes="Primary" Command="{Binding RequestLeaveCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="CalendarPlus" Width="18"/>
-                        <TextBlock Text="Request Leave"/>
+                        <TextBlock Text="{Binding L[RequestLeave]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding EvaluateTherapistCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="ChartBar" Width="18"/>
-                        <TextBlock Text="Evaluate"/>
+                        <TextBlock Text="{Binding L[Evaluate]}"/>
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="4" Classes="Primary" Command="{Binding PrintPayrollCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="CashRegister" Width="18"/>
-                        <TextBlock Text="Payroll"/>
+                        <TextBlock Text="{Binding L[Payroll]}"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
         <TabControl Grid.Row="1" Margin="16" SelectedIndex="{Binding SelectedTab}">
-            <TabItem Header="Employees">
+            <TabItem Header="{Binding L[Employees]}">
                 <Border Classes="Card" Padding="0">
                     <DataGrid ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                            <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="120"/>
-                            <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="120"/>
-                            <DataGridTextColumn Header="Salary" Binding="{Binding Salary, StringFormat='{}{0:C}'}" Width="120"/>
-                            <DataGridTextColumn Header="Join Date" Binding="{Binding JoinDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
+                            <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="الدور" Binding="{Binding Role}" Width="120"/>
+                            <DataGridTextColumn Header="الجوال" Binding="{Binding Phone}" Width="120"/>
+                            <DataGridTextColumn Header="الراتب" Binding="{Binding Salary, StringFormat='{}{0:C}'}" Width="120"/>
+                            <DataGridTextColumn Header="تاريخ التوظيف" Binding="{Binding JoinDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                            <DataGridTextColumn Header="نشط" Binding="{Binding IsActive}" Width="80"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
             </TabItem>
-            <TabItem Header="Leave Requests">
+            <TabItem Header="{Binding L[LeaveRequests]}">
                 <Border Classes="Card" Padding="0">
                     <DataGrid ItemsSource="{Binding LeaveRequests}" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Employee" Binding="{Binding Employee.Name}" Width="*"/>
-                            <DataGridTextColumn Header="Type" Binding="{Binding LeaveType}" Width="120"/>
-                            <DataGridTextColumn Header="Start" Binding="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="End" Binding="{Binding EndDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="Days" Binding="{Binding DaysCount}" Width="60"/>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                            <DataGridTextColumn Header="الموظف" Binding="{Binding Employee.Name}" Width="*"/>
+                            <DataGridTextColumn Header="النوع" Binding="{Binding LeaveType}" Width="120"/>
+                            <DataGridTextColumn Header="البداية" Binding="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                            <DataGridTextColumn Header="النهاية" Binding="{Binding EndDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                            <DataGridTextColumn Header="الأيام" Binding="{Binding DaysCount}" Width="60"/>
+                            <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
@@ -67,31 +67,31 @@
         <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsLeaveFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border Classes="Card" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="Request Leave" Classes="Title" Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="0" Text="{Binding L[RequestLeave]}" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0" Text="Leave Type" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Text="{Binding L[LeaveType]}" Margin="0,0,0,4"/>
                         <ComboBox Grid.Row="1" SelectedItem="{Binding LeaveType}" Margin="0,0,0,12">
                             <ComboBoxItem>Annual</ComboBoxItem>
                             <ComboBoxItem>Sick</ComboBoxItem>
                             <ComboBoxItem>Emergency</ComboBoxItem>
                             <ComboBoxItem>Unpaid</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Grid.Row="2" Text="Start Date" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="2" Text="{Binding L[StartDate]}" Margin="0,0,0,4"/>
                         <DatePicker Grid.Row="3" SelectedDate="{Binding LeaveStart}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="4" Text="End Date" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="4" Text="{Binding L[EndDate]}" Margin="0,0,0,4"/>
                         <DatePicker Grid.Row="5" SelectedDate="{Binding LeaveEnd}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="6" Text="Reason" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="6" Text="{Binding L[Reason]}" Margin="0,0,0,4"/>
                         <TextBox Grid.Row="7" Text="{Binding LeaveReason}" Height="60" TextWrapping="Wrap"/>
                     </Grid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
                         <Button Classes="Accent" Command="{Binding RequestLeaveCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="Submit"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[SubmitLeave]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="Cancel"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
