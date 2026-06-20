@@ -91,9 +91,9 @@ public class InventoryViewModel : ViewModelBase
         _dialogService = dialogService;
 
         LoadCommand = ReactiveCommand.CreateFromTask(LoadAsync);
-        AddCommand = ReactiveCommand.Create(() => IsFormOpen = true);
+        AddCommand = ReactiveCommand.Create(() => { IsFormOpen = true; });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         AddStockCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (SelectedItem != null)

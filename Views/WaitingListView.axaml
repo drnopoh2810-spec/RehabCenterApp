@@ -56,7 +56,7 @@
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Date of Birth" Margin="0,0,0,4"/>
                         <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DateOfBirth}" Margin="0,0,0,12"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Disability Type" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="3" Grid.Column="0" Text="{Binding DisabilityType}" Margin="0,0,8,12">
+                        <ComboBox Grid.Row="3" Grid.Column="0" SelectedItem="{Binding DisabilityType}" Margin="0,0,8,12">
                             <ComboBoxItem>Physical</ComboBoxItem>
                             <ComboBoxItem>Intellectual</ComboBoxItem>
                             <ComboBoxItem>Hearing</ComboBoxItem>

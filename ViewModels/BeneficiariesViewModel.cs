@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -96,7 +97,7 @@ public class BeneficiariesViewModel : ViewModelBase
                 }
             }
         });
-        CloseFormCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CloseFormCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         ExportToPdfCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             var list = Beneficiaries.ToList();
@@ -111,7 +112,7 @@ public class BeneficiariesViewModel : ViewModelBase
             var list = Beneficiaries.ToList();
             if (list.Count > 0)
             {
-                var path = await ExcelExporter.ExportBeneficiariesToExcelAsync(list);
+                var path = await ExcelExporter.ExportBeneficiariesAsync(list);
                 await _dialogService.ShowInfoAsync("تم التصدير", $"تم حفظ الملف: {path}");
             }
         });

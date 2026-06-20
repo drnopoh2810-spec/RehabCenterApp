@@ -4,13 +4,6 @@
              x:Class="RehabCenterApp.App"
              RequestedThemeVariant="Light">
 
-    <Application.Styles>
-        <FluentTheme />
-        <fluent:FluentAvaloniaTheme />
-        <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
-        <StyleInclude Source="/Styles/CustomStyles.axaml" />
-    </Application.Styles>
-
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,4 +11,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Material.Icons.Avalonia/MaterialIconStyles.axaml" />
+        <StyleInclude Source="/Styles/CustomStyles.axaml" />
+    </Application.Styles>
+
 </Application>

@@ -114,7 +114,7 @@ public class RemindersViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         CompleteCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (SelectedReminder != null)

@@ -61,7 +61,7 @@
                             <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
                         </ComboBox>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Assessment *" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding AssessmentName}" Margin="0,0,0,12">
+                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding AssessmentName}" Margin="0,0,0,12">
                             <ComboBoxItem>GARS-2</ComboBoxItem>
                             <ComboBoxItem>WISC-V</ComboBoxItem>
                             <ComboBoxItem>GMFM</ComboBoxItem>

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -79,28 +80,28 @@ public class MainWindowViewModel : ViewModelBase
                 this.RaisePropertyChanged(nameof(CurrentViewModel));
         };
 
-        NavigateToDashboardCommand = ReactiveCommand.Create(_navigationService.NavigateToDashboard);
-        NavigateToBeneficiariesCommand = ReactiveCommand.Create(_navigationService.NavigateToBeneficiaries);
-        NavigateToSessionsCommand = ReactiveCommand.Create(_navigationService.NavigateToSessions);
-        NavigateToAccountingCommand = ReactiveCommand.Create(_navigationService.NavigateToAccounting);
-        NavigateToCorrespondenceCommand = ReactiveCommand.Create(_navigationService.NavigateToCorrespondence);
-        NavigateToRemindersCommand = ReactiveCommand.Create(_navigationService.NavigateToReminders);
-        NavigateToFormsCommand = ReactiveCommand.Create(_navigationService.NavigateToForms);
-        NavigateToSettingsCommand = ReactiveCommand.Create(_navigationService.NavigateToSettings);
-        NavigateToAssessmentsCommand = ReactiveCommand.Create(_navigationService.NavigateToAssessments);
-        NavigateToInterventionPlansCommand = ReactiveCommand.Create(_navigationService.NavigateToInterventionPlans);
-        NavigateToWaitingListCommand = ReactiveCommand.Create(_navigationService.NavigateToWaitingList);
-        NavigateToInventoryCommand = ReactiveCommand.Create(_navigationService.NavigateToInventory);
-        NavigateToParentPortalCommand = ReactiveCommand.Create(_navigationService.NavigateToParentPortal);
-        NavigateToMDTMeetingsCommand = ReactiveCommand.Create(_navigationService.NavigateToMDTMeetings);
-        NavigateToAnalyticsCommand = ReactiveCommand.Create(_navigationService.NavigateToAnalytics);
-        NavigateToTelehealthCommand = ReactiveCommand.Create(_navigationService.NavigateToTelehealth);
-        NavigateToClinicalReportsCommand = ReactiveCommand.Create(_navigationService.NavigateToClinicalReports);
-        NavigateToGamificationCommand = ReactiveCommand.Create(_navigationService.NavigateToGamification);
-        NavigateToGovernmentReportsCommand = ReactiveCommand.Create(_navigationService.NavigateToGovernmentReports);
-        NavigateToDocumentArchiveCommand = ReactiveCommand.Create(_navigationService.NavigateToDocumentArchive);
-        NavigateToHRManagementCommand = ReactiveCommand.Create(_navigationService.NavigateToHRManagement);
-        TogglePaneCommand = ReactiveCommand.Create(() => IsPaneOpen = !IsPaneOpen);
+        NavigateToDashboardCommand = ReactiveCommand.Create(() => _navigationService.NavigateToDashboard());
+        NavigateToBeneficiariesCommand = ReactiveCommand.Create(() => _navigationService.NavigateToBeneficiaries());
+        NavigateToSessionsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToSessions());
+        NavigateToAccountingCommand = ReactiveCommand.Create(() => _navigationService.NavigateToAccounting());
+        NavigateToCorrespondenceCommand = ReactiveCommand.Create(() => _navigationService.NavigateToCorrespondence());
+        NavigateToRemindersCommand = ReactiveCommand.Create(() => _navigationService.NavigateToReminders());
+        NavigateToFormsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToForms());
+        NavigateToSettingsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToSettings());
+        NavigateToAssessmentsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToAssessments());
+        NavigateToInterventionPlansCommand = ReactiveCommand.Create(() => _navigationService.NavigateToInterventionPlans());
+        NavigateToWaitingListCommand = ReactiveCommand.Create(() => _navigationService.NavigateToWaitingList());
+        NavigateToInventoryCommand = ReactiveCommand.Create(() => _navigationService.NavigateToInventory());
+        NavigateToParentPortalCommand = ReactiveCommand.Create(() => _navigationService.NavigateToParentPortal());
+        NavigateToMDTMeetingsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToMDTMeetings());
+        NavigateToAnalyticsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToAnalytics());
+        NavigateToTelehealthCommand = ReactiveCommand.Create(() => _navigationService.NavigateToTelehealth());
+        NavigateToClinicalReportsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToClinicalReports());
+        NavigateToGamificationCommand = ReactiveCommand.Create(() => _navigationService.NavigateToGamification());
+        NavigateToGovernmentReportsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToGovernmentReports());
+        NavigateToDocumentArchiveCommand = ReactiveCommand.Create(() => _navigationService.NavigateToDocumentArchive());
+        NavigateToHRManagementCommand = ReactiveCommand.Create(() => _navigationService.NavigateToHRManagement());
+        TogglePaneCommand = ReactiveCommand.Create(() => { IsPaneOpen = !IsPaneOpen; });
         LogoutCommand = ReactiveCommand.CreateFromTask(LogoutAsync);
 
         _notificationService.ReminderTriggered += (s, r) =>

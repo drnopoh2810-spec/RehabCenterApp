@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -122,7 +123,7 @@ public class AssessmentsViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         ViewProgressCommand = ReactiveCommand.CreateFromTask(ViewProgressAsync);
         ExportCommand = ReactiveCommand.CreateFromTask(async () =>
         {
@@ -182,7 +183,7 @@ public class AssessmentsViewModel : ViewModelBase
                 Name = "التقدم",
                 Values = values,
                 Stroke = new SolidColorPaint(SKColor.Parse("#1e3a5f")) { StrokeThickness = 3 },
-                Fill = new SolidColorPaint(SKColor.Parse("#1e3a5f")) { SKAlpha = 30 }
+                Fill = new SolidColorPaint(new SKColor(30, 58, 95, 30))
             }
         };
         XAxes = new[] { new Axis { Labels = labels } };

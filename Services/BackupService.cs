@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace RehabCenterApp.Services;
 

@@ -106,7 +106,7 @@
                         </ComboBox>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="نوع الجلسة *" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="3" Grid.Column="0" Text="{Binding SessionType}" Margin="0,0,8,12">
+                        <ComboBox Grid.Row="3" Grid.Column="0" SelectedItem="{Binding SessionType}" Margin="0,0,8,12">
                             <ComboBoxItem>علاج طبيعي</ComboBoxItem>
                             <ComboBoxItem>علاج وظيفي</ComboBoxItem>
                             <ComboBoxItem>علاج نطق</ComboBoxItem>

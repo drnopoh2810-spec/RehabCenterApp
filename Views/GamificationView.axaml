@@ -7,7 +7,7 @@
     <Grid RowDefinitions="Auto,Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
             <Grid ColumnDefinitions="*,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="Gamification & Achievement System" Classes="Title" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="Gamification &amp; Achievement System" Classes="Title" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AwardAchievementCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Trophy" Width="18"/>

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -84,6 +85,7 @@ public class HRManagementViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> RejectLeaveCommand { get; }
     public ReactiveCommand<Unit, Unit> EvaluateTherapistCommand { get; }
     public ReactiveCommand<Unit, Unit> PrintPayrollCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     public HRManagementViewModel(DatabaseService dbService, DialogService dialogService)
     {
@@ -129,6 +131,7 @@ public class HRManagementViewModel : ViewModelBase
         {
             await _dialogService.ShowInfoAsync("كشف رواتب", "تم طباعة كشف الرواتب");
         });
+        CancelCommand = ReactiveCommand.Create(() => { IsLeaveFormOpen = false; });
 
         _ = LoadAsync();
     }

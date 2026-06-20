@@ -126,7 +126,7 @@ public class AnalyticsViewModel : ViewModelBase
                 Name = "الإيرادات",
                 Values = revenueByMonth.Values.ToArray(),
                 Stroke = new SolidColorPaint(SKColor.Parse("#48bb78")) { StrokeThickness = 3 },
-                Fill = new SolidColorPaint(SKColor.Parse("#48bb78")) { SKAlpha = 30 }
+                Fill = new SolidColorPaint(new SKColor(72, 187, 120, 30))
             }
         };
 

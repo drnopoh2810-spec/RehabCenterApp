@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using MessageBox.Avalonia;
-using MessageBox.Avalonia.Enums;
-using MessageBox.Avalonia.DTO;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace RehabCenterApp.Services;
 
@@ -17,56 +16,44 @@ public class DialogService
 
     public async Task<bool> ShowConfirmAsync(string title, string message)
     {
-        var msgBox = MessageBoxManager.GetMessageBoxStandardWindow(
-            new MessageBoxStandardParams
-            {
-                ButtonDefinitions = ButtonEnum.YesNo,
-                ContentTitle = title,
-                ContentMessage = message,
-                Icon = Icon.Question,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            });
+        var msgBox = MessageBoxManager.GetMessageBoxStandard(
+            title,
+            message,
+            ButtonEnum.YesNo,
+            Icon.Question);
 
-        var result = _owner != null 
-            ? await msgBox.ShowDialog(_owner)
-            : await msgBox.Show();
+        var result = _owner != null
+            ? await msgBox.ShowWindowDialogAsync(_owner)
+            : await msgBox.ShowAsync();
 
         return result == ButtonResult.Yes;
     }
 
     public async Task ShowInfoAsync(string title, string message)
     {
-        var msgBox = MessageBoxManager.GetMessageBoxStandardWindow(
-            new MessageBoxStandardParams
-            {
-                ButtonDefinitions = ButtonEnum.Ok,
-                ContentTitle = title,
-                ContentMessage = message,
-                Icon = Icon.Info,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            });
+        var msgBox = MessageBoxManager.GetMessageBoxStandard(
+            title,
+            message,
+            ButtonEnum.Ok,
+            Icon.Info);
 
         if (_owner != null)
-            await msgBox.ShowDialog(_owner);
+            await msgBox.ShowWindowDialogAsync(_owner);
         else
-            await msgBox.Show();
+            await msgBox.ShowAsync();
     }
 
     public async Task ShowErrorAsync(string title, string message)
     {
-        var msgBox = MessageBoxManager.GetMessageBoxStandardWindow(
-            new MessageBoxStandardParams
-            {
-                ButtonDefinitions = ButtonEnum.Ok,
-                ContentTitle = title,
-                ContentMessage = message,
-                Icon = Icon.Error,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            });
+        var msgBox = MessageBoxManager.GetMessageBoxStandard(
+            title,
+            message,
+            ButtonEnum.Ok,
+            Icon.Error);
 
         if (_owner != null)
-            await msgBox.ShowDialog(_owner);
+            await msgBox.ShowWindowDialogAsync(_owner);
         else
-            await msgBox.Show();
+            await msgBox.ShowAsync();
     }
 }

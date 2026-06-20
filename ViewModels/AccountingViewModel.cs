@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -178,7 +179,7 @@ public class AccountingViewModel : ViewModelBase
             IsPaymentFormOpen = true;
         });
         SavePaymentCommand = ReactiveCommand.CreateFromTask(SavePaymentAsync);
-        AddExpenseCommand = ReactiveCommand.Create(() => IsExpenseFormOpen = true);
+        AddExpenseCommand = ReactiveCommand.Create(() => { IsExpenseFormOpen = true; });
         SaveExpenseCommand = ReactiveCommand.CreateFromTask(SaveExpenseAsync);
         CancelCommand = ReactiveCommand.Create(() =>
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -83,7 +84,7 @@ public class ClinicalReportsViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         ApproveCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (SelectedReport != null)

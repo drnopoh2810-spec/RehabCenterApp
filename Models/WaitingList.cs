@@ -102,7 +102,7 @@ public class InventoryTransaction : BaseEntity
     public DateTime Date { get; set; } = DateTime.Now;
 
     [MaxLength(100)]
-    public string? Reason { get; set; }; // Session use, Purchase, Damage, Return
+    public string? Reason { get; set; } // Session use, Purchase, Damage, Return
 
     public int? BeneficiaryId { get; set; }
 

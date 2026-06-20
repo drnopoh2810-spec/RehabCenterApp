@@ -7,7 +7,7 @@
              x:DataType="vm:AnalyticsViewModel">
     <ScrollViewer>
         <Grid RowDefinitions="Auto,Auto,*" Margin="24">
-            <TextBlock Grid.Row="0" Text="Advanced Analytics & AI Predictions" Classes="Title" Margin="0,0,0,24"/>
+            <TextBlock Grid.Row="0" Text="Advanced Analytics &amp; AI Predictions" Classes="Title" Margin="0,0,0,24"/>
 
             <!-- KPI Cards -->
             <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*" Margin="0,0,0,24">

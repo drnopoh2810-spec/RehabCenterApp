@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -80,7 +81,7 @@ public class InterventionPlansViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         AddObjectiveCommand = ReactiveCommand.Create(() => { });
         PrintIEPCommand = ReactiveCommand.CreateFromTask(async () =>
         {

@@ -79,7 +79,7 @@ public class TelehealthViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         StartSessionCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (SelectedSession != null && !string.IsNullOrEmpty(SelectedSession.MeetingLink))

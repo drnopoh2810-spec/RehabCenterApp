@@ -26,7 +26,7 @@ public class PrintService
         document.Open();
 
         // Header
-        var titleFont = FontFactory.GetFont("Arial", 18, Font.BOLD, BaseColor.DARK_GRAY);
+        var titleFont = FontFactory.GetFont("Arial", 18, Font.BOLD, new BaseColor(64, 64, 64));
         var headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
         var normalFont = FontFactory.GetFont("Arial", 10, Font.NORMAL);
         var boldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
@@ -68,7 +68,7 @@ public class PrintService
         document.Open();
 
         var titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
-        var headerFont = FontFactory.GetFont("Arial", 10, Font.BOLD, BaseColor.WHITE);
+        var headerFont = FontFactory.GetFont("Arial", 10, Font.BOLD, new BaseColor(255, 255, 255));
         var normalFont = FontFactory.GetFont("Arial", 9, Font.NORMAL);
 
         document.Add(new Paragraph("Beneficiaries Report", titleFont) { Alignment = Element.ALIGN_CENTER });

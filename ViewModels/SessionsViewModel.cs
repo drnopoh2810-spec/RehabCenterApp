@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -119,7 +120,7 @@ public class SessionsViewModel : ViewModelBase
             _ = LoadDropdownsAsync();
         });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveSessionAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         MarkPresentCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Present"));
         MarkAbsentCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Absent"));
         MarkCancelledCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Cancelled"));

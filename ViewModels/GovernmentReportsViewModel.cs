@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -77,7 +78,7 @@ public class GovernmentReportsViewModel : ViewModelBase
     private async Task GenerateAsync()
     {
         var beneficiaries = await _dbService.GetBeneficiariesAsync();
-        var sessions = await _dbService.GetSessionsAsync(PeriodStart, PeriodEnd);
+        var sessions = await _dbService.GetSessionsAsync(date: PeriodStart);
         var payments = await _dbService.GetPaymentsAsync(PeriodStart, PeriodEnd);
 
         var data = new

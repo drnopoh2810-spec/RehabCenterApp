@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -91,9 +92,9 @@ public class WaitingListViewModel : ViewModelBase
         _dialogService = dialogService;
 
         LoadCommand = ReactiveCommand.CreateFromTask(LoadAsync);
-        AddCommand = ReactiveCommand.Create(() => IsFormOpen = true);
+        AddCommand = ReactiveCommand.Create(() => { IsFormOpen = true; });
         SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         ConvertToBeneficiaryCommand = ReactiveCommand.CreateFromTask(ConvertAsync);
         ContactCommand = ReactiveCommand.CreateFromTask(ContactAsync);
         DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);

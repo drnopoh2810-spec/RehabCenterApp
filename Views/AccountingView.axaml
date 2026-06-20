@@ -152,7 +152,7 @@
                     <TextBlock Grid.Row="0" Text="إضافة مصروف جديد" Classes="Title" Margin="0,0,0,16"/>
                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                         <TextBlock Grid.Row="0" Text="التصنيف *" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="1" Text="{Binding ExpenseCategory}" Margin="0,0,0,12">
+                        <ComboBox Grid.Row="1" SelectedItem="{Binding ExpenseCategory}" Margin="0,0,0,12">
                             <ComboBoxItem>رواتب</ComboBoxItem>
                             <ComboBoxItem>إيجار</ComboBoxItem>
                             <ComboBoxItem>معدات طبية</ComboBoxItem>

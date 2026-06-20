@@ -23,7 +23,7 @@
                 </Button>
                 <Button Grid.Column="3" Classes="Primary" Command="{Binding SnoozeCommand}" Margin="4,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <materialIcons:MaterialIcon Kind="Snooze" Width="18"/>
+                        <materialIcons:MaterialIcon Kind="AlarmSnooze" Width="18"/>
                         <TextBlock Text="Snooze"/>
                     </StackPanel>
                 </Button>

@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:converters="using:RehabCenterApp.Converters"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="RehabCenterApp.Views.BeneficiariesView"
              x:DataType="vm:BeneficiariesViewModel">
@@ -83,7 +84,7 @@
                 <ScrollViewer>
                     <Grid DataContext="{Binding FormViewModel}" RowDefinitions="Auto,*">
                         <TextBlock Grid.Row="0" 
-                                   Text="{Binding IsEditing, Converter={x:Static BoolToStringConverter.Instance}, ConverterParameter='تعديل مستفيد|إضافة مستفيد جديد'}"
+                                   Text="{Binding IsEditing, Converter={x:Static converters:BoolToStringConverter.Instance}, ConverterParameter='تعديل مستفيد|إضافة مستفيد جديد'}"
                                    Classes="Title" 
                                    Margin="0,0,0,16"/>
 
@@ -110,7 +111,7 @@
                             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Phone}" Margin="0,0,0,8"/>
 
                             <TextBlock Grid.Row="6" Grid.Column="0" Text="نوع الإعاقة *" Margin="0,0,0,4"/>
-                            <ComboBox Grid.Row="7" Grid.Column="0" Text="{Binding DisabilityType}" Margin="0,0,8,8">
+                            <ComboBox Grid.Row="7" Grid.Column="0" SelectedItem="{Binding DisabilityType}" Margin="0,0,8,8">
                                 <ComboBoxItem>إعاقة حركية</ComboBoxItem>
                                 <ComboBoxItem>إعاقة ذهنية</ComboBoxItem>
                                 <ComboBoxItem>إعاقة سمعية</ComboBoxItem>

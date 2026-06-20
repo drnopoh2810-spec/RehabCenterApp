@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ public class ParentPortalViewModel : ViewModelBase
             IsFormOpen = true;
         });
         SendCommand = ReactiveCommand.CreateFromTask(SendAsync);
-        CancelCommand = ReactiveCommand.Create(() => IsFormOpen = false);
+        CancelCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
         SendAutoReportCommand = ReactiveCommand.CreateFromTask(SendAutoReportAsync);
 
         _ = LoadAsync();
@@ -131,12 +132,9 @@ public class ParentPortalViewModel : ViewModelBase
         var sessions = await _dbService.GetSessionsAsync(beneficiaryId: SelectedBeneficiary.Id);
         var payments = await _dbService.GetPaymentsAsync(beneficiaryId: SelectedBeneficiary.Id);
 
-        var report = $"تقرير تلقائي - {SelectedBeneficiary.Name}
-" +
-                     $"الجلسات: {sessions.Count}
-" +
-                     $"المدفوعات: {payments.Sum(p => p.Amount):C}
-" +
+        var report = $"تقرير تلقائي - {SelectedBeneficiary.Name}\n" +
+                     $"الجلسات: {sessions.Count}\n" +
+                     $"المدفوعات: {payments.Sum(p => p.Amount):C}\n" +
                      $"تاريخ: {DateTime.Now:yyyy-MM-dd}";
 
         var comm = new ParentCommunication

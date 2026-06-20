@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using FluentAvalonia.Core;
 
 namespace RehabCenterApp;
 
@@ -15,6 +16,5 @@ class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseReactiveUI()
-            .UseFluentAvaloniaUI();
+            .UseReactiveUI();
 }

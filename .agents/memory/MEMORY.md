@@ -1,0 +1,1 @@
+- [Replit build fixes](replit-build-fixes.md) — key fixes needed to compile/run this Windows Avalonia app on Linux/Replit

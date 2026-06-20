@@ -63,7 +63,7 @@
                         </Button>
                         <Button Classes="Accent" Command="{Binding ExportPdfCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
+                                <materialIcons:MaterialIcon Kind="FileExport" Width="18"/>
                                 <TextBlock Text="تصدير PDF"/>
                             </StackPanel>
                         </Button>
