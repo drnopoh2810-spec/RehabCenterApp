@@ -1,0 +1,500 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.BeneficiaryProfileView"
+             x:CompileBindings="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ══ HEADER ══ -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="24,16">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                <!-- Photo -->
+                <Border Grid.Column="0" Width="80" Height="80" CornerRadius="40"
+                        ClipToBounds="True" Margin="0,0,20,0">
+                    <Grid>
+                        <Border Background="#ffffff30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <materialIcons:MaterialIcon Kind="Account" Width="48" Foreground="White"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Command="{Binding PickPhotoCommand}" Background="Transparent"
+                                BorderThickness="0" Cursor="Hand"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                ToolTip.Tip="انقر لتغيير الصورة" Opacity="0.01"/>
+                    </Grid>
+                </Border>
+
+                <!-- Info -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <materialIcons:MaterialIcon Kind="Cake" Width="14" Foreground="#ffffffaa"/>
+                            <TextBlock Text="{Binding DateOfBirth, StringFormat='{}{0:yyyy-MM-dd}'}" Foreground="#ffffffaa" FontSize="13"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <materialIcons:MaterialIcon Kind="Hospital" Width="14" Foreground="#ffffffaa"/>
+                            <TextBlock Text="{Binding DisabilityType}" Foreground="#ffffffaa" FontSize="13"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <materialIcons:MaterialIcon Kind="Phone" Width="14" Foreground="#ffffffaa"/>
+                            <TextBlock Text="{Binding Phone}" Foreground="#ffffffaa" FontSize="13"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Stats row -->
+                    <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,6,0,0">
+                        <Border Background="#ffffff20" CornerRadius="6" Padding="10,4">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="CalendarCheck" Width="14" Foreground="White"/>
+                                <TextBlock Foreground="White" FontSize="12">
+                                    <Run Text="الجلسات: "/><Run Text="{Binding TotalSessions}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#ffffff20" CornerRadius="6" Padding="10,4">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="ChartBar" Width="14" Foreground="White"/>
+                                <TextBlock Foreground="White" FontSize="12">
+                                    <Run Text="التقييمات: "/><Run Text="{Binding TotalAssessments}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#ffffff20" CornerRadius="6" Padding="10,4">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="ClipboardText" Width="14" Foreground="White"/>
+                                <TextBlock Foreground="White" FontSize="12">
+                                    <Run Text="الخطط: "/><Run Text="{Binding ActivePlans}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#ffffff20" CornerRadius="6" Padding="10,4">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="TrendingUp" Width="14" Foreground="#48bb78"/>
+                                <TextBlock Foreground="#48bb78" FontSize="12">
+                                    <Run Text="متوسط الإتقان: "/><Run Text="{Binding AvgMastery}"/><Run Text="%"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Close button -->
+                <Button Grid.Column="2" Command="{Binding CloseCommand}"
+                        Background="#ffffff20" CornerRadius="20"
+                        Width="40" Height="40" Padding="0" VerticalAlignment="Top">
+                    <materialIcons:MaterialIcon Kind="Close" Width="20" Foreground="White"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- ══ TABS ══ -->
+        <TabControl Grid.Row="1" SelectedIndex="{Binding TabIndex}">
+
+            <!-- ─ Tab 1: البيانات الأساسية ─ -->
+            <TabItem Header="البيانات الأساسية">
+                <ScrollViewer Padding="16">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+                        <!-- Section: بيانات الطالب -->
+                        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                                Background="{StaticResource PrimaryBrush}" CornerRadius="6" Padding="10,6" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Account" Width="16" Foreground="White"/>
+                                <TextBlock Text="بيانات الطالب" Foreground="White" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,8,10">
+                            <TextBlock Text="الاسم الكامل *" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Name}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="1" Margin="8,0,0,10">
+                            <TextBlock Text="تاريخ الميلاد" FontSize="12" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding DateOfBirth}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,8,10">
+                            <TextBlock Text="الجنس" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox SelectedItem="{Binding Gender}">
+                                <ComboBoxItem>ذكر</ComboBoxItem>
+                                <ComboBoxItem>أنثى</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2" Margin="8,0,0,10">
+                            <TextBlock Text="رقم الهوية" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding NationalId}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,8,10">
+                            <TextBlock Text="نوع الإعاقة" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox SelectedItem="{Binding DisabilityType}">
+                                <ComboBoxItem>إعاقة حركية</ComboBoxItem>
+                                <ComboBoxItem>إعاقة ذهنية</ComboBoxItem>
+                                <ComboBoxItem>إعاقة سمعية</ComboBoxItem>
+                                <ComboBoxItem>إعاقة بصرية</ComboBoxItem>
+                                <ComboBoxItem>توحد</ComboBoxItem>
+                                <ComboBoxItem>متلازمة داون</ComboBoxItem>
+                                <ComboBoxItem>شلل دماغي</ComboBoxItem>
+                                <ComboBoxItem>أخرى</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="3" Margin="8,0,0,10">
+                            <TextBlock Text="الهاتف" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Phone}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0,0,0,10">
+                            <TextBlock Text="العنوان" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Address}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="5" Margin="0,0,8,10">
+                            <TextBlock Text="المدرسة / المؤسسة" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding SchoolName}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="5" Margin="8,0,0,10">
+                            <TextBlock Text="جهة الإحالة" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding ReferralSource}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="6" Margin="0,0,8,10">
+                            <TextBlock Text="الحالة" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox SelectedItem="{Binding Status}">
+                                <ComboBoxItem>Active</ComboBoxItem>
+                                <ComboBoxItem>Inactive</ComboBoxItem>
+                                <ComboBoxItem>Graduated</ComboBoxItem>
+                                <ComboBoxItem>Transferred</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Section: بيانات ولي الأمر -->
+                        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7"
+                                Background="{StaticResource AccentBrush}" CornerRadius="6" Padding="10,6" Margin="0,8,0,12">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="AccountSupervisor" Width="16" Foreground="White"/>
+                                <TextBlock Text="بيانات ولي الأمر" Foreground="White" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="0" Grid.Row="8" Margin="0,0,8,10">
+                            <TextBlock Text="اسم ولي الأمر" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding GuardianName}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="8" Margin="8,0,0,10">
+                            <TextBlock Text="صفة ولي الأمر" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox SelectedItem="{Binding GuardianRelation}">
+                                <ComboBoxItem>أب</ComboBoxItem>
+                                <ComboBoxItem>أم</ComboBoxItem>
+                                <ComboBoxItem>أخ</ComboBoxItem>
+                                <ComboBoxItem>أخت</ComboBoxItem>
+                                <ComboBoxItem>جد</ComboBoxItem>
+                                <ComboBoxItem>جدة</ComboBoxItem>
+                                <ComboBoxItem>كفيل</ComboBoxItem>
+                                <ComboBoxItem>أخرى</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="9" Margin="0,0,8,10">
+                            <TextBlock Text="هاتف ولي الأمر" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding GuardianPhone}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="9" Margin="8,0,0,10">
+                            <TextBlock Text="هاتف الطوارئ" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding EmergencyPhone}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="10" Margin="0,0,8,10">
+                            <TextBlock Text="البريد الإلكتروني" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding GuardianEmail}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="10" Margin="8,0,0,10">
+                            <TextBlock Text="رقم هوية ولي الأمر" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Beneficiary.GuardianNationalId}"/>
+                        </StackPanel>
+
+                        <!-- Save button -->
+                        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11"
+                                Classes="Accent" Command="{Binding SaveBasicInfoCommand}"
+                                HorizontalAlignment="Center" Margin="0,12,0,0" Width="200">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ البيانات الأساسية"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ─ Tab 2: التشخيص الطبي ─ -->
+            <TabItem Header="التشخيص الطبي">
+                <ScrollViewer Padding="16">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+                        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                                Background="{StaticResource ErrorBrush}" CornerRadius="6" Padding="10,6" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Stethoscope" Width="16" Foreground="White"/>
+                                <TextBlock Text="المعلومات الطبية والتشخيصية" Foreground="White" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="0,0,0,10">
+                            <TextBlock Text="التشخيص الرئيسي" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Diagnosis}" Height="70" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="0,0,0,10">
+                            <TextBlock Text="التشخيص الثانوي" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding SecondaryDiagnosis}" Height="70" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="0,0,0,10">
+                            <TextBlock Text="التاريخ الطبي" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding MedicalHistory}" Height="90" TextWrapping="Wrap"
+                                     Watermark="السوابق المرضية، العمليات، الحوادث..."/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="4" Margin="0,0,8,10">
+                            <TextBlock Text="الحساسيات" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Allergies}" Watermark="الأدوية، الغذاء..."/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="4" Margin="8,0,0,10">
+                            <TextBlock Text="فصيلة الدم" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox SelectedItem="{Binding BloodType}">
+                                <ComboBoxItem>A+</ComboBoxItem>
+                                <ComboBoxItem>A-</ComboBoxItem>
+                                <ComboBoxItem>B+</ComboBoxItem>
+                                <ComboBoxItem>B-</ComboBoxItem>
+                                <ComboBoxItem>AB+</ComboBoxItem>
+                                <ComboBoxItem>AB-</ComboBoxItem>
+                                <ComboBoxItem>O+</ComboBoxItem>
+                                <ComboBoxItem>O-</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,10">
+                            <TextBlock Text="الأدوية الحالية" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding CurrentMedications}" Height="70" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Margin="0,0,0,10">
+                            <TextBlock Text="المستوى الوظيفي الحالي" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FunctionalLevel}" Height="70" TextWrapping="Wrap"
+                                     Watermark="وصف للقدرات الحالية والمستوى العام للطالب..."/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="7" Margin="0,0,8,10">
+                            <TextBlock Text="شركة التأمين" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding InsuranceCompany}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="7" Margin="8,0,0,10">
+                            <TextBlock Text="رقم التأمين" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding InsuranceNumber}"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8"
+                                Classes="Accent" Command="{Binding SaveMedicalCommand}"
+                                HorizontalAlignment="Center" Margin="0,12,0,0" Width="220">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ المعلومات الطبية"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ─ Tab 3: المرفقات ─ -->
+            <TabItem Header="المرفقات والوثائق">
+                <Grid RowDefinitions="Auto,*" Margin="16">
+
+                    <Button Grid.Row="0" Classes="Accent" Command="{Binding AddAttachmentCommand}"
+                            Margin="0,0,0,12" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="PaperclipPlus" Width="18"/>
+                            <TextBlock Text="إرفاق ملف أو صورة"/>
+                        </StackPanel>
+                    </Button>
+
+                    <ScrollViewer Grid.Row="1">
+                        <ItemsControl ItemsSource="{Binding Attachments}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Classes="Card" Margin="0,0,0,8" Padding="12,10">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                            <!-- Icon by type -->
+                                            <Border Grid.Column="0" Width="42" Height="42" CornerRadius="8"
+                                                    Background="{StaticResource PrimaryBrush}" Margin="0,0,12,0">
+                                                <materialIcons:MaterialIcon Kind="FileDocument" Width="22"
+                                                                             Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <!-- Info -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                                <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" FontSize="13"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                                    <TextBlock Text="{Binding AttachmentType}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                    <TextBlock Text="{Binding UploadDate, StringFormat='{}{0:yyyy-MM-dd}'}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                    <TextBlock Text="{Binding AddedByUser}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                </StackPanel>
+                                                <TextBlock Text="{Binding Notes}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"
+                                                           IsVisible="{Binding Notes, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                            </StackPanel>
+                                            <!-- Open -->
+                                            <Button Grid.Column="2" Command="{Binding $parent[ItemsControl].DataContext.OpenAttachmentCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="{StaticResource SuccessBrush}" CornerRadius="6"
+                                                    Padding="8,4" Margin="8,0,4,0">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <materialIcons:MaterialIcon Kind="OpenInNew" Width="16" Foreground="White"/>
+                                                    <TextBlock Text="فتح" Foreground="White" FontSize="12"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <!-- Delete -->
+                                            <Button Grid.Column="3" Command="{Binding $parent[ItemsControl].DataContext.DeleteAttachmentCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="{StaticResource ErrorBrush}" CornerRadius="6"
+                                                    Padding="8,4">
+                                                <materialIcons:MaterialIcon Kind="Delete" Width="16" Foreground="White"/>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <!-- ─ Tab 4: الخطط التأهلية ─ -->
+            <TabItem Header="الخطط التأهلية">
+                <ScrollViewer Margin="16">
+                    <ItemsControl ItemsSource="{Binding Plans}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="Card" Margin="0,0,0,10">
+                                    <Grid RowDefinitions="Auto,Auto,Auto">
+                                        <!-- Plan header -->
+                                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                            <StackPanel Grid.Column="0" Spacing="2">
+                                                <TextBlock Text="{Binding PlanTitle}" FontWeight="Bold" FontSize="15"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                                    <TextBlock Text="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                    <TextBlock Text="→" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                    <TextBlock Text="{Binding EndDate, StringFormat='{}{0:yyyy-MM-dd}'}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Border Grid.Column="1" CornerRadius="4" Padding="10,4"
+                                                    Background="{StaticResource AccentBrush}">
+                                                <TextBlock Text="{Binding Status}" Foreground="White" FontSize="12"/>
+                                            </Border>
+                                        </Grid>
+                                        <!-- Long term goals -->
+                                        <TextBlock Grid.Row="1" Text="{Binding LongTermGoals}"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   TextWrapping="Wrap" FontSize="12" Margin="0,0,0,8"/>
+                                        <!-- Objectives -->
+                                        <ItemsControl Grid.Row="2" ItemsSource="{Binding Objectives}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6"
+                                                            Padding="10,8" Margin="0,0,0,4">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto">
+                                                            <StackPanel Grid.Column="0" Spacing="2">
+                                                                <TextBlock Text="{Binding ObjectiveText}" FontSize="12" TextWrapping="Wrap"/>
+                                                                <TextBlock Text="{Binding Domain}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10"/>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Status}" FontSize="11"
+                                                                       Foreground="{StaticResource PrimaryBrush}" Margin="8,0"/>
+                                                            <TextBlock Grid.Column="2" FontSize="11" Foreground="{StaticResource SuccessBrush}">
+                                                                <Run Text="الهدف: "/><Run Text="{Binding Target}"/><Run Text="%"/>
+                                                            </TextBlock>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ─ Tab 5: السجل التاريخي ─ -->
+            <TabItem Header="السجل التاريخي">
+                <ScrollViewer Margin="16">
+                    <ItemsControl ItemsSource="{Binding History}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,Auto,*" Margin="0,0,0,0">
+                                    <!-- Timeline line -->
+                                    <Border Grid.Column="0" Width="2" Background="{StaticResource BorderBrush}"
+                                            Margin="19,0,0,0" VerticalAlignment="Stretch"/>
+
+                                    <!-- Timeline dot -->
+                                    <Border Grid.Column="1" Width="38" Height="38" CornerRadius="19"
+                                            Background="{StaticResource PrimaryBrush}"
+                                            Margin="-20,8,10,8" VerticalAlignment="Top">
+                                        <materialIcons:MaterialIcon Kind="CalendarCheck" Width="18"
+                                                                     Foreground="White"
+                                                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <!-- Entry card -->
+                                    <Border Grid.Column="2" Classes="Card" Margin="0,4,0,4" Padding="14,10">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                                                <Border CornerRadius="4" Padding="6,2">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="#E3F2FD"/>
+                                                    </Border.Background>
+                                                    <TextBlock Text="{Binding EntryType}" FontSize="11" FontWeight="Bold" Foreground="#1565C0"/>
+                                                </Border>
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <materialIcons:MaterialIcon Kind="AccountOutline" Width="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                    <TextBlock Text="{Binding TherapistName}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding DateFormatted}"
+                                                       Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+
+                                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                                                       Text="{Binding Summary}" TextWrapping="Wrap"
+                                                       FontSize="12" Margin="0,6,0,0"/>
+
+                                            <!-- Mastery -->
+                                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"
+                                                        Orientation="Horizontal" Spacing="8" Margin="0,6,0,0"
+                                                        IsVisible="{Binding MasteryPercent, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                                <materialIcons:MaterialIcon Kind="TrendingUp" Width="14" Foreground="{StaticResource SuccessBrush}"/>
+                                                <TextBlock Foreground="{StaticResource SuccessBrush}" FontSize="12" FontWeight="SemiBold">
+                                                    <Run Text="نسبة الإتقان: "/><Run Text="{Binding MasteryPercent}"/><Run Text="%"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- ══ FOOTER ══ -->
+        <Border Grid.Row="2" Classes="Card" CornerRadius="0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Close" Width="16"/>
+                        <TextBlock Text="إغلاق الملف"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

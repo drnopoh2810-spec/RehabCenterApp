@@ -16,6 +16,54 @@ public class DatabaseService
     {
         _context = context;
         _context.Database.EnsureCreated();
+        RunMigrations();
+    }
+
+    /// <summary>
+    /// Safe runtime migrations — adds new columns to existing tables without breaking existing data.
+    /// SQLite doesn't support IF NOT EXISTS in ALTER TABLE, so we catch the exception.
+    /// </summary>
+    private void RunMigrations()
+    {
+        var conn = _context.Database.GetDbConnection();
+        try
+        {
+            if (conn.State != System.Data.ConnectionState.Open)
+                conn.Open();
+
+            void TryAdd(string table, string column, string type)
+            {
+                try
+                {
+                    using var cmd = conn.CreateCommand();
+                    cmd.CommandText = $"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {type}";
+                    cmd.ExecuteNonQuery();
+                }
+                catch { /* column already exists — ignore */ }
+            }
+
+            // User table new columns
+            TryAdd("Users", "FullName",         "TEXT");
+            TryAdd("Users", "Phone",            "TEXT");
+            TryAdd("Users", "Email",            "TEXT");
+            TryAdd("Users", "Notes",            "TEXT");
+            TryAdd("Users", "RequireLanAccess", "INTEGER NOT NULL DEFAULT 1");
+
+            // Beneficiary table new columns
+            TryAdd("Beneficiaries", "GuardianRelation",    "TEXT");
+            TryAdd("Beneficiaries", "GuardianNationalId",  "TEXT");
+            TryAdd("Beneficiaries", "GuardianEmail",       "TEXT");
+            TryAdd("Beneficiaries", "EmergencyPhone",      "TEXT");
+            TryAdd("Beneficiaries", "SchoolName",          "TEXT");
+            TryAdd("Beneficiaries", "ReferralSource",      "TEXT");
+            TryAdd("Beneficiaries", "SecondaryDiagnosis",  "TEXT");
+            TryAdd("Beneficiaries", "MedicalHistory",      "TEXT");
+            TryAdd("Beneficiaries", "Allergies",           "TEXT");
+            TryAdd("Beneficiaries", "BloodType",           "TEXT");
+            TryAdd("Beneficiaries", "CurrentMedications",  "TEXT");
+            TryAdd("Beneficiaries", "FunctionalLevel",     "TEXT");
+        }
+        catch { /* ignore migration errors — app still works */ }
     }
 
     // Beneficiaries
@@ -53,7 +101,59 @@ public class DatabaseService
             .ThenInclude(s => s.Therapist)
             .Include(b => b.Payments)
             .Include(b => b.Reminders)
+            .Include(b => b.Attachments)
             .FirstOrDefaultAsync(b => b.Id == id && !b.IsDeleted);
+    }
+
+    // Beneficiary Attachments
+    public async Task<List<BeneficiaryAttachment>> GetBeneficiaryAttachmentsAsync(int beneficiaryId)
+    {
+        return await _context.BeneficiaryAttachments
+            .Where(a => a.BeneficiaryId == beneficiaryId && !a.IsDeleted)
+            .OrderByDescending(a => a.UploadDate)
+            .ToListAsync();
+    }
+
+    public async Task AddBeneficiaryAttachmentAsync(BeneficiaryAttachment attachment)
+    {
+        _context.BeneficiaryAttachments.Add(attachment);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteBeneficiaryAttachmentAsync(int id)
+    {
+        var a = await _context.BeneficiaryAttachments.FindAsync(id);
+        if (a != null) { a.IsDeleted = true; await _context.SaveChangesAsync(); }
+    }
+
+    // Beneficiary full history for profile view
+    public async Task<List<Assessment>> GetBeneficiaryAssessmentsAsync(int beneficiaryId)
+    {
+        return await _context.Assessments
+            .Include(a => a.Therapist)
+            .Where(a => a.BeneficiaryId == beneficiaryId && !a.IsDeleted)
+            .OrderByDescending(a => a.AssessmentDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<InterventionPlan>> GetBeneficiaryPlansAsync(int beneficiaryId)
+    {
+        return await _context.InterventionPlans
+            .Include(p => p.Objectives)
+            .ThenInclude(o => o.ProgressRecords)
+            .Where(p => p.BeneficiaryId == beneficiaryId && !p.IsDeleted)
+            .OrderByDescending(p => p.StartDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<TherapistReport>> GetBeneficiaryTherapistReportsAsync(int beneficiaryId)
+    {
+        return await _context.TherapistReports
+            .Include(r => r.Session)
+            .Include(r => r.Therapist)
+            .Where(r => r.Session.BeneficiaryId == beneficiaryId && !r.IsDeleted)
+            .OrderByDescending(r => r.ReportDate)
+            .ToListAsync();
     }
 
     public async Task<Beneficiary> AddBeneficiaryAsync(Beneficiary beneficiary)

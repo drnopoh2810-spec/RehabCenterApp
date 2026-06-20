@@ -1,162 +1,257 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:views="using:RehabCenterApp.Views"
              xmlns:converters="using:RehabCenterApp.Converters"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="RehabCenterApp.Views.BeneficiariesView"
-             x:DataType="vm:BeneficiariesViewModel">
-
-    <Design.DataContext>
-        <vm:BeneficiariesViewModel/>
-    </Design.DataContext>
+             x:CompileBindings="False">
 
     <Grid RowDefinitions="Auto,*">
+
+        <!-- ══ TOP BAR ══ -->
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
-            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-                <TextBox Grid.Column="0"
-                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                         Watermark="{Binding L[SearchPlaceholder]}"
-                         Margin="0,0,16,0">
-                    <TextBox.InnerLeftContent>
-                        <materialIcons:MaterialIcon Kind="Magnify" Width="20" Margin="8,0" Foreground="{StaticResource TextSecondaryBrush}"/>
-                    </TextBox.InnerLeftContent>
-                </TextBox>
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto">
+                <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" CornerRadius="6"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                        Margin="0,0,8,0" Padding="8,0">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <materialIcons:MaterialIcon Grid.Column="0" Kind="Magnify" Width="18"
+                                                    Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,6,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 Watermark="بحث بالاسم أو الهاتف أو رقم الهوية..."
+                                 Background="Transparent" BorderThickness="0" Padding="0,4"/>
+                    </Grid>
+                </Border>
 
                 <Button Grid.Column="1" Classes="Accent" Command="{Binding AddCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="Plus" Width="18"/>
-                        <TextBlock Text="{Binding L[Add]}"/>
+                        <TextBlock Text="إضافة جديد"/>
                     </StackPanel>
                 </Button>
 
-                <Button Grid.Column="2" Classes="Primary" Command="{Binding EditCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                <!-- ★ Full profile card button -->
+                <Button Grid.Column="2" Command="{Binding OpenProfileCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedBeneficiary, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="CardAccountDetails" Width="18"/>
+                        <TextBlock Text="الملف الكامل"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding EditCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedBeneficiary, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="Pencil" Width="18"/>
-                        <TextBlock Text="{Binding L[Edit]}"/>
+                        <TextBlock Text="تعديل سريع"/>
                     </StackPanel>
                 </Button>
 
-                <Button Grid.Column="3" Classes="Danger" Command="{Binding DeleteCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Grid.Column="4" Classes="Danger" Command="{Binding DeleteCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedBeneficiary, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="Delete" Width="18"/>
-                        <TextBlock Text="{Binding L[Delete]}"/>
+                        <TextBlock Text="حذف"/>
                     </StackPanel>
                 </Button>
 
-                <Button Grid.Column="4" Classes="Primary" Command="{Binding ExportToExcelCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Grid.Column="5" Classes="Primary" Command="{Binding ExportToExcelCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="FileExcel" Width="18"/>
-                        <TextBlock Text="{Binding L[Excel]}"/>
+                        <TextBlock Text="Excel"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
 
-        <Border Classes="Card" Grid.Row="1" Margin="16">
+        <!-- ══ BENEFICIARIES TABLE ══ -->
+        <Border Classes="Card" Grid.Row="1" Margin="16" Padding="0">
             <DataGrid ItemsSource="{Binding Beneficiaries}"
                       SelectedItem="{Binding SelectedBeneficiary}"
                       IsReadOnly="True"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" Width="*"/>
-                    <DataGridTextColumn Header="العمر" Binding="{Binding Age}" Width="80"/>
+                    <DataGridTemplateColumn Header="المستفيد" Width="220">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,*" Margin="8,4">
+                                    <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18"
+                                            Background="{StaticResource PrimaryBrush}" Margin="0,0,10,0">
+                                        <TextBlock Text="{Binding Name[0]}"
+                                                   Foreground="White" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" FontWeight="Bold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"/>
+                                        <TextBlock Text="{Binding NationalId}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="العمر" Binding="{Binding Age}" Width="60"/>
+                    <DataGridTextColumn Header="الجنس" Binding="{Binding Gender}" Width="70"/>
                     <DataGridTextColumn Header="نوع الإعاقة" Binding="{Binding DisabilityType}" Width="150"/>
                     <DataGridTextColumn Header="الجوال" Binding="{Binding Phone}" Width="120"/>
-                    <DataGridTextColumn Header="آخر جلسة" Binding="{Binding LastSession.Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                    <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                    <DataGridTextColumn Header="ولي الأمر" Binding="{Binding GuardianName}" Width="130"/>
+                    <DataGridTextColumn Header="آخر جلسة" Binding="{Binding LastSession.Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="110"/>
+                    <DataGridTemplateColumn Header="الحالة" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="4" Padding="6,2" Margin="4,6"
+                                        Background="{StaticResource AccentBrush}">
+                                    <TextBlock Text="{Binding Status}" Foreground="White" FontSize="11"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
 
+        <!-- ══ QUICK ADD/EDIT FORM OVERLAY ══ -->
         <Border Grid.Row="0" Grid.RowSpan="2"
-                Background="#80000000"
+                Background="#AA000000"
                 IsVisible="{Binding IsFormOpen}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Border Classes="Card"
-                    Width="600"
-                    MaxHeight="700"
+                    Width="640"
+                    MaxHeight="720"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
-                <ScrollViewer>
-                    <Grid x:CompileBindings="False" DataContext="{Binding FormViewModel}" RowDefinitions="Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0"
-                                   Text="{Binding IsEditing, Converter={x:Static converters:BoolToStringConverter.Instance}, ConverterParameter='تعديل مستفيد|إضافة مستفيد جديد'}"
-                                   Classes="Title"
-                                   Margin="0,0,0,16"/>
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0"
+                            Margin="-16,-16,-16,16" Padding="16,12">
+                        <TextBlock x:CompileBindings="False"
+                                   Text="{Binding FormViewModel.IsEditing, Converter={x:Static converters:BoolToStringConverter.Instance}, ConverterParameter='تعديل بيانات مستفيد|إضافة مستفيد جديد'}"
+                                   Foreground="White" FontWeight="Bold" FontSize="16"/>
+                    </Border>
 
-                        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding L[FullName]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Name}" Margin="0,0,8,8"/>
+                    <ScrollViewer Grid.Row="1">
+                        <Grid x:CompileBindings="False" DataContext="{Binding FormViewModel}"
+                              ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding L[DateOfBirth]}" Margin="0,0,0,4"/>
-                            <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DateOfBirth}" Margin="0,0,0,8"/>
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,8,10">
+                                <TextBlock Text="الاسم الكامل *" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding Name}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="8,0,0,10">
+                                <TextBlock Text="تاريخ الميلاد" Margin="0,0,0,4" FontSize="12"/>
+                                <DatePicker SelectedDate="{Binding DateOfBirth}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding L[Gender]}" Margin="0,0,0,4"/>
-                            <ComboBox Grid.Row="3" Grid.Column="0" SelectedItem="{Binding Gender}" Margin="0,0,8,8">
-                                <ComboBoxItem>ذكر</ComboBoxItem>
-                                <ComboBoxItem>أنثى</ComboBoxItem>
-                            </ComboBox>
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,8,10">
+                                <TextBlock Text="الجنس" Margin="0,0,0,4" FontSize="12"/>
+                                <ComboBox SelectedItem="{Binding Gender}">
+                                    <ComboBoxItem>ذكر</ComboBoxItem>
+                                    <ComboBoxItem>أنثى</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="8,0,0,10">
+                                <TextBlock Text="رقم الهوية" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding NationalId}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding L[NationalId]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NationalId}" Margin="0,0,0,8"/>
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,8,10">
+                                <TextBlock Text="نوع الإعاقة" Margin="0,0,0,4" FontSize="12"/>
+                                <ComboBox SelectedItem="{Binding DisabilityType}">
+                                    <ComboBoxItem>إعاقة حركية</ComboBoxItem>
+                                    <ComboBoxItem>إعاقة ذهنية</ComboBoxItem>
+                                    <ComboBoxItem>إعاقة سمعية</ComboBoxItem>
+                                    <ComboBoxItem>إعاقة بصرية</ComboBoxItem>
+                                    <ComboBoxItem>توحد</ComboBoxItem>
+                                    <ComboBoxItem>متلازمة داون</ComboBoxItem>
+                                    <ComboBoxItem>شلل دماغي</ComboBoxItem>
+                                    <ComboBoxItem>أخرى</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="8,0,0,10">
+                                <TextBlock Text="الهاتف" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding Phone}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding L[Address]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Address}" Margin="0,0,8,8"/>
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="0,0,0,10">
+                                <TextBlock Text="التشخيص" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding Diagnosis}" Height="60" TextWrapping="Wrap"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding L[Phone]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Phone}" Margin="0,0,0,8"/>
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0,0,0,10">
+                                <TextBlock Text="العنوان" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding Address}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding L[DisabilityType]}" Margin="0,0,0,4"/>
-                            <ComboBox Grid.Row="7" Grid.Column="0" SelectedItem="{Binding DisabilityType}" Margin="0,0,8,8">
-                                <ComboBoxItem>إعاقة حركية</ComboBoxItem>
-                                <ComboBoxItem>إعاقة ذهنية</ComboBoxItem>
-                                <ComboBoxItem>إعاقة سمعية</ComboBoxItem>
-                                <ComboBoxItem>إعاقة بصرية</ComboBoxItem>
-                                <ComboBoxItem>توحد</ComboBoxItem>
-                                <ComboBoxItem>متلازمة داون</ComboBoxItem>
-                                <ComboBoxItem>أخرى</ComboBoxItem>
-                            </ComboBox>
+                            <StackPanel Grid.Column="0" Grid.Row="5" Margin="0,0,8,10">
+                                <TextBlock Text="اسم ولي الأمر" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding GuardianName}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="5" Margin="8,0,0,10">
+                                <TextBlock Text="هاتف ولي الأمر" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding GuardianPhone}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding L[Diagnosis]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Diagnosis}" Margin="0,0,0,8"/>
+                            <StackPanel Grid.Column="0" Grid.Row="6" Margin="0,0,8,10">
+                                <TextBlock Text="شركة التأمين" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding InsuranceCompany}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="6" Margin="8,0,0,10">
+                                <TextBlock Text="رقم التأمين" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding InsuranceNumber}"/>
+                            </StackPanel>
 
-                            <TextBlock Grid.Row="8" Grid.Column="0" Text="{Binding L[GuardianName]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding GuardianName}" Margin="0,0,8,8"/>
-
-                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding L[GuardianPhone]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding GuardianPhone}" Margin="0,0,0,8"/>
-
-                            <TextBlock Grid.Row="10" Grid.Column="0" Text="{Binding L[InsuranceCompany]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="11" Grid.Column="0" Text="{Binding InsuranceCompany}" Margin="0,0,8,8"/>
-
-                            <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding L[InsuranceNumber]}" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding InsuranceNumber}" Margin="0,0,0,8"/>
-
-                            <TextBlock Grid.Row="12" Grid.Column="0" Text="{Binding L[Status]}" Margin="0,0,0,4"/>
-                            <ComboBox Grid.Row="13" Grid.Column="0" SelectedItem="{Binding Status}" Margin="0,0,8,8">
-                                <ComboBoxItem>Active</ComboBoxItem>
-                                <ComboBoxItem>Inactive</ComboBoxItem>
-                            </ComboBox>
+                            <StackPanel Grid.Column="0" Grid.Row="7" Margin="0,0,8,10">
+                                <TextBlock Text="الحالة" Margin="0,0,0,4" FontSize="12"/>
+                                <ComboBox SelectedItem="{Binding Status}">
+                                    <ComboBoxItem>Active</ComboBoxItem>
+                                    <ComboBoxItem>Inactive</ComboBoxItem>
+                                    <ComboBoxItem>Graduated</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
                         </Grid>
+                    </ScrollViewer>
 
-                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
-                            <Button Classes="Accent" Command="{Binding SaveCommand}" Width="120">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
-                                    <TextBlock Text="{Binding L[Save]}"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <materialIcons:MaterialIcon Kind="Close" Width="18"/>
-                                    <TextBlock Text="{Binding L[Cancel]}"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </ScrollViewer>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding FormViewModel.SaveCommand, FallbackValue={x:Null}}" Width="150">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CloseFormCommand}" Width="100">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </Border>
         </Border>
+
+        <!-- ══ FULL PROFILE OVERLAY ══ -->
+        <Border Grid.Row="0" Grid.RowSpan="2"
+                Background="#CC000000"
+                IsVisible="{Binding IsProfileOpen}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border Classes="Card"
+                    MaxWidth="1100" MaxHeight="860"
+                    Width="1060"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="0">
+                <ContentControl Content="{Binding ProfileViewModel}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="vm:BeneficiaryProfileViewModel">
+                            <views:BeneficiaryProfileView/>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </Border>
+        </Border>
+
     </Grid>
 </UserControl>

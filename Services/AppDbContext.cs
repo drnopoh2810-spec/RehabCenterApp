@@ -54,6 +54,7 @@ public class AppDbContext : DbContext
     // Therapist Portal
     public DbSet<TherapistReport> TherapistReports => Set<TherapistReport>();
     public DbSet<SessionWorksheet> SessionWorksheets => Set<SessionWorksheet>();
+    public DbSet<BeneficiaryAttachment> BeneficiaryAttachments => Set<BeneficiaryAttachment>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

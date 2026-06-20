@@ -41,6 +41,7 @@ public class BeneficiariesViewModel : ViewModelBase
         }
     }
 
+    // ── Form (quick add/edit) ─────────────────────────────────────
     private bool _isFormOpen;
     public bool IsFormOpen
     {
@@ -55,9 +56,26 @@ public class BeneficiariesViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _formViewModel, value);
     }
 
+    // ── Full Profile ──────────────────────────────────────────────
+    private bool _isProfileOpen;
+    public bool IsProfileOpen
+    {
+        get => _isProfileOpen;
+        set => this.RaiseAndSetIfChanged(ref _isProfileOpen, value);
+    }
+
+    private BeneficiaryProfileViewModel? _profileViewModel;
+    public BeneficiaryProfileViewModel? ProfileViewModel
+    {
+        get => _profileViewModel;
+        set => this.RaiseAndSetIfChanged(ref _profileViewModel, value);
+    }
+
+    // ── Commands ─────────────────────────────────────────────────
     public ReactiveCommand<Unit, Unit> LoadCommand { get; }
     public ReactiveCommand<Unit, Unit> AddCommand { get; }
     public ReactiveCommand<Unit, Unit> EditCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenProfileCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
     public ReactiveCommand<Unit, Unit> CloseFormCommand { get; }
     public ReactiveCommand<Unit, Unit> ExportToPdfCommand { get; }
@@ -70,11 +88,13 @@ public class BeneficiariesViewModel : ViewModelBase
         _printService = printService;
 
         LoadCommand = ReactiveCommand.CreateFromTask(LoadAsync);
+
         AddCommand = ReactiveCommand.Create(() =>
         {
             FormViewModel = new BeneficiaryFormViewModel(_dbService, null, OnFormSaved);
             IsFormOpen = true;
         });
+
         EditCommand = ReactiveCommand.Create(() =>
         {
             if (SelectedBeneficiary != null)
@@ -83,6 +103,9 @@ public class BeneficiariesViewModel : ViewModelBase
                 IsFormOpen = true;
             }
         });
+
+        OpenProfileCommand = ReactiveCommand.CreateFromTask(OpenProfileAsync);
+
         DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (SelectedBeneficiary != null)
@@ -93,11 +116,13 @@ public class BeneficiariesViewModel : ViewModelBase
                 {
                     await _dbService.DeleteBeneficiaryAsync(SelectedBeneficiary.Id);
                     await LoadAsync();
-                    await AuditLogger.LogAsync("Delete", "Beneficiary", $"Deleted beneficiary: {SelectedBeneficiary.Name}");
+                    await AuditLogger.LogAsync("Delete", "Beneficiary", $"حذف مستفيد: {SelectedBeneficiary.Name}");
                 }
             }
         });
+
         CloseFormCommand = ReactiveCommand.Create(() => { IsFormOpen = false; });
+
         ExportToPdfCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             var list = Beneficiaries.ToList();
@@ -107,6 +132,7 @@ public class BeneficiariesViewModel : ViewModelBase
                 await _dialogService.ShowInfoAsync("تم التصدير", $"تم حفظ الملف: {path}");
             }
         });
+
         ExportToExcelCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             var list = Beneficiaries.ToList();
@@ -134,6 +160,22 @@ public class BeneficiariesViewModel : ViewModelBase
         Beneficiaries.Clear();
         foreach (var b in list)
             Beneficiaries.Add(b);
+    }
+
+    private async Task OpenProfileAsync()
+    {
+        if (SelectedBeneficiary == null) return;
+        // Load full beneficiary data with all includes
+        var full = await _dbService.GetBeneficiaryByIdAsync(SelectedBeneficiary.Id)
+                   ?? SelectedBeneficiary;
+        ProfileViewModel = new BeneficiaryProfileViewModel(
+            _dbService, _dialogService, full,
+            onClose: () =>
+            {
+                IsProfileOpen = false;
+                _ = LoadAsync();
+            });
+        IsProfileOpen = true;
     }
 
     private async void OnFormSaved()

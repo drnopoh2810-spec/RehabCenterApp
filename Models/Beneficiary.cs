@@ -46,6 +46,42 @@ public class Beneficiary : BaseEntity
 
     public string? PhotoPath { get; set; }
 
+    [MaxLength(50)]
+    public string? GuardianRelation { get; set; }
+
+    [MaxLength(20)]
+    public string? GuardianNationalId { get; set; }
+
+    [MaxLength(100)]
+    public string? GuardianEmail { get; set; }
+
+    [MaxLength(20)]
+    public string? EmergencyPhone { get; set; }
+
+    [MaxLength(100)]
+    public string? SchoolName { get; set; }
+
+    [MaxLength(100)]
+    public string? ReferralSource { get; set; }
+
+    [MaxLength(1000)]
+    public string? SecondaryDiagnosis { get; set; }
+
+    [MaxLength(2000)]
+    public string? MedicalHistory { get; set; }
+
+    [MaxLength(200)]
+    public string? Allergies { get; set; }
+
+    [MaxLength(10)]
+    public string? BloodType { get; set; }
+
+    [MaxLength(500)]
+    public string? CurrentMedications { get; set; }
+
+    [MaxLength(1000)]
+    public string? FunctionalLevel { get; set; }
+
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
     [MaxLength(20)]
@@ -54,6 +90,7 @@ public class Beneficiary : BaseEntity
     public ICollection<Session> Sessions { get; set; } = new List<Session>();
     public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>();
+    public ICollection<BeneficiaryAttachment> Attachments { get; set; } = new List<BeneficiaryAttachment>();
 
     [NotMapped]
     public int Age => DateTime.Now.Year - DateOfBirth.Year;

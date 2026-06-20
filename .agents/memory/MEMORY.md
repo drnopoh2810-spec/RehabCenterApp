@@ -1,2 +1,4 @@
 - [Replit build fixes](replit-build-fixes.md) — key fixes needed to compile/run this Windows Avalonia app on Linux/Replit
 - [Role-based user system](role-based-user-system.md) — how roles, nav visibility, LAN check, and UserSessionService are wired together
+- [DB migration strategy](db-migration-strategy.md) — how new columns are added to existing SQLite DB without EF migrations
+- [Beneficiary profile card](beneficiary-profile-card.md) — comprehensive 5-tab profile overlay architecture and key bindings
