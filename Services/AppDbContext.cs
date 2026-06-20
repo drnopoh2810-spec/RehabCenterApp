@@ -70,7 +70,7 @@ public class AppDbContext : DbContext
             { 
                 Id = 1, 
                 Username = "admin", 
-                PasswordHash = "$2a$12$7x8Q3y2Z1w0V9u8T7r6E5o4P3n2M1l0K9j8I7h6G5f4D3s2A1q0W9e8R7t6Y5u4",
+                PasswordHash = "$2b$12$PM6vdyTw6K1jsB4AHiuX7O5LKhwW2uZktTDFqrTJ1BB.5w6vEGwFS",
                 Role = "Admin",
                 IsActive = true
             }
