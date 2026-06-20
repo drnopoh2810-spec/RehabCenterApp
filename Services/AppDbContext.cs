@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Correspondence> Correspondences => Set<Correspondence>();
     public DbSet<Reminder> Reminders => Set<Reminder>();
     public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<EmployeePayroll> EmployeePayrolls => Set<EmployeePayroll>();
     public DbSet<User> Users => Set<User>();
     public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 

@@ -3,100 +3,771 @@
              xmlns:vm="using:RehabCenterApp.ViewModels"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="RehabCenterApp.Views.HRManagementView"
-             x:DataType="vm:HRManagementViewModel">
+             x:CompileBindings="False">
+
     <Grid RowDefinitions="Auto,*">
+
+        <!-- ══════ TOP BAR ══════ -->
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
-            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Text="{Binding L[HRManagement]}" Classes="Title" VerticalAlignment="Center"/>
-                <Button Grid.Column="1" Classes="Accent" Command="{Binding AddEmployeeCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="إدارة الموارد البشرية" Classes="Title" VerticalAlignment="Center"/>
+
+                <!-- Search -->
+                <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}"
+                        CornerRadius="6" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" Margin="12,0,8,0" Padding="8,0">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <materialIcons:MaterialIcon Grid.Column="0" Kind="Magnify" Width="18"
+                                                    Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,6,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding SearchText}"
+                                 Watermark="بحث بالاسم أو الرقم أو القسم..."
+                                 Background="Transparent" BorderThickness="0" Padding="0,4"/>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="2" Classes="Accent" Command="{Binding AddEmployeeCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="AccountPlus" Width="18"/>
-                        <TextBlock Text="{Binding L[AddEmployee]}"/>
+                        <TextBlock Text="إضافة موظف"/>
                     </StackPanel>
                 </Button>
-                <Button Grid.Column="2" Classes="Primary" Command="{Binding RequestLeaveCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding EditEmployeeCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Pencil" Width="18"/>
+                        <TextBlock Text="تعديل"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="4" Classes="Primary" Command="{Binding ShowIdCardCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Card" Width="18"/>
+                        <TextBlock Text="بطاقة تعريفية"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="5" Classes="Primary" Command="{Binding AddPayrollCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="CashPlus" Width="18"/>
+                        <TextBlock Text="إضافة راتب"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="6" Classes="Primary" Command="{Binding RequestLeaveCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="CalendarPlus" Width="18"/>
-                        <TextBlock Text="{Binding L[RequestLeave]}"/>
+                        <TextBlock Text="طلب إجازة"/>
                     </StackPanel>
                 </Button>
-                <Button Grid.Column="3" Classes="Primary" Command="{Binding EvaluateTherapistCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Grid.Column="7" Classes="Primary" Command="{Binding PrintPayrollCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
+                        <TextBlock Text="طباعة الرواتب"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="8" Classes="Primary" Command="{Binding EvaluateTherapistCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
                         <materialIcons:MaterialIcon Kind="ChartBar" Width="18"/>
-                        <TextBlock Text="{Binding L[Evaluate]}"/>
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="4" Classes="Primary" Command="{Binding PrintPayrollCommand}" Margin="4,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <materialIcons:MaterialIcon Kind="CashRegister" Width="18"/>
-                        <TextBlock Text="{Binding L[Payroll]}"/>
+                        <TextBlock Text="تقييم"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
-        <TabControl Grid.Row="1" Margin="16" SelectedIndex="{Binding SelectedTab}">
-            <TabItem Header="{Binding L[Employees]}">
-                <Border Classes="Card" Padding="0">
-                    <DataGrid ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" IsReadOnly="True" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" Width="*"/>
-                            <DataGridTextColumn Header="الدور" Binding="{Binding Role}" Width="120"/>
-                            <DataGridTextColumn Header="الجوال" Binding="{Binding Phone}" Width="120"/>
-                            <DataGridTextColumn Header="الراتب" Binding="{Binding Salary, StringFormat='{}{0:C}'}" Width="120"/>
-                            <DataGridTextColumn Header="تاريخ التوظيف" Binding="{Binding JoinDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="نشط" Binding="{Binding IsActive}" Width="80"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
-            </TabItem>
-            <TabItem Header="{Binding L[LeaveRequests]}">
-                <Border Classes="Card" Padding="0">
-                    <DataGrid ItemsSource="{Binding LeaveRequests}" IsReadOnly="True" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="الموظف" Binding="{Binding Employee.Name}" Width="*"/>
-                            <DataGridTextColumn Header="النوع" Binding="{Binding LeaveType}" Width="120"/>
-                            <DataGridTextColumn Header="البداية" Binding="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="النهاية" Binding="{Binding EndDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
-                            <DataGridTextColumn Header="الأيام" Binding="{Binding DaysCount}" Width="60"/>
-                            <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
-            </TabItem>
-        </TabControl>
-        <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding IsLeaveFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border Classes="Card" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="{Binding L[RequestLeave]}" Classes="Title" Margin="0,0,0,16"/>
-                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                        <TextBlock Grid.Row="0" Text="{Binding L[LeaveType]}" Margin="0,0,0,4"/>
-                        <ComboBox Grid.Row="1" SelectedItem="{Binding LeaveType}" Margin="0,0,0,12">
-                            <ComboBoxItem>Annual</ComboBoxItem>
-                            <ComboBoxItem>Sick</ComboBoxItem>
-                            <ComboBoxItem>Emergency</ComboBoxItem>
-                            <ComboBoxItem>Unpaid</ComboBoxItem>
-                        </ComboBox>
-                        <TextBlock Grid.Row="2" Text="{Binding L[StartDate]}" Margin="0,0,0,4"/>
-                        <DatePicker Grid.Row="3" SelectedDate="{Binding LeaveStart}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="4" Text="{Binding L[EndDate]}" Margin="0,0,0,4"/>
-                        <DatePicker Grid.Row="5" SelectedDate="{Binding LeaveEnd}" Margin="0,0,0,12"/>
-                        <TextBlock Grid.Row="6" Text="{Binding L[Reason]}" Margin="0,0,0,4"/>
-                        <TextBox Grid.Row="7" Text="{Binding LeaveReason}" Height="60" TextWrapping="Wrap"/>
+
+        <!-- ══════ MAIN CONTENT ══════ -->
+        <Grid Grid.Row="1" ColumnDefinitions="320,*" Margin="16">
+
+            <!-- ── Left: Employee List ── -->
+            <Border Classes="Card" Grid.Column="0" Padding="0" Margin="0,0,8,0">
+                <Grid RowDefinitions="Auto,*">
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0" Padding="12,10">
+                        <TextBlock Text="قائمة الموظفين" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                    </Border>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding Employees}"
+                             SelectedItem="{Binding SelectedEmployee}"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10,8">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <!-- Avatar -->
+                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20"
+                                                Background="{StaticResource PrimaryBrush}"
+                                                Margin="0,0,10,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name[0]}"
+                                                       Foreground="White" HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                                        </Border>
+                                        <!-- Info -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                            <TextBlock Text="{Binding Position}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                            <TextBlock Text="{Binding EmployeeNumber}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                        </StackPanel>
+                                        <!-- Status -->
+                                        <Border Grid.Column="2" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="#E8F5E9"/>
+                                            </Border.Background>
+                                            <TextBlock Text="نشط" FontSize="11" Foreground="#2E7D32"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- ── Right: Details Tabs ── -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,*">
+                <!-- Employee Card summary when selected -->
+                <Border Grid.Row="0" Classes="Card" Margin="0,0,0,8"
+                        IsVisible="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28"
+                                Background="{StaticResource AccentBrush}" Margin="0,0,14,0">
+                            <TextBlock Text="{Binding SelectedEmployee.Name[0]}"
+                                       Foreground="White" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
+                            <TextBlock Text="{Binding SelectedEmployee.Name}" FontSize="18" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="{Binding SelectedEmployee.Position}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock Text="|" Foreground="{StaticResource BorderBrush}"/>
+                                <TextBlock Text="{Binding SelectedEmployee.Department}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock Text="|" Foreground="{StaticResource BorderBrush}"/>
+                                <TextBlock Text="{Binding SelectedEmployee.Phone}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="رقم الهوية:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding SelectedEmployee.NationalId}" FontSize="12"/>
+                                <TextBlock Text="|" Foreground="{StaticResource BorderBrush}" FontSize="12"/>
+                                <TextBlock Text="الراتب الأساسي:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding SelectedEmployee.BaseSalary, StringFormat='{}{0:N0} ر.س'}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                            <Button Command="{Binding OpenContractCommand}" ToolTip.Tip="فتح العقد"
+                                    IsEnabled="{Binding SelectedEmployee.ContractPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                <materialIcons:MaterialIcon Kind="FileDocument" Width="18"/>
+                            </Button>
+                            <Button Command="{Binding OpenCvCommand}" ToolTip.Tip="فتح السيرة الذاتية"
+                                    IsEnabled="{Binding SelectedEmployee.CvPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                <materialIcons:MaterialIcon Kind="AccountDetails" Width="18"/>
+                            </Button>
+                        </StackPanel>
                     </Grid>
+                </Border>
+
+                <!-- Tabs -->
+                <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
+                    <!-- ─ Tab 1: Full Profile ─ -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="AccountCircle" Width="16"/>
+                                <TextBlock Text="الملف الشخصي"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <ScrollViewer>
+                            <StackPanel Spacing="12" IsVisible="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
+                                    <Border Grid.Column="0" Grid.Row="0" Classes="Card" Margin="0,0,6,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="رقم الموظف" Classes="Label" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.EmployeeNumber}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" Grid.Row="0" Classes="Card" Margin="6,0,0,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="رقم الهوية" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.NationalId}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="0" Grid.Row="1" Classes="Card" Margin="0,0,6,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="الدور" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.Role}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" Grid.Row="1" Classes="Card" Margin="6,0,0,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="القسم" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.Department}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="0" Grid.Row="2" Classes="Card" Margin="0,0,6,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="البريد الإلكتروني" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.Email}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" Grid.Row="2" Classes="Card" Margin="6,0,0,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="تاريخ الالتحاق" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.JoinDate, StringFormat='{}{0:yyyy-MM-dd}'}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="0" Grid.Row="3" Classes="Card" Margin="0,0,6,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="جهة الاتصال الطارئة" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.EmergencyContact}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" Grid.Row="3" Classes="Card" Margin="6,0,0,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="هاتف الطوارئ" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.EmergencyPhone}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Classes="Card" Margin="0,0,0,6">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="العنوان" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            <TextBlock Text="{Binding SelectedEmployee.Address}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                                <Border Classes="Card">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="ملاحظات" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding SelectedEmployee.Notes}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ─ Tab 2: Payroll ─ -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="CashMultiple" Width="16"/>
+                                <TextBlock Text="الرواتب والأجور"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <Grid RowDefinitions="Auto,*">
+                            <!-- Payroll Summary Cards -->
+                            <Border Grid.Row="0" Classes="Card" Margin="0,0,0,8"
+                                    IsVisible="{Binding SelectedPayroll, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Grid ColumnDefinitions="*,*,*,*,*,*">
+                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="الراتب الأساسي" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SelectedPayroll.BaseSalary, StringFormat='{}{0:N0}'}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="البدلات" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Foreground="{StaticResource PrimaryBrush}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0:N0}">
+                                                    <Binding Path="SelectedPayroll.HousingAllowance"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="الحوافز" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SelectedPayroll.Incentives, StringFormat='{}{0:N0}'}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource SuccessBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="الخصومات" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SelectedPayroll.Deductions, StringFormat='{}{0:N0}'}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource ErrorBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="4" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="خصم الغياب" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SelectedPayroll.AbsenceDeduction, StringFormat='{}{0:N0}'}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource WarningBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="5" HorizontalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="الصافي" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SelectedPayroll.NetSalary, StringFormat='{}{0:N0} ر.س'}" FontWeight="Bold" FontSize="16" Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="1" Classes="Card" Padding="0">
+                                <Grid RowDefinitions="*,Auto">
+                                    <DataGrid Grid.Row="0" ItemsSource="{Binding Payrolls}"
+                                              SelectedItem="{Binding SelectedPayroll}"
+                                              IsReadOnly="True" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="الشهر" Binding="{Binding MonthName}" Width="120"/>
+                                            <DataGridTextColumn Header="الراتب الأساسي" Binding="{Binding BaseSalary, StringFormat='{}{0:N0}'}" Width="110"/>
+                                            <DataGridTextColumn Header="بدل سكن" Binding="{Binding HousingAllowance, StringFormat='{}{0:N0}'}" Width="90"/>
+                                            <DataGridTextColumn Header="بدل نقل" Binding="{Binding TransportAllowance, StringFormat='{}{0:N0}'}" Width="90"/>
+                                            <DataGridTextColumn Header="حوافز" Binding="{Binding Incentives, StringFormat='{}{0:N0}'}" Width="80"/>
+                                            <DataGridTextColumn Header="خصومات" Binding="{Binding Deductions, StringFormat='{}{0:N0}'}" Width="80"/>
+                                            <DataGridTextColumn Header="أيام غياب" Binding="{Binding AbsenceDays}" Width="80"/>
+                                            <DataGridTextColumn Header="خصم غياب" Binding="{Binding AbsenceDeduction, StringFormat='{}{0:N0}'}" Width="90"/>
+                                            <DataGridTextColumn Header="الصافي" Binding="{Binding NetSalary, StringFormat='{}{0:N0} ر.س'}" Width="120"/>
+                                            <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="80"/>
+                                            <DataGridTextColumn Header="ملاحظات" Binding="{Binding Notes}" Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="8">
+                                        <Button Classes="Accent" Command="{Binding MarkPayrollPaidCommand}"
+                                                IsEnabled="{Binding SelectedPayroll, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <materialIcons:MaterialIcon Kind="CheckCircle" Width="16"/>
+                                                <TextBlock Text="تأكيد الصرف"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+
+                    <!-- ─ Tab 3: Attendance ─ -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="CalendarCheck" Width="16"/>
+                                <TextBlock Text="الحضور والغياب"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <Grid RowDefinitions="Auto,Auto,*">
+                            <!-- Month Selector -->
+                            <Border Grid.Row="0" Classes="Card" Margin="0,0,0,8">
+                                <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                    <TextBlock Text="الشهر:" VerticalAlignment="Center"/>
+                                    <ComboBox SelectedIndex="{Binding AttMonth}" Width="130">
+                                        <ComboBoxItem>يناير</ComboBoxItem>
+                                        <ComboBoxItem>فبراير</ComboBoxItem>
+                                        <ComboBoxItem>مارس</ComboBoxItem>
+                                        <ComboBoxItem>أبريل</ComboBoxItem>
+                                        <ComboBoxItem>مايو</ComboBoxItem>
+                                        <ComboBoxItem>يونيو</ComboBoxItem>
+                                        <ComboBoxItem>يوليو</ComboBoxItem>
+                                        <ComboBoxItem>أغسطس</ComboBoxItem>
+                                        <ComboBoxItem>سبتمبر</ComboBoxItem>
+                                        <ComboBoxItem>أكتوبر</ComboBoxItem>
+                                        <ComboBoxItem>نوفمبر</ComboBoxItem>
+                                        <ComboBoxItem>ديسمبر</ComboBoxItem>
+                                    </ComboBox>
+                                    <TextBlock Text="السنة:" VerticalAlignment="Center"/>
+                                    <NumericUpDown Value="{Binding AttYear}" Minimum="2020" Maximum="2035" Width="90"/>
+                                    <Button Classes="Primary" Command="{Binding AddAttendanceCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <materialIcons:MaterialIcon Kind="Plus" Width="16"/>
+                                            <TextBlock Text="تسجيل حضور"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                            <!-- Stats -->
+                            <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,8">
+                                <Border Grid.Column="0" Background="#E8F5E9" CornerRadius="8" Padding="12,8" Margin="0,0,6,0">
+                                    <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalPresent}" FontSize="22" FontWeight="Bold" Foreground="#2E7D32" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="حاضر" FontSize="12" Foreground="#2E7D32" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="1" Background="#FFEBEE" CornerRadius="8" Padding="12,8" Margin="3,0">
+                                    <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalAbsent}" FontSize="22" FontWeight="Bold" Foreground="#C62828" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="غائب" FontSize="12" Foreground="#C62828" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="2" Background="#FFF8E1" CornerRadius="8" Padding="12,8" Margin="3,0">
+                                    <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalLate}" FontSize="22" FontWeight="Bold" Foreground="#E65100" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="متأخر" FontSize="12" Foreground="#E65100" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="3" Background="#E3F2FD" CornerRadius="8" Padding="12,8" Margin="6,0,0,0">
+                                    <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalOnLeave}" FontSize="22" FontWeight="Bold" Foreground="#1565C0" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="في إجازة" FontSize="12" Foreground="#1565C0" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                            <!-- Attendance Table -->
+                            <Border Grid.Row="2" Classes="Card" Padding="0">
+                                <DataGrid ItemsSource="{Binding AttendanceRecords}"
+                                          IsReadOnly="True" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="التاريخ" Binding="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                                        <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="100"/>
+                                        <DataGridTextColumn Header="وقت الحضور" Binding="{Binding CheckIn}" Width="120"/>
+                                        <DataGridTextColumn Header="وقت الانصراف" Binding="{Binding CheckOut}" Width="120"/>
+                                        <DataGridTextColumn Header="ساعات العمل" Binding="{Binding HoursWorked}" Width="100"/>
+                                        <DataGridTextColumn Header="نوع الإجازة" Binding="{Binding LeaveType}" Width="100"/>
+                                        <DataGridTextColumn Header="ملاحظات" Binding="{Binding Notes}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+
+                    <!-- ─ Tab 4: Leave Requests ─ -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <materialIcons:MaterialIcon Kind="Calendar" Width="16"/>
+                                <TextBlock Text="طلبات الإجازة"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <Grid RowDefinitions="*,Auto">
+                            <Border Grid.Row="0" Classes="Card" Padding="0">
+                                <DataGrid ItemsSource="{Binding LeaveRequests}" IsReadOnly="True" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="الموظف" Binding="{Binding Employee.Name}" Width="*"/>
+                                        <DataGridTextColumn Header="النوع" Binding="{Binding LeaveType}" Width="100"/>
+                                        <DataGridTextColumn Header="من" Binding="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="110"/>
+                                        <DataGridTextColumn Header="إلى" Binding="{Binding EndDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="110"/>
+                                        <DataGridTextColumn Header="الأيام" Binding="{Binding DaysCount}" Width="60"/>
+                                        <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="90"/>
+                                        <DataGridTextColumn Header="السبب" Binding="{Binding Reason}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+                                <Button Classes="Accent" Command="{Binding ApproveLeaveCommand}"
+                                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <materialIcons:MaterialIcon Kind="CheckCircle" Width="16"/>
+                                        <TextBlock Text="موافقة"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Classes="Primary" Command="{Binding RejectLeaveCommand}"
+                                        IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <materialIcons:MaterialIcon Kind="CloseCircle" Width="16"/>
+                                        <TextBlock Text="رفض"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+
+        <!-- ══════ OVERLAYS ══════ -->
+
+        <!-- ── Employee Form Overlay ── -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#AA000000"
+                IsVisible="{Binding IsEmployeeFormOpen}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="700" MaxHeight="680"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0"
+                            Margin="-16,-16,-16,16" Padding="16,12">
+                        <TextBlock Text="{Binding FormTitle}" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                    </Border>
+                    <!-- Fields -->
+                    <ScrollViewer Grid.Row="1">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                              HorizontalAlignment="Stretch">
+                            <!-- Row 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,8,12">
+                                <TextBlock Text="رقم الموظف" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpNumber}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="8,0,0,12">
+                                <TextBlock Text="الاسم الكامل *" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpName}"/>
+                            </StackPanel>
+                            <!-- Row 1 -->
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,8,12">
+                                <TextBlock Text="الدور الوظيفي" Margin="0,0,0,4" FontSize="12"/>
+                                <ComboBox SelectedItem="{Binding EmpRole}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem>Therapist</ComboBoxItem>
+                                    <ComboBoxItem>Receptionist</ComboBoxItem>
+                                    <ComboBoxItem>Admin</ComboBoxItem>
+                                    <ComboBoxItem>Accountant</ComboBoxItem>
+                                    <ComboBoxItem>Doctor</ComboBoxItem>
+                                    <ComboBoxItem>Nurse</ComboBoxItem>
+                                    <ComboBoxItem>Driver</ComboBoxItem>
+                                    <ComboBoxItem>Other</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="8,0,0,12">
+                                <TextBlock Text="المسمى الوظيفي" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpPosition}"/>
+                            </StackPanel>
+                            <!-- Row 2 -->
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,8,12">
+                                <TextBlock Text="القسم" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpDepartment}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="8,0,0,12">
+                                <TextBlock Text="رقم الهاتف" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpPhone}"/>
+                            </StackPanel>
+                            <!-- Row 3 -->
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,8,12">
+                                <TextBlock Text="البريد الإلكتروني" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpEmail}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="3" Margin="8,0,0,12">
+                                <TextBlock Text="رقم الهوية" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpNationalId}"/>
+                            </StackPanel>
+                            <!-- Row 4 -->
+                            <StackPanel Grid.Column="0" Grid.Row="4" Margin="0,0,8,12">
+                                <TextBlock Text="الراتب الأساسي" Margin="0,0,0,4" FontSize="12"/>
+                                <NumericUpDown Value="{Binding EmpBaseSalary}" Minimum="0" Maximum="1000000" Increment="100"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="4" Margin="8,0,0,12">
+                                <TextBlock Text="تاريخ الالتحاق" Margin="0,0,0,4" FontSize="12"/>
+                                <DatePicker SelectedDate="{Binding EmpJoinDate}"/>
+                            </StackPanel>
+                            <!-- Row 5 -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,12">
+                                <TextBlock Text="العنوان" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpAddress}" Height="54" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <!-- Row 6 -->
+                            <StackPanel Grid.Column="0" Grid.Row="6" Margin="0,0,8,12">
+                                <TextBlock Text="جهة الاتصال الطارئة" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpEmergencyContact}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="6" Margin="8,0,0,12">
+                                <TextBlock Text="هاتف الطوارئ" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpEmergencyPhone}"/>
+                            </StackPanel>
+                            <!-- Row 7: File paths -->
+                            <StackPanel Grid.Column="0" Grid.Row="7" Margin="0,0,8,12">
+                                <TextBlock Text="مسار صورة العقد" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpContractPath}" Watermark="مسار ملف العقد..."/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="7" Margin="8,0,0,12">
+                                <TextBlock Text="مسار السيرة الذاتية" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpCvPath}" Watermark="مسار ملف السيرة الذاتية..."/>
+                            </StackPanel>
+                            <!-- Row 8: Notes -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" Margin="0,0,0,0">
+                                <TextBlock Text="ملاحظات" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding EmpNotes}" Height="60" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                    <!-- Buttons -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
-                        <Button Classes="Accent" Command="{Binding RequestLeaveCommand}" Width="120">
+                        <Button Classes="Accent" Command="{Binding SaveEmployeeCommand}" Width="140">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/><TextBlock Text="{Binding L[SubmitLeave]}"/>
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ البيانات"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="120">
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="100">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <materialIcons:MaterialIcon Kind="Close" Width="18"/><TextBlock Text="{Binding L[Cancel]}"/>
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </Grid>
             </Border>
         </Border>
+
+        <!-- ── Payroll Form Overlay ── -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#AA000000"
+                IsVisible="{Binding IsPayrollFormOpen}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="550" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0"
+                            Margin="-16,-16,-16,16" Padding="16,12">
+                        <TextBlock Text="إضافة كشف راتب شهري" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                    </Border>
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,8,12">
+                            <TextBlock Text="الشهر" Margin="0,0,0,4" FontSize="12"/>
+                            <ComboBox SelectedIndex="{Binding PayMonth}" HorizontalAlignment="Stretch">
+                                <ComboBoxItem>يناير</ComboBoxItem><ComboBoxItem>فبراير</ComboBoxItem>
+                                <ComboBoxItem>مارس</ComboBoxItem><ComboBoxItem>أبريل</ComboBoxItem>
+                                <ComboBoxItem>مايو</ComboBoxItem><ComboBoxItem>يونيو</ComboBoxItem>
+                                <ComboBoxItem>يوليو</ComboBoxItem><ComboBoxItem>أغسطس</ComboBoxItem>
+                                <ComboBoxItem>سبتمبر</ComboBoxItem><ComboBoxItem>أكتوبر</ComboBoxItem>
+                                <ComboBoxItem>نوفمبر</ComboBoxItem><ComboBoxItem>ديسمبر</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0" Margin="8,0,0,12">
+                            <TextBlock Text="السنة" Margin="0,0,0,4" FontSize="12"/>
+                            <NumericUpDown Value="{Binding PayYear}" Minimum="2020" Maximum="2035"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,8,12">
+                            <TextBlock Text="الراتب الأساسي" Margin="0,0,0,4" FontSize="12"/>
+                            <NumericUpDown Value="{Binding PayBaseSalary}" Minimum="0" Increment="100"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="1" Margin="8,0,0,12">
+                            <TextBlock Text="بدل السكن" Margin="0,0,0,4" FontSize="12"/>
+                            <NumericUpDown Value="{Binding PayHousingAllowance}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,8,12">
+                            <TextBlock Text="بدل النقل" Margin="0,0,0,4" FontSize="12"/>
+                            <NumericUpDown Value="{Binding PayTransportAllowance}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2" Margin="8,0,0,12">
+                            <TextBlock Text="بدلات أخرى" Margin="0,0,0,4" FontSize="12"/>
+                            <NumericUpDown Value="{Binding PayOtherAllowances}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,8,12">
+                            <TextBlock Text="الحوافز" Margin="0,0,0,4" FontSize="12" Foreground="{StaticResource SuccessBrush}"/>
+                            <NumericUpDown Value="{Binding PayIncentives}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="3" Margin="8,0,0,12">
+                            <TextBlock Text="الخصومات" Margin="0,0,0,4" FontSize="12" Foreground="{StaticResource ErrorBrush}"/>
+                            <NumericUpDown Value="{Binding PayDeductions}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="4" Margin="0,0,8,12">
+                            <TextBlock Text="أيام الغياب" Margin="0,0,0,4" FontSize="12" Foreground="{StaticResource WarningBrush}"/>
+                            <NumericUpDown Value="{Binding PayAbsenceDays}" Minimum="0" Maximum="31"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="4" Margin="8,0,0,12">
+                            <TextBlock Text="خصم الغياب" Margin="0,0,0,4" FontSize="12" Foreground="{StaticResource WarningBrush}"/>
+                            <NumericUpDown Value="{Binding PayAbsenceDeduction}" Minimum="0" Increment="50"/>
+                        </StackPanel>
+                        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5"
+                                Background="{StaticResource AccentBrush}" CornerRadius="8" Padding="12,8" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+                                <TextBlock Text="الراتب الصافي:" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                                <TextBlock Text="{Binding PayNetSalary, StringFormat='{}{0:N0} ر.س'}" Foreground="White" FontWeight="Bold" FontSize="18"/>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Margin="0,0,0,0">
+                            <TextBlock Text="ملاحظات" Margin="0,0,0,4" FontSize="12"/>
+                            <TextBox Text="{Binding PayNotes}" Height="54" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SavePayrollCommand}" Width="130">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ الراتب"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="100">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- ── Leave Form Overlay ── -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#AA000000"
+                IsVisible="{Binding IsLeaveFormOpen}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0"
+                            Margin="-16,-16,-16,16" Padding="16,12">
+                        <TextBlock Text="طلب إجازة" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                    </Border>
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Text="نوع الإجازة" Margin="0,0,0,4" FontSize="12"/>
+                        <ComboBox Grid.Row="1" SelectedItem="{Binding LeaveType}" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+                            <ComboBoxItem>Annual</ComboBoxItem>
+                            <ComboBoxItem>Sick</ComboBoxItem>
+                            <ComboBoxItem>Emergency</ComboBoxItem>
+                            <ComboBoxItem>Unpaid</ComboBoxItem>
+                            <ComboBoxItem>Maternity</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Grid.Row="2" Text="من تاريخ" Margin="0,0,0,4" FontSize="12"/>
+                        <DatePicker Grid.Row="3" SelectedDate="{Binding LeaveStart}" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="4" Text="إلى تاريخ" Margin="0,0,0,4" FontSize="12"/>
+                        <DatePicker Grid.Row="5" SelectedDate="{Binding LeaveEnd}" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="6" Text="السبب" Margin="0,0,0,4" FontSize="12"/>
+                        <TextBox Grid.Row="7" Text="{Binding LeaveReason}" Height="64" TextWrapping="Wrap"/>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SubmitLeaveCommand}" Width="130">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="تقديم الطلب"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="100">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- ── ID Card Overlay ── -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#AA000000"
+                IsVisible="{Binding IsIdCardOpen}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12" Width="440">
+
+                <!-- The ID Card itself -->
+                <Border CornerRadius="16" Padding="0" ClipToBounds="True">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <!-- Card Header -->
+                        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="24,20">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <TextBlock Text="بطاقة موظف" Foreground="White" FontSize="13" Opacity="0.8"/>
+                                    <TextBlock Text="مركز التأهيل" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                                </StackPanel>
+                                <Border Grid.Column="1" Width="70" Height="70" CornerRadius="35"
+                                        Background="White" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding SelectedEmployee.Name[0]}"
+                                               FontSize="30" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <!-- Card Body -->
+                        <Border Grid.Row="1" Background="White" Padding="24,16">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                <TextBlock Grid.Row="0" Text="{Binding SelectedEmployee.Name}"
+                                           FontSize="22" FontWeight="Bold" Foreground="#1A237E" Margin="0,0,0,4"/>
+                                <TextBlock Grid.Row="1" Text="{Binding SelectedEmployee.Position}"
+                                           FontSize="14" Foreground="#5C6BC0" Margin="0,0,0,12"/>
+                                <Rectangle Grid.Row="2" Height="1" Fill="#E8EAF6" Margin="0,0,0,12"/>
+                                <Grid Grid.Row="3" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,8">
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="رقم الموظف:" Foreground="#9E9E9E" FontSize="12" Width="120" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedEmployee.EmployeeNumber}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="1" Text="القسم:" Foreground="#9E9E9E" FontSize="12" Width="120" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedEmployee.Department}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="2" Text="رقم الهوية:" Foreground="#9E9E9E" FontSize="12" Width="120" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedEmployee.NationalId}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="3" Text="الهاتف:" Foreground="#9E9E9E" FontSize="12" Width="120"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SelectedEmployee.Phone}" FontSize="12" FontWeight="SemiBold"/>
+                                </Grid>
+                                <Rectangle Grid.Row="4" Height="1" Fill="#E8EAF6" Margin="0,8"/>
+                                <StackPanel Grid.Row="5" Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="تاريخ الالتحاق:" Foreground="#9E9E9E" FontSize="11"/>
+                                    <TextBlock Text="{Binding SelectedEmployee.JoinDate, StringFormat='{}{0:yyyy-MM-dd}'}" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Action Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
+                    <Button Classes="Accent" Command="{Binding PrintIdCardCommand}" Width="150">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="Printer" Width="18"/>
+                            <TextBlock Text="طباعة البطاقة"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="Primary" Command="{Binding CancelCommand}" Width="110">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                            <TextBlock Text="إغلاق"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
     </Grid>
 </UserControl>

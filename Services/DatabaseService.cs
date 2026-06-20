@@ -239,6 +239,58 @@ public class DatabaseService
         return employee;
     }
 
+    public async Task UpdateEmployeeAsync(Employee employee)
+    {
+        employee.UpdatedAt = DateTime.Now;
+        _context.Employees.Update(employee);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<EmployeePayroll>> GetPayrollsAsync(int? employeeId = null, int? month = null, int? year = null)
+    {
+        var query = _context.EmployeePayrolls
+            .Include(p => p.Employee)
+            .Where(p => !p.IsDeleted)
+            .AsNoTracking();
+        if (employeeId.HasValue)
+            query = query.Where(p => p.EmployeeId == employeeId.Value);
+        if (month.HasValue)
+            query = query.Where(p => p.Month == month.Value);
+        if (year.HasValue)
+            query = query.Where(p => p.Year == year.Value);
+        return await query.OrderByDescending(p => p.Year).ThenByDescending(p => p.Month).ToListAsync();
+    }
+
+    public async Task<EmployeePayroll> AddPayrollAsync(EmployeePayroll payroll)
+    {
+        _context.EmployeePayrolls.Add(payroll);
+        await _context.SaveChangesAsync();
+        return payroll;
+    }
+
+    public async Task UpdatePayrollAsync(EmployeePayroll payroll)
+    {
+        payroll.UpdatedAt = DateTime.Now;
+        _context.EmployeePayrolls.Update(payroll);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<EmployeeAttendance>> GetMonthlyAttendanceAsync(int employeeId, int month, int year)
+    {
+        return await _context.EmployeeAttendances
+            .Where(a => !a.IsDeleted && a.EmployeeId == employeeId
+                && a.Date.Month == month && a.Date.Year == year)
+            .OrderBy(a => a.Date)
+            .ToListAsync();
+    }
+
+    public async Task UpdateEmployeeAttendanceAsync(EmployeeAttendance attendance)
+    {
+        attendance.UpdatedAt = DateTime.Now;
+        _context.EmployeeAttendances.Update(attendance);
+        await _context.SaveChangesAsync();
+    }
+
     // Users
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
