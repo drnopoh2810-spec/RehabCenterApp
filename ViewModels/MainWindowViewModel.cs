@@ -38,7 +38,37 @@ public class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<Reminder> UpcomingReminders { get; } = new();
 
-    // Navigation Commands
+    // ── Current user info (from session) ──────────────────────────
+    public string CurrentUserName => UserSessionService.Instance.FullName.Length > 0
+        ? UserSessionService.Instance.FullName
+        : UserSessionService.Instance.Username;
+
+    public string CurrentUserRole => UserSessionService.Instance.RoleDisplayName;
+
+    // ── Role-based nav visibility ─────────────────────────────────
+    public bool CanSeeBeneficiaries => UserSessionService.Instance.CanSeeBeneficiaries;
+    public bool CanSeeWaitingList => UserSessionService.Instance.CanSeeWaitingList;
+    public bool CanSeeSessions => UserSessionService.Instance.CanSeeSessions;
+    public bool CanSeeTelehealth => UserSessionService.Instance.CanSeeTelehealth;
+    public bool CanSeeAssessments => UserSessionService.Instance.CanSeeAssessments;
+    public bool CanSeeInterventionPlans => UserSessionService.Instance.CanSeeInterventionPlans;
+    public bool CanSeeClinicalReports => UserSessionService.Instance.CanSeeClinicalReports;
+    public bool CanSeeMDT => UserSessionService.Instance.CanSeeMDT;
+    public bool CanSeeGamification => UserSessionService.Instance.CanSeeGamification;
+    public bool CanSeeAccounting => UserSessionService.Instance.CanSeeAccounting;
+    public bool CanSeeInventory => UserSessionService.Instance.CanSeeInventory;
+    public bool CanSeeHR => UserSessionService.Instance.CanSeeHR;
+    public bool CanSeeCorrespondence => UserSessionService.Instance.CanSeeCorrespondence;
+    public bool CanSeeParentPortal => UserSessionService.Instance.CanSeeParentPortal;
+    public bool CanSeeReminders => UserSessionService.Instance.CanSeeReminders;
+    public bool CanSeeDocuments => UserSessionService.Instance.CanSeeDocuments;
+    public bool CanSeeAnalytics => UserSessionService.Instance.CanSeeAnalytics;
+    public bool CanSeeGovernmentReports => UserSessionService.Instance.CanSeeGovernmentReports;
+    public bool CanSeeForms => UserSessionService.Instance.CanSeeForms;
+    public bool CanSeeSettings => UserSessionService.Instance.CanSeeSettings;
+    public bool CanSeeUserManagement => UserSessionService.Instance.CanSeeUserManagement;
+
+    // ── Navigation Commands ───────────────────────────────────────
     public ReactiveCommand<Unit, Unit> NavigateToDashboardCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToBeneficiariesCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToSessionsCommand { get; }
@@ -60,6 +90,7 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> NavigateToGovernmentReportsCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToDocumentArchiveCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToHRManagementCommand { get; }
+    public ReactiveCommand<Unit, Unit> NavigateToUserManagementCommand { get; }
     public ReactiveCommand<Unit, Unit> TogglePaneCommand { get; }
     public ReactiveCommand<Unit, Unit> ToggleLanguageCommand { get; }
     public ReactiveCommand<Unit, Unit> LogoutCommand { get; }
@@ -102,6 +133,7 @@ public class MainWindowViewModel : ViewModelBase
         NavigateToGovernmentReportsCommand = ReactiveCommand.Create(() => _navigationService.NavigateToGovernmentReports());
         NavigateToDocumentArchiveCommand = ReactiveCommand.Create(() => _navigationService.NavigateToDocumentArchive());
         NavigateToHRManagementCommand = ReactiveCommand.Create(() => _navigationService.NavigateToHRManagement());
+        NavigateToUserManagementCommand = ReactiveCommand.Create(() => _navigationService.NavigateToUserManagement());
         TogglePaneCommand = ReactiveCommand.Create(() => { IsPaneOpen = !IsPaneOpen; });
         ToggleLanguageCommand = ReactiveCommand.Create(() => Services.LocalizationService.Instance.ToggleLanguage());
         LogoutCommand = ReactiveCommand.CreateFromTask(LogoutAsync);
@@ -113,6 +145,14 @@ public class MainWindowViewModel : ViewModelBase
 
         _notificationService.Start();
         _ = LoadRemindersAsync();
+
+        // Navigate to first allowed section
+        NavigateToFirstAllowed();
+    }
+
+    private void NavigateToFirstAllowed()
+    {
+        // Already defaults to Dashboard which is always visible
     }
 
     private async Task LoadRemindersAsync()
@@ -133,6 +173,7 @@ public class MainWindowViewModel : ViewModelBase
         var confirm = await _dialogService.ShowConfirmAsync("تأكيد", "هل تريد تسجيل الخروج؟");
         if (confirm)
         {
+            UserSessionService.Instance.Clear();
             Environment.Exit(0);
         }
     }

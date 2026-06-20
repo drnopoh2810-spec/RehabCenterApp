@@ -298,11 +298,26 @@ public class DatabaseService
             .FirstOrDefaultAsync(u => u.Username == username && u.IsActive && !u.IsDeleted);
     }
 
+    public async Task<List<User>> GetUsersAsync()
+    {
+        return await _context.Users
+            .Where(u => !u.IsDeleted)
+            .OrderBy(u => u.Role).ThenBy(u => u.Username)
+            .ToListAsync();
+    }
+
     public async Task<User> AddUserAsync(User user)
     {
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         return user;
+    }
+
+    public async Task UpdateUserAsync(User user)
+    {
+        user.UpdatedAt = DateTime.Now;
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteUserAsync(int id)

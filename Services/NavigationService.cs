@@ -34,6 +34,7 @@ public class NavigationService : ReactiveObject
     private readonly GovernmentReportsViewModel _govVm;
     private readonly DocumentArchiveViewModel _docVm;
     private readonly HRManagementViewModel _hrVm;
+    private readonly UserManagementViewModel _userMgmtVm;
 
     public NavigationService(
         DashboardViewModel dashboardVm,
@@ -56,7 +57,8 @@ public class NavigationService : ReactiveObject
         GamificationViewModel gamificationVm,
         GovernmentReportsViewModel govVm,
         DocumentArchiveViewModel docVm,
-        HRManagementViewModel hrVm)
+        HRManagementViewModel hrVm,
+        UserManagementViewModel userMgmtVm)
     {
         _dashboardVm = dashboardVm;
         _beneficiariesVm = beneficiariesVm;
@@ -79,6 +81,7 @@ public class NavigationService : ReactiveObject
         _govVm = govVm;
         _docVm = docVm;
         _hrVm = hrVm;
+        _userMgmtVm = userMgmtVm;
 
         CurrentViewModel = _dashboardVm;
     }
@@ -104,4 +107,5 @@ public class NavigationService : ReactiveObject
     public void NavigateToGovernmentReports() => CurrentViewModel = _govVm;
     public void NavigateToDocumentArchive() => CurrentViewModel = _docVm;
     public void NavigateToHRManagement() => CurrentViewModel = _hrVm;
+    public void NavigateToUserManagement() => CurrentViewModel = _userMgmtVm;
 }

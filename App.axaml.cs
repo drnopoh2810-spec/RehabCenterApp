@@ -26,78 +26,91 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var loginVm = new ViewModels.LoginViewModel(
+            // ── Shared helper: open MainWindow and close login ────────
+            void OpenMainWindow()
+            {
+                var mainWindow = new MainWindow
+                {
+                    DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
+                };
+                Services.GetRequiredService<DialogService>().SetOwner(mainWindow);
+                desktop.MainWindow = mainWindow;
+                mainWindow.Show();
+                var lw = desktop.Windows.FirstOrDefault(w => w is LoginWindow);
+                lw?.Close();
+            }
+
+            // ── Helper: build a LoginViewModel ────────────────────────
+            ViewModels.LoginViewModel BuildLoginVm() => new ViewModels.LoginViewModel(
                 Services.GetRequiredService<DatabaseService>(),
                 Services.GetRequiredService<LanAccessService>(),
-                () =>
-                {
-                    var mainWindow = new MainWindow
-                    {
-                        DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
-                    };
+                onAdminSuccess: OpenMainWindow,
+                onTherapistSuccess: (therapistUsername) => OpenTherapistWindow(therapistUsername, desktop),
+                onRoleSuccess: (role) => OpenMainWindow()
+            );
 
-                    Services.GetRequiredService<DialogService>().SetOwner(mainWindow);
-
-                    desktop.MainWindow = mainWindow;
-                    mainWindow.Show();
-
-                    var loginWindow = desktop.Windows.FirstOrDefault(w => w is LoginWindow);
-                    loginWindow?.Close();
-                },
-                (therapistUsername) =>
-                {
-                    var therapistVm = new ViewModels.TherapistDashboardViewModel(
-                        Services.GetRequiredService<DatabaseService>(),
-                        Services.GetRequiredService<PrintService>(),
-                        Services.GetRequiredService<WordExportService>(),
-                        Services.GetRequiredService<DialogService>(),
-                        therapistUsername,
-                        () =>
-                        {
-                            var newLoginWindow = new LoginWindow();
-                            var newLoginVm = new ViewModels.LoginViewModel(
-                                Services.GetRequiredService<DatabaseService>(),
-                                Services.GetRequiredService<LanAccessService>(),
-                                () =>
-                                {
-                                    var mw = new MainWindow
-                                    {
-                                        DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
-                                    };
-                                    Services.GetRequiredService<DialogService>().SetOwner(mw);
-                                    desktop.MainWindow = mw;
-                                    mw.Show();
-                                    desktop.Windows.FirstOrDefault(w => w is LoginWindow)?.Close();
-                                    desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
-                                },
-                                (u) => { }
-                            );
-                            newLoginWindow.DataContext = newLoginVm;
-                            desktop.MainWindow = newLoginWindow;
-                            newLoginWindow.Show();
-                            desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
-                        }
-                    );
-
-                    var therapistWindow = new TherapistWindow
-                    {
-                        DataContext = therapistVm
-                    };
-
-                    Services.GetRequiredService<DialogService>().SetOwner(therapistWindow);
-                    desktop.MainWindow = therapistWindow;
-                    therapistWindow.Show();
-
-                    var loginWindow = desktop.Windows.FirstOrDefault(w => w is LoginWindow);
-                    loginWindow?.Close();
-                });
-
+            var loginVm = BuildLoginVm();
             var loginWindow = new LoginWindow { DataContext = loginVm };
             desktop.MainWindow = loginWindow;
             loginWindow.Show();
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void OpenTherapistWindow(string therapistUsername, IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var therapistVm = new ViewModels.TherapistDashboardViewModel(
+            Services.GetRequiredService<DatabaseService>(),
+            Services.GetRequiredService<PrintService>(),
+            Services.GetRequiredService<WordExportService>(),
+            Services.GetRequiredService<DialogService>(),
+            therapistUsername,
+            onLogout: () =>
+            {
+                // Re-open login
+                var newLoginWindow = new LoginWindow();
+                var newLoginVm = new ViewModels.LoginViewModel(
+                    Services.GetRequiredService<DatabaseService>(),
+                    Services.GetRequiredService<LanAccessService>(),
+                    onAdminSuccess: () =>
+                    {
+                        var mw = new MainWindow
+                        {
+                            DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
+                        };
+                        Services.GetRequiredService<DialogService>().SetOwner(mw);
+                        desktop.MainWindow = mw;
+                        mw.Show();
+                        desktop.Windows.FirstOrDefault(w => w is LoginWindow)?.Close();
+                        desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
+                    },
+                    onTherapistSuccess: (u) => OpenTherapistWindow(u, desktop),
+                    onRoleSuccess: (role) =>
+                    {
+                        var mw = new MainWindow
+                        {
+                            DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
+                        };
+                        Services.GetRequiredService<DialogService>().SetOwner(mw);
+                        desktop.MainWindow = mw;
+                        mw.Show();
+                        desktop.Windows.FirstOrDefault(w => w is LoginWindow)?.Close();
+                        desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
+                    }
+                );
+                newLoginWindow.DataContext = newLoginVm;
+                desktop.MainWindow = newLoginWindow;
+                newLoginWindow.Show();
+                desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
+            }
+        );
+
+        var therapistWindow = new TherapistWindow { DataContext = therapistVm };
+        Services.GetRequiredService<DialogService>().SetOwner(therapistWindow);
+        desktop.MainWindow = therapistWindow;
+        therapistWindow.Show();
+        desktop.Windows.FirstOrDefault(w => w is LoginWindow)?.Close();
     }
 
     private void ConfigureServices(IServiceCollection services)
@@ -144,5 +157,8 @@ public partial class App : Application
         services.AddTransient<ViewModels.DocumentArchiveViewModel>();
         services.AddTransient<ViewModels.HRManagementViewModel>();
         services.AddTransient<ViewModels.TherapistDashboardViewModel>();
+
+        // ViewModels - User Management
+        services.AddSingleton<ViewModels.UserManagementViewModel>();
     }
 }

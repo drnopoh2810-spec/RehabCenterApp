@@ -4,7 +4,7 @@
         xmlns:views="using:RehabCenterApp.Views"
         xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         x:Class="RehabCenterApp.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
+        x:CompileBindings="False"
         Title="{Binding L[AppTitle]}"
         Width="1600" Height="1000"
         MinWidth="1200" MinHeight="800"
@@ -17,7 +17,9 @@
                CompactPaneLength="56">
         <SplitView.Pane>
             <Border Background="{StaticResource PrimaryBrush}">
-                <Grid RowDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+                    <!-- Toggle button -->
                     <Button Grid.Row="0"
                             Command="{Binding TogglePaneCommand}"
                             Background="Transparent"
@@ -27,13 +29,35 @@
                         <materialIcons:MaterialIcon Kind="Menu" Width="24" Height="24" Foreground="White"/>
                     </Button>
 
-                    <ScrollViewer Grid.Row="1">
+                    <!-- Current user info -->
+                    <Border Grid.Row="1" Padding="12,8" Margin="6,0,6,6"
+                            Background="#00000030" CornerRadius="8"
+                            IsVisible="{Binding IsPaneOpen}">
+                        <StackPanel Spacing="2">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border Width="32" Height="32" CornerRadius="16" Background="#ffffff30">
+                                    <materialIcons:MaterialIcon Kind="AccountCircle" Width="20" Foreground="White"
+                                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center" Spacing="1">
+                                    <TextBlock Text="{Binding CurrentUserName}" Foreground="White" FontWeight="Bold" FontSize="13"/>
+                                    <TextBlock Text="{Binding CurrentUserRole}" Foreground="#ffffff80" FontSize="11"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Navigation -->
+                    <ScrollViewer Grid.Row="2">
                         <StackPanel Spacing="1" Margin="0,4">
 
-                            <TextBlock Text="{Binding L[NavCoreOps]}" Foreground="#ffffff80" FontSize="10" Margin="16,8,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <!-- ══ Core Operations ══ -->
+                            <TextBlock Text="{Binding L[NavCoreOps]}" Foreground="#ffffff80" FontSize="10"
+                                       Margin="16,8,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToDashboardCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ViewDashboard" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavDashboard]}" Foreground="White" FontSize="13"/>
@@ -41,7 +65,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToBeneficiariesCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeBeneficiaries}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountGroup" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavBeneficiaries]}" Foreground="White" FontSize="13"/>
@@ -49,7 +75,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToWaitingListCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeWaitingList}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ClipboardList" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavWaitingList]}" Foreground="White" FontSize="13"/>
@@ -57,7 +85,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToSessionsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeSessions}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="CalendarCheck" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavSessions]}" Foreground="White" FontSize="13"/>
@@ -65,17 +95,23 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToTelehealthCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeTelehealth}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Video" Width="22" Foreground="#48bb78"/>
                                     <TextBlock Text="{Binding L[NavTelehealth]}" Foreground="#48bb78" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding L[NavClinical]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <!-- ══ Clinical ══ -->
+                            <TextBlock Text="{Binding L[NavClinical]}" Foreground="#ffffff80" FontSize="10"
+                                       Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAssessmentsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeAssessments}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ChartBar" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavAssessments]}" Foreground="White" FontSize="13"/>
@@ -83,7 +119,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToInterventionPlansCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeInterventionPlans}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ClipboardText" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavInterventionPlans]}" Foreground="White" FontSize="13"/>
@@ -91,7 +129,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToClinicalReportsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeClinicalReports}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileCertificate" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavClinicalReports]}" Foreground="White" FontSize="13"/>
@@ -99,7 +139,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToMDTMeetingsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeMDT}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountMultiple" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavMDT]}" Foreground="White" FontSize="13"/>
@@ -107,17 +149,23 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToGamificationCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeGamification}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Trophy" Width="22" Foreground="#ed8936"/>
                                     <TextBlock Text="{Binding L[NavGamification]}" Foreground="#ed8936" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding L[NavFinancial]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <!-- ══ Financial ══ -->
+                            <TextBlock Text="{Binding L[NavFinancial]}" Foreground="#ffffff80" FontSize="10"
+                                       Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAccountingCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeAccounting}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="CashRegister" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavAccounting]}" Foreground="White" FontSize="13"/>
@@ -125,7 +173,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToInventoryCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeInventory}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="PackageVariant" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavInventory]}" Foreground="White" FontSize="13"/>
@@ -133,17 +183,23 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToHRManagementCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeHR}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="AccountTie" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavHR]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding L[NavCommunication]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <!-- ══ Communication ══ -->
+                            <TextBlock Text="{Binding L[NavCommunication]}" Foreground="#ffffff80" FontSize="10"
+                                       Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToCorrespondenceCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeCorrespondence}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Email" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavCorrespondence]}" Foreground="White" FontSize="13"/>
@@ -151,7 +207,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToParentPortalCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeParentPortal}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="MessageText" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavParentPortal]}" Foreground="White" FontSize="13"/>
@@ -159,7 +217,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToRemindersCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeReminders}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="BellRing" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavReminders]}" Foreground="White" FontSize="13"/>
@@ -167,17 +227,23 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToDocumentArchiveCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeDocuments}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Archive" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavDocuments]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding L[NavReports]}" Foreground="#ffffff80" FontSize="10" Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
+                            <!-- ══ Reports ══ -->
+                            <TextBlock Text="{Binding L[NavReports]}" Foreground="#ffffff80" FontSize="10"
+                                       Margin="16,12,0,4" IsVisible="{Binding IsPaneOpen}"/>
 
                             <Button Command="{Binding NavigateToAnalyticsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeAnalytics}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="ChartAreaspline" Width="22" Foreground="#48bb78"/>
                                     <TextBlock Text="{Binding L[NavAnalytics]}" Foreground="#48bb78" FontSize="13"/>
@@ -185,7 +251,9 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToGovernmentReportsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeGovernmentReports}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileDocumentCheck" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavGovernmentReports]}" Foreground="White" FontSize="13"/>
@@ -193,38 +261,56 @@
                             </Button>
 
                             <Button Command="{Binding NavigateToFormsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeForms}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="FileDocument" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavForms]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
+                            <!-- ══ Admin ══ -->
                             <Separator Margin="8,8" Background="#ffffff30"/>
 
-                            <Button Command="{Binding ToggleLanguageCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                            <Button Command="{Binding NavigateToUserManagementCommand}"
+                                    IsVisible="{Binding CanSeeUserManagement}"
+                                    Background="#ffffff15" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
-                                    <materialIcons:MaterialIcon Kind="Translate" Width="22" Foreground="#90cdf4"/>
-                                    <TextBlock Text="{Binding L.LangToggleLabel}" Foreground="#90cdf4" FontSize="13" FontWeight="Bold"/>
+                                    <materialIcons:MaterialIcon Kind="AccountKey" Width="22" Foreground="#fbd38d"/>
+                                    <TextBlock Text="إدارة المستخدمين" Foreground="#fbd38d" FontSize="13" FontWeight="Bold"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Command="{Binding NavigateToSettingsCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    IsVisible="{Binding CanSeeSettings}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Cog" Width="22" Foreground="White"/>
                                     <TextBlock Text="{Binding L[NavSettings]}" Foreground="White" FontSize="13"/>
                                 </StackPanel>
                             </Button>
 
+                            <Button Command="{Binding ToggleLanguageCommand}"
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
+                                <StackPanel Orientation="Horizontal" Spacing="14">
+                                    <materialIcons:MaterialIcon Kind="Translate" Width="22" Foreground="#90cdf4"/>
+                                    <TextBlock Text="{Binding L.LangToggleLabel}" Foreground="#90cdf4" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
                             <Button Command="{Binding LogoutCommand}"
-                                    Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,10">
+                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" Padding="16,10">
                                 <StackPanel Orientation="Horizontal" Spacing="14">
                                     <materialIcons:MaterialIcon Kind="Logout" Width="22" Foreground="#feb2b2"/>
                                     <TextBlock Text="{Binding L[NavLogout]}" Foreground="#feb2b2" FontSize="13"/>
                                 </StackPanel>
                             </Button>
+
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
@@ -256,6 +342,7 @@
                         <DataTemplate DataType="vm:GovernmentReportsViewModel"><views:GovernmentReportsView/></DataTemplate>
                         <DataTemplate DataType="vm:DocumentArchiveViewModel"><views:DocumentArchiveView/></DataTemplate>
                         <DataTemplate DataType="vm:HRManagementViewModel"><views:HRManagementView/></DataTemplate>
+                        <DataTemplate DataType="vm:UserManagementViewModel"><views:UserManagementView/></DataTemplate>
                     </TransitioningContentControl.DataTemplates>
                 </TransitioningContentControl>
             </Border>

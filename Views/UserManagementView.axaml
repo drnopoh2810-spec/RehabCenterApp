@@ -1,0 +1,288 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.UserManagementView"
+             x:CompileBindings="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ══ TOP BAR ══ -->
+        <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Text="إدارة المستخدمين والصلاحيات" Classes="Title" VerticalAlignment="Center"/>
+                <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                        Margin="12,0,8,0" Padding="8,0">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <materialIcons:MaterialIcon Grid.Column="0" Kind="Magnify" Width="18"
+                                                    Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,6,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding SearchText}" Watermark="بحث بالاسم أو الدور..."
+                                 Background="Transparent" BorderThickness="0" Padding="0,4"/>
+                    </Grid>
+                </Border>
+                <Button Grid.Column="2" Classes="Accent" Command="{Binding AddUserCommand}" Margin="4,0">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="AccountPlus" Width="18"/>
+                        <TextBlock Text="مستخدم جديد"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="3" Classes="Primary" Command="{Binding EditUserCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedUser, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Pencil" Width="18"/>
+                        <TextBlock Text="تعديل"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="4" Command="{Binding ToggleActiveCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedUser, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="AccountCheck" Width="18"/>
+                        <TextBlock Text="تفعيل / تعطيل"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="5" Classes="Primary" Command="{Binding DeleteUserCommand}" Margin="4,0"
+                        IsEnabled="{Binding SelectedUser, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="AccountRemove" Width="18"/>
+                        <TextBlock Text="حذف"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- ══ CONTENT ══ -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,340" Margin="16">
+
+            <!-- ── Left: Users list + Network ── -->
+            <Grid Grid.Column="0" RowDefinitions="*,Auto" Margin="0,0,8,0">
+
+                <!-- Users Table -->
+                <Border Grid.Row="0" Classes="Card" Padding="0">
+                    <DataGrid ItemsSource="{Binding Users}"
+                              SelectedItem="{Binding SelectedUser}"
+                              IsReadOnly="True" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="المستخدم" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*" Margin="8,4">
+                                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18"
+                                                    Background="{StaticResource PrimaryBrush}" Margin="0,0,10,0">
+                                                <TextBlock Text="{Binding Username[0]}"
+                                                           Foreground="White" HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center" FontWeight="Bold"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                                <TextBlock Text="{Binding FullName}" FontWeight="SemiBold" FontSize="13"/>
+                                                <TextBlock Text="{Binding Username}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="الدور" Width="130">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="4" Padding="8,3" Margin="4,6"
+                                                Background="{StaticResource AccentBrush}">
+                                            <TextBlock Text="{Binding Role}" Foreground="White" FontSize="12" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="الهاتف" Binding="{Binding Phone}" Width="120"/>
+                            <DataGridTextColumn Header="الشبكة" Binding="{Binding RequireLanAccess, StringFormat={}{0}}" Width="80"/>
+                            <DataGridTextColumn Header="الحالة" Binding="{Binding IsActive, StringFormat={}{0}}" Width="90"/>
+                            <DataGridTextColumn Header="آخر دخول" Binding="{Binding LastLogin, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="140"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Network / WiFi Settings -->
+                <Border Grid.Row="1" Classes="Card" Margin="0,8,0,0">
+                    <Grid RowDefinitions="Auto,Auto,Auto">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+                            <materialIcons:MaterialIcon Kind="Wifi" Width="22" Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text="إعداد قيد الشبكة (واي فاي)" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <!-- IP info -->
+                        <Border Grid.Row="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,10">
+                            <Border.Background>
+                                <SolidColorBrush Color="#E3F2FD"/>
+                            </Border.Background>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <materialIcons:MaterialIcon Grid.Column="0" Kind="InformationOutline" Width="18"
+                                                            Foreground="#1565C0" Margin="0,0,8,0"/>
+                                <TextBlock Grid.Column="1" Text="{Binding LanStatusText}"
+                                           Foreground="#1565C0" FontSize="12" TextWrapping="Wrap"/>
+                            </Grid>
+                        </Border>
+                        <!-- Subnet setting -->
+                        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto,Auto">
+                            <TextBlock Grid.Column="0" Text="نطاق الشبكة المسموح:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox Grid.Column="1" Text="{Binding AllowedSubnet}"
+                                     Watermark="مثال: 192.168.1."
+                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <Button Grid.Column="2" Command="{Binding DetectSubnetCommand}" Margin="0,0,6,0"
+                                    ToolTip.Tip="اكتشاف تلقائي من IP الجهاز الحالي">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <materialIcons:MaterialIcon Kind="AutoFix" Width="16"/>
+                                    <TextBlock Text="تلقائي"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Classes="Accent" Command="{Binding SaveSubnetCommand}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <materialIcons:MaterialIcon Kind="ContentSave" Width="16"/>
+                                    <TextBlock Text="حفظ"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ── Right: Role cards ── -->
+            <Border Grid.Column="1" Classes="Card">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                        <materialIcons:MaterialIcon Kind="ShieldAccount" Width="20" Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBlock Text="الأدوار والصلاحيات" FontWeight="Bold" FontSize="15"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Roles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="Card" Margin="0,0,0,6" Padding="12,10"
+                                        CornerRadius="8">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Border Grid.Column="0" Width="38" Height="38" CornerRadius="19"
+                                                Background="{StaticResource PrimaryBrush}" Margin="0,0,10,0"
+                                                VerticalAlignment="Center">
+                                            <materialIcons:MaterialIcon Kind="AccountCircle" Width="22"
+                                                                         Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13"/>
+                                            <TextBlock Text="{Binding Description}"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       FontSize="11" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ══ FORM OVERLAY ══ -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#AA000000"
+                IsVisible="{Binding IsFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="620" MaxHeight="680"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="8,8,0,0"
+                            Margin="-16,-16,-16,16" Padding="16,12">
+                        <TextBlock Text="{Binding FormTitle}" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                    </Border>
+
+                    <!-- Fields -->
+                    <ScrollViewer Grid.Row="1">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                            <!-- Row 0: Username + Full Name -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,8,12">
+                                <TextBlock Text="اسم المستخدم *" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FUsername}" IsEnabled="{Binding !IsEditMode}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="8,0,0,12">
+                                <TextBlock Text="الاسم الكامل" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FFullName}"/>
+                            </StackPanel>
+                            <!-- Row 1: Role selector -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="0,0,0,12">
+                                <TextBlock Text="الدور الوظيفي *" Margin="0,0,0,6" FontSize="12"/>
+                                <ListBox ItemsSource="{Binding Roles}"
+                                         SelectedItem="{Binding SelectedRoleInfo}"
+                                         SelectionMode="Single">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,6" CornerRadius="6" Margin="3">
+                                                <TextBlock Text="{Binding DisplayName}" FontSize="12"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                            <!-- Row 2: Phone + Email -->
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,8,12">
+                                <TextBlock Text="الهاتف" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FPhone}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="8,0,0,12">
+                                <TextBlock Text="البريد الإلكتروني" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FEmail}"/>
+                            </StackPanel>
+                            <!-- Row 3: Password -->
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,8,12">
+                                <TextBlock Text="{Binding IsEditMode, StringFormat={}كلمة المرور (اتركها فارغة لعدم التغيير)}"
+                                           Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FPassword}" PasswordChar="•"
+                                         Watermark="••••••••"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="3" Margin="8,0,0,12">
+                                <TextBlock Text="تأكيد كلمة المرور" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FPasswordConfirm}" PasswordChar="•"
+                                         Watermark="••••••••"/>
+                            </StackPanel>
+                            <!-- Row 4: LAN + Active -->
+                            <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4"
+                                    Background="#E3F2FD" CornerRadius="8" Padding="12,10" Margin="0,0,0,12">
+                                <StackPanel Spacing="8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <materialIcons:MaterialIcon Kind="Wifi" Width="18" Foreground="#1565C0"/>
+                                        <TextBlock Text="إعدادات الوصول عبر الشبكة" FontWeight="SemiBold" Foreground="#1565C0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <CheckBox IsChecked="{Binding FRequireLan}" Content="اشتراط الاتصال بنفس شبكة الواي فاي" FontSize="13"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <CheckBox IsChecked="{Binding FIsActive}" Content="الحساب فعّال" FontSize="13"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <!-- Row 5: Notes -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,0">
+                                <TextBlock Text="ملاحظات" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox Text="{Binding FNotes}" Height="60" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SaveUserCommand}" Width="150">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="حفظ المستخدم"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelCommand}" Width="100">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="إلغاء"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+    </Grid>
+</UserControl>

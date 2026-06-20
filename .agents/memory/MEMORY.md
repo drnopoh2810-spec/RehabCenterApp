@@ -1,1 +1,2 @@
 - [Replit build fixes](replit-build-fixes.md) — key fixes needed to compile/run this Windows Avalonia app on Linux/Replit
+- [Role-based user system](role-based-user-system.md) — how roles, nav visibility, LAN check, and UserSessionService are wired together

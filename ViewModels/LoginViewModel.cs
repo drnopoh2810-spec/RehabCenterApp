@@ -13,6 +13,7 @@ public class LoginViewModel : ViewModelBase
     private readonly LanAccessService _lanAccessService;
     private readonly Action _onAdminSuccess;
     private readonly Action<string> _onTherapistSuccess;
+    private readonly Action<string> _onRoleSuccess;
 
     private string _username = string.Empty;
     public string Username
@@ -52,12 +53,22 @@ public class LoginViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> LoginCommand { get; }
     public ReactiveCommand<Unit, Unit> ToggleLangCommand { get; }
 
-    public LoginViewModel(DatabaseService dbService, LanAccessService lanAccessService, Action onAdminSuccess, Action<string> onTherapistSuccess)
+    /// <param name="onAdminSuccess">Opens admin/MainWindow</param>
+    /// <param name="onTherapistSuccess">Opens TherapistWindow with username</param>
+    /// <param name="onRoleSuccess">Opens MainWindow for non-admin roles (role-based nav)</param>
+    public LoginViewModel(
+        DatabaseService dbService,
+        LanAccessService lanAccessService,
+        Action onAdminSuccess,
+        Action<string> onTherapistSuccess,
+        Action<string>? onRoleSuccess = null)
     {
         _dbService = dbService;
         _lanAccessService = lanAccessService;
         _onAdminSuccess = onAdminSuccess;
         _onTherapistSuccess = onTherapistSuccess;
+        _onRoleSuccess = onRoleSuccess ?? (role => onAdminSuccess());
+
         LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync);
         ToggleLangCommand = ReactiveCommand.Create(() => LocalizationService.Instance.ToggleLanguage());
     }
@@ -91,7 +102,27 @@ public class LoginViewModel : ViewModelBase
                 return;
             }
 
-            // LAN check for Therapist role
+            if (!user.IsActive)
+            {
+                ErrorMessage = "هذا الحساب معطّل. الرجاء التواصل مع مدير النظام.";
+                HasError = true;
+                return;
+            }
+
+            // ── LAN check for all roles except Admin ─────────────────
+            if (user.Role != "Admin" && user.RequireLanAccess)
+            {
+                var allowedSubnet = await _lanAccessService.GetAllowedSubnetAsync();
+                if (!string.IsNullOrWhiteSpace(allowedSubnet) && !_lanAccessService.IsAllowedAccess(allowedSubnet))
+                {
+                    var localIp = _lanAccessService.GetPrimaryLocalIp();
+                    ErrorMessage = $"الوصول مرفوض — يُسمح فقط للمتصلين بشبكة: {allowedSubnet}*\nعنوان IP الحالي: {localIp}\n\nالرجاء الاتصال بنفس شبكة الواي فاي الخاصة بالمركز.";
+                    HasError = true;
+                    return;
+                }
+            }
+
+            // ── Therapist portal check ────────────────────────────────
             if (user.Role == "Therapist")
             {
                 var portalEnabled = await _dbService.GetSettingAsync("TherapistPortalEnabled") ?? "True";
@@ -101,25 +132,26 @@ public class LoginViewModel : ViewModelBase
                     HasError = true;
                     return;
                 }
-
-                var allowedSubnet = await _lanAccessService.GetAllowedSubnetAsync();
-                if (!_lanAccessService.IsAllowedAccess(allowedSubnet))
-                {
-                    var localIp = _lanAccessService.GetPrimaryLocalIp();
-                    ErrorMessage = $"الوصول مرفوض. يُسمح فقط بالشبكة: {allowedSubnet}*\nعنوان IP الحالي: {localIp}";
-                    HasError = true;
-                    return;
-                }
             }
 
+            // ── Save session ──────────────────────────────────────────
+            UserSessionService.Instance.SetUser(user);
             await _dbService.SetSettingAsync("CurrentUser", user.Username);
             await _dbService.SetSettingAsync("CurrentRole", user.Role);
-            await AuditLogger.LogAsync("Login", "User", $"User {user.Username} logged in with role {user.Role}");
 
+            // Update last login
+            user.LastLogin = DateTime.Now;
+            await _dbService.UpdateUserAsync(user);
+
+            await AuditLogger.LogAsync("Login", "User", $"تسجيل دخول: {user.Username} ({user.Role})");
+
+            // ── Route by role ─────────────────────────────────────────
             if (user.Role == "Therapist")
                 _onTherapistSuccess(user.Username);
-            else
+            else if (user.Role == "Admin")
                 _onAdminSuccess();
+            else
+                _onRoleSuccess(user.Role);
         }
         catch (Exception ex)
         {
