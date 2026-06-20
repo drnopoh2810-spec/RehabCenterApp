@@ -353,6 +353,47 @@ public class LocalizationService : ReactiveObject
         ["Message"] = "الرسالة",
         ["Survey"] = "الاستبيان",
         ["Rating"] = "التقييم",
+
+        // Therapist Portal
+        ["TherapistPortal"] = "بوابة المعالج",
+        ["TodaySchedule"] = "جدول اليوم",
+        ["TodayAppointments"] = "مواعيد اليوم",
+        ["TotalReports"] = "إجمالي التقارير",
+        ["WriteReport"] = "كتابة تقرير",
+        ["SaveReport"] = "حفظ التقرير",
+        ["DailySessionReport"] = "تقرير الجلسة اليومي",
+        ["ReportExistsFor"] = "تم حفظ تقرير لهذه الجلسة",
+        ["RecentReports"] = "آخر التقارير",
+        ["Activities"] = "الأنشطة",
+        ["ActivitiesPerformed"] = "الأنشطة المنفذة",
+        ["ChildResponse"] = "استجابة الطفل",
+        ["GoalsAddressed"] = "الأهداف المُناولة",
+        ["BehaviorNotes"] = "ملاحظات السلوك",
+        ["HomeworkParent"] = "الواجبات / تعليمات ولي الأمر",
+        ["NextSessionPlan"] = "خطة الجلسة القادمة",
+        ["OverallRating"] = "التقييم العام",
+        ["Worksheet"] = "ورقة عمل الجلسة",
+        ["WorksheetDescription"] = "ستظهر أوراق العمل هنا. اختر جلسة من اليسار للبدء.",
+        ["SelectSessionFirst"] = "الرجاء اختيار جلسة من القائمة.",
+        ["SelectSessionPrompt"] = "انقر على جلسة لعرض التفاصيل وكتابة تقرير.",
+        ["ChildHistory"] = "تاريخ تقدم الطفل",
+        ["ExportWord"] = "تصدير Word",
+        ["HistoryNote"] = "صدّر التاريخ الكامل كـ PDF أو Word لمشاركته مع الوالدين أو المشرفين.",
+        ["NavLogout"] = "تسجيل الخروج",
+
+        // Schedule Export
+        ["ExportSchedule"] = "تصدير الجدول",
+        ["PrintSchedule"] = "طباعة الجدول",
+        ["ExportExcel"] = "تصدير Excel",
+        ["ScheduleExported"] = "تم تصدير الجدول",
+
+        // Settings LAN
+        ["LanAccessControl"] = "التحكم في الوصول عبر الشبكة المحلية",
+        ["AllowedSubnet"] = "الشبكة الفرعية المسموح بها",
+        ["AllowedSubnetHint"] = "مثال: 192.168. (فقط الأجهزة في هذه الشبكة يمكنها تسجيل دخول المعالج)",
+        ["TherapistPortalEnabled"] = "تفعيل بوابة المعالج",
+        ["CurrentIp"] = "عنوان IP الحالي",
+        ["LanSettingsSaved"] = "تم حفظ إعدادات الشبكة بنجاح.",
     };
 
     private static readonly Dictionary<string, string> _english = new()
@@ -668,5 +709,47 @@ public class LocalizationService : ReactiveObject
         ["Message"] = "Message",
         ["Survey"] = "Survey",
         ["Rating"] = "Rating",
+
+        // Therapist Portal
+        ["TherapistPortal"] = "Therapist Portal",
+        ["TodaySchedule"] = "Today's Schedule",
+        ["TodayAppointments"] = "Today's Appointments",
+        ["TotalReports"] = "Total Reports",
+        ["WriteReport"] = "Write Report",
+        ["SaveReport"] = "Save Report",
+        ["DailySessionReport"] = "Daily Session Report",
+        ["ReportExistsFor"] = "Report saved for this session",
+        ["RecentReports"] = "Recent Reports",
+        ["Activities"] = "Activities",
+        ["ActivitiesPerformed"] = "Activities Performed",
+        ["ChildResponse"] = "Child Response",
+        ["GoalsAddressed"] = "Goals Addressed",
+        ["BehaviorNotes"] = "Behavior Notes",
+        ["HomeworkParent"] = "Homework / Parent Instructions",
+        ["NextSessionPlan"] = "Next Session Plan",
+        ["OverallRating"] = "Overall Rating",
+        ["Worksheet"] = "Session Worksheet",
+        ["WorksheetDescription"] = "Session worksheets will appear here. Select a session from the left to get started.",
+        ["SelectSessionFirst"] = "Please select a session from the list on the left.",
+        ["SelectSessionPrompt"] = "Click on a session to view details and write a report.",
+        ["ChildHistory"] = "Child Progress History",
+        ["ExportWord"] = "Export Word",
+        ["HistoryNote"] = "Export the full history as PDF or Word to share with parents or supervisors.",
+        ["NavLogout"] = "Logout",
+
+        // Schedule Export
+        ["ExportSchedule"] = "Export Schedule",
+        ["PrintSchedule"] = "Print Schedule",
+        ["ExportExcel"] = "Export Excel",
+        ["ScheduleExported"] = "Schedule exported",
+
+        // Settings LAN
+        ["LanAccessControl"] = "LAN Access Control",
+        ["AllowedSubnet"] = "Allowed IP Subnet",
+        ["AllowedSubnetHint"] = "e.g. 192.168. (only devices on this subnet can log in as Therapist)",
+        ["TherapistPortalEnabled"] = "Therapist Portal Enabled",
+        ["CurrentIp"] = "Your Current IP",
+        ["LanSettingsSaved"] = "LAN settings saved successfully.",
     };
+
 }

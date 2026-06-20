@@ -1,0 +1,310 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RehabCenterApp.ViewModels"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="RehabCenterApp.Views.TherapistDashboardView"
+             x:DataType="vm:TherapistDashboardViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Top Bar -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="16,12">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto">
+                <materialIcons:MaterialIcon Grid.Column="0" Kind="AccountCircle" Width="36" Height="36" Foreground="White" Margin="0,0,12,0"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding L[TherapistPortal]}" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TherapistName}" Foreground="#ccddee" FontSize="13"/>
+                </StackPanel>
+
+                <Border Grid.Column="2" Background="#2255a0" CornerRadius="8" Padding="12,6" Margin="8,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="CalendarToday" Width="18" Foreground="White"/>
+                        <StackPanel>
+                            <TextBlock Text="{Binding L[TodayAppointments]}" Foreground="#aaccee" FontSize="11"/>
+                            <TextBlock Text="{Binding TotalSessions}" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Background="#1a5a30" CornerRadius="8" Padding="12,6" Margin="8,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="FileDocument" Width="18" Foreground="White"/>
+                        <StackPanel>
+                            <TextBlock Text="{Binding L[TotalReports]}" Foreground="#aaeebb" FontSize="11"/>
+                            <TextBlock Text="{Binding TotalReports}" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Button Grid.Column="4" Command="{Binding ToggleLanguageCommand}" Background="Transparent" Foreground="White" Margin="8,0" Padding="10,6">
+                    <TextBlock Text="{Binding L.LangToggleLabel}" FontWeight="Bold" FontSize="14"/>
+                </Button>
+                <Button Grid.Column="5" Command="{Binding LogoutCommand}" Background="{StaticResource ErrorBrush}" Foreground="White" Padding="10,6">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <materialIcons:MaterialIcon Kind="Logout" Width="16"/>
+                        <TextBlock Text="{Binding L[NavLogout]}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" ColumnDefinitions="350,*">
+
+            <!-- Left: Today's Sessions -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
+                <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="16,12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,1">
+                    <TextBlock Text="{Binding L[TodaySchedule]}" FontWeight="Bold" FontSize="15"/>
+                </Border>
+
+                <ListBox Grid.Row="1" ItemsSource="{Binding TodaySessions}" SelectedItem="{Binding SelectedSession}" Background="{StaticResource SurfaceBrush}" BorderThickness="0,0,1,0" BorderBrush="{StaticResource BorderBrush}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="12,10" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                                    <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
+                                            Width="4" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource AccentBrush}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Beneficiary.Name}" FontWeight="Bold" FontSize="14"/>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="0,2,0,0">
+                                        <materialIcons:MaterialIcon Kind="Clock" Width="13" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBlock Text="{Binding Time, StringFormat='{}{0:hh\\:mm}'}" Classes="Subtitle" FontSize="12"/>
+                                        <TextBlock Text="•" Classes="Subtitle"/>
+                                        <TextBlock Text="{Binding Duration, StringFormat='{}{0} min'}" Classes="Subtitle" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="0,3,0,0">
+                                        <Border CornerRadius="4" Padding="6,2" Background="{StaticResource PrimaryBrush}">
+                                            <TextBlock Text="{Binding SessionType}" Foreground="White" FontSize="11"/>
+                                        </Border>
+                                        <Border CornerRadius="4" Padding="6,2" Background="{StaticResource AccentBrush}">
+                                            <TextBlock Text="{Binding Status}" Foreground="White" FontSize="11"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" Padding="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,1,0">
+                    <TextBlock Text="{Binding L[SelectSessionPrompt]}" Classes="Subtitle" TextWrapping="Wrap" FontSize="12"/>
+                </Border>
+            </Grid>
+
+            <!-- Right: Session Detail + Report + History -->
+            <Grid Grid.Column="1" RowDefinitions="*">
+                <TabControl SelectedIndex="{Binding SelectedTab}">
+
+                    <!-- Tab 1: Write Report -->
+                    <TabItem Header="{Binding L[WriteReport]}">
+                        <ScrollViewer>
+                            <StackPanel Margin="24" Spacing="16">
+                                <Border Classes="Card" IsVisible="{Binding SelectedSession, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <Grid RowDefinitions="Auto,*">
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="16" Margin="0,0,0,16">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding L[Beneficiary]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding SelectedSession.Beneficiary.Name}" FontWeight="Bold" FontSize="16"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding L[SessionType]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding SelectedSession.SessionType}" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding L[Duration]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding SelectedSession.Duration, StringFormat='{}{0} min'}" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding L[Status]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding SelectedSession.Status}" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+                                            <Button Classes="Accent" Command="{Binding OpenReportCommand}">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <materialIcons:MaterialIcon Kind="Pencil" Width="18"/>
+                                                    <TextBlock Text="{Binding L[WriteReport]}"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Classes="Primary" Command="{Binding ViewChildHistoryCommand}">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <materialIcons:MaterialIcon Kind="History" Width="18"/>
+                                                    <TextBlock Text="{Binding L[ChildHistory]}"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="Card" IsVisible="{Binding CurrentReport, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <Grid RowDefinitions="Auto,*">
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+                                            <materialIcons:MaterialIcon Kind="FileCheck" Width="20" Foreground="{StaticResource SuccessBrush}"/>
+                                            <TextBlock Text="{Binding L[ReportExistsFor]}" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}"/>
+                                        </StackPanel>
+                                        <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding L[Activities]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding CurrentReport.ActivitiesPerformed}" TextWrapping="Wrap" MaxLines="3" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Margin="8,0">
+                                                <TextBlock Text="{Binding L[ChildResponse]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding CurrentReport.ChildResponse}" TextWrapping="Wrap" MaxLines="3" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="{Binding L[OverallRating]}" Classes="Subtitle" FontSize="11"/>
+                                                <TextBlock Text="{Binding CurrentReport.OverallRating, StringFormat='★ {0}/5'}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource WarningBrush}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="Card">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding L[RecentReports]}" FontWeight="Bold" Margin="0,0,0,12"/>
+                                        <DataGrid ItemsSource="{Binding AllReports}" IsReadOnly="True" AutoGenerateColumns="False" MaxHeight="300">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="الطفل" Binding="{Binding Session.Beneficiary.Name}" Width="*"/>
+                                                <DataGridTextColumn Header="التاريخ" Binding="{Binding ReportDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="110"/>
+                                                <DataGridTextColumn Header="التقييم" Binding="{Binding OverallRating}" Width="70"/>
+                                                <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="80"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- Tab 2: Worksheet -->
+                    <TabItem Header="{Binding L[Worksheet]}">
+                        <Border Classes="Card" Margin="24">
+                            <StackPanel>
+                                <TextBlock Text="{Binding L[WorksheetDescription]}" Classes="Subtitle" Margin="0,0,0,16" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding L[SelectSessionFirst]}" IsVisible="{Binding SelectedSession, Converter={x:Static ObjectConverters.IsNull}}" Classes="Subtitle"/>
+                            </StackPanel>
+                        </Border>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+
+        <!-- Report Form Modal -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#88000000" IsVisible="{Binding IsReportFormOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="720" MaxHeight="620" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding L[DailySessionReport]}" Classes="Title"/>
+                            <TextBlock Text="{Binding SelectedSession.Beneficiary.Name}" Classes="Subtitle"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding L[OverallRating]}" VerticalAlignment="Center"/>
+                            <NumericUpDown Value="{Binding OverallRating}" Minimum="1" Maximum="5" Width="100"/>
+                            <TextBlock Text="/ 5 ★" VerticalAlignment="Center" FontSize="18" Foreground="{StaticResource WarningBrush}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*" Margin="0,0,8,0">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding L[ActivitiesPerformed]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Activities}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,8,12"/>
+
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding L[ChildResponse]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ChildResponse}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,12"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding L[GoalsAddressed]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding GoalsAddressed}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,8,12"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding L[BehaviorNotes]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BehaviorNotes}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,12"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding L[HomeworkParent]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Homework}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,8,12"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding L[NextSessionPlan]}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding NextSessionPlan}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,12"/>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+                        <Button Classes="Accent" Command="{Binding SaveReportCommand}" Width="150">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="{Binding L[SaveReport]}"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Primary" Command="{Binding CancelReportCommand}" Width="120">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                                <TextBlock Text="{Binding L[Cancel]}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- Child History Modal -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#88000000" IsVisible="{Binding IsHistoryOpen}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Classes="Card" Width="900" MaxHeight="700" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding L[ChildHistory]}" Classes="Title"/>
+                            <TextBlock Text="{Binding HistoryBeneficiary.Name}" Classes="Subtitle" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                            <Button Classes="Accent" Command="{Binding ExportHistoryPdfCommand}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
+                                    <TextBlock Text="{Binding L[ExportPDF]}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Classes="Primary" Command="{Binding ExportHistoryWordCommand}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <materialIcons:MaterialIcon Kind="FileWord" Width="18"/>
+                                    <TextBlock Text="{Binding L[ExportWord]}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding CloseHistoryCommand}" Padding="8">
+                                <materialIcons:MaterialIcon Kind="Close" Width="18"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="24" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="{Binding L[DisabilityType]}" Classes="Subtitle" FontSize="11"/>
+                            <TextBlock Text="{Binding HistoryBeneficiary.DisabilityType}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="{Binding L[Diagnosis]}" Classes="Subtitle" FontSize="11"/>
+                            <TextBlock Text="{Binding HistoryBeneficiary.Diagnosis}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="{Binding L[GuardianPhone]}" Classes="Subtitle" FontSize="11"/>
+                            <TextBlock Text="{Binding HistoryBeneficiary.GuardianPhone}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Total Sessions" Classes="Subtitle" FontSize="11"/>
+                            <TextBlock Text="{Binding HistoryList.Count}" FontWeight="Bold" FontSize="16" Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="2" ItemsSource="{Binding HistoryList}" IsReadOnly="True" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="التاريخ" Binding="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}" Width="110"/>
+                            <DataGridTextColumn Header="نوع الجلسة" Binding="{Binding SessionType}" Width="130"/>
+                            <DataGridTextColumn Header="المعالج" Binding="{Binding Therapist.Name}" Width="*"/>
+                            <DataGridTextColumn Header="المدة" Binding="{Binding Duration, StringFormat='{}{0} min'}" Width="80"/>
+                            <DataGridTextColumn Header="الحالة" Binding="{Binding Status}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Border Grid.Row="3" Margin="0,8,0,0">
+                        <TextBlock Text="{Binding L[HistoryNote]}" Classes="Subtitle" TextWrapping="Wrap" FontSize="12"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

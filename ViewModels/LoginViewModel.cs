@@ -10,7 +10,9 @@ namespace RehabCenterApp.ViewModels;
 public class LoginViewModel : ViewModelBase
 {
     private readonly DatabaseService _dbService;
-    private readonly Action _onLoginSuccess;
+    private readonly LanAccessService _lanAccessService;
+    private readonly Action _onAdminSuccess;
+    private readonly Action<string> _onTherapistSuccess;
 
     private string _username = string.Empty;
     public string Username
@@ -50,10 +52,12 @@ public class LoginViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> LoginCommand { get; }
     public ReactiveCommand<Unit, Unit> ToggleLangCommand { get; }
 
-    public LoginViewModel(DatabaseService dbService, Action onLoginSuccess)
+    public LoginViewModel(DatabaseService dbService, LanAccessService lanAccessService, Action onAdminSuccess, Action<string> onTherapistSuccess)
     {
         _dbService = dbService;
-        _onLoginSuccess = onLoginSuccess;
+        _lanAccessService = lanAccessService;
+        _onAdminSuccess = onAdminSuccess;
+        _onTherapistSuccess = onTherapistSuccess;
         LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync);
         ToggleLangCommand = ReactiveCommand.Create(() => LocalizationService.Instance.ToggleLanguage());
     }
@@ -87,11 +91,35 @@ public class LoginViewModel : ViewModelBase
                 return;
             }
 
+            // LAN check for Therapist role
+            if (user.Role == "Therapist")
+            {
+                var portalEnabled = await _dbService.GetSettingAsync("TherapistPortalEnabled") ?? "True";
+                if (portalEnabled != "True")
+                {
+                    ErrorMessage = "بوابة المعالج غير مفعلة. الرجاء التواصل مع المشرف.";
+                    HasError = true;
+                    return;
+                }
+
+                var allowedSubnet = await _lanAccessService.GetAllowedSubnetAsync();
+                if (!_lanAccessService.IsAllowedAccess(allowedSubnet))
+                {
+                    var localIp = _lanAccessService.GetPrimaryLocalIp();
+                    ErrorMessage = $"الوصول مرفوض. يُسمح فقط بالشبكة: {allowedSubnet}*\nعنوان IP الحالي: {localIp}";
+                    HasError = true;
+                    return;
+                }
+            }
+
             await _dbService.SetSettingAsync("CurrentUser", user.Username);
             await _dbService.SetSettingAsync("CurrentRole", user.Role);
-            await AuditLogger.LogAsync("Login", "User", $"User {user.Username} logged in");
+            await AuditLogger.LogAsync("Login", "User", $"User {user.Username} logged in with role {user.Role}");
 
-            _onLoginSuccess();
+            if (user.Role == "Therapist")
+                _onTherapistSuccess(user.Username);
+            else
+                _onAdminSuccess();
         }
         catch (Exception ex)
         {

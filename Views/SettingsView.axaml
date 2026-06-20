@@ -128,6 +128,47 @@
                     </Button>
                 </Grid>
             </Border>
+
+            <!-- LAN Access Control -->
+            <Border Classes="Card">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,16">
+                        <materialIcons:MaterialIcon Kind="LanConnect" Width="22" Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBlock Text="{Binding L[LanAccessControl]}" FontWeight="Bold" FontSize="16"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" Background="{StaticResource InfoBrush}" CornerRadius="8" Padding="12,8" Margin="0,0,0,16" Opacity="0.85">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="InformationOutline" Width="18" Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text="{Binding L[AllowedSubnetHint]}" Foreground="{StaticResource PrimaryBrush}" FontSize="12" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,0,0,12">
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="{Binding L[AllowedSubnet]}" Margin="0,0,0,4" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding AllowedSubnet}" Watermark="192.168."/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="{Binding L[CurrentIp]}" Margin="0,0,0,4" FontWeight="SemiBold"/>
+                            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10,8" Background="{StaticResource SurfaceBrush}">
+                                <TextBlock Text="{Binding CurrentIp}" FontFamily="Monospace" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="12" Margin="0,0,0,16">
+                        <CheckBox IsChecked="{Binding TherapistPortalEnabled}" Content="{Binding L[TherapistPortalEnabled]}"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="4" Classes="Accent" Command="{Binding SaveLanSettingsCommand}" Width="200" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <materialIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                            <TextBlock Text="{Binding L[Save]}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

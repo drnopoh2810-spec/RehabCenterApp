@@ -1,17 +1,21 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 using RehabCenterApp.Services;
 using RehabCenterApp.Models;
+using RehabCenterApp.Helpers;
 
 namespace RehabCenterApp.ViewModels;
 
 public class SessionsViewModel : ViewModelBase
 {
     private readonly DatabaseService _dbService;
+    private readonly PrintService _printService;
+    private readonly DialogService _dialogService;
 
     private ObservableCollection<Session> _sessions = new();
     public ObservableCollection<Session> Sessions
@@ -108,10 +112,14 @@ public class SessionsViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> MarkPresentCommand { get; }
     public ReactiveCommand<Unit, Unit> MarkAbsentCommand { get; }
     public ReactiveCommand<Unit, Unit> MarkCancelledCommand { get; }
+    public ReactiveCommand<Unit, Unit> ExportPdfCommand { get; }
+    public ReactiveCommand<Unit, Unit> ExportExcelCommand { get; }
 
-    public SessionsViewModel(DatabaseService dbService)
+    public SessionsViewModel(DatabaseService dbService, PrintService? printService = null, DialogService? dialogService = null)
     {
         _dbService = dbService;
+        _printService = printService!;
+        _dialogService = dialogService!;
 
         LoadCommand = ReactiveCommand.CreateFromTask(LoadSessionsAsync);
         AddCommand = ReactiveCommand.Create(() =>
@@ -124,6 +132,8 @@ public class SessionsViewModel : ViewModelBase
         MarkPresentCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Present"));
         MarkAbsentCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Absent"));
         MarkCancelledCommand = ReactiveCommand.CreateFromTask(async () => await UpdateStatusAsync("Cancelled"));
+        ExportPdfCommand = ReactiveCommand.CreateFromTask(ExportSchedulePdfAsync);
+        ExportExcelCommand = ReactiveCommand.CreateFromTask(ExportScheduleExcelAsync);
 
         _ = LoadSessionsAsync();
     }
@@ -179,5 +189,24 @@ public class SessionsViewModel : ViewModelBase
             await _dbService.UpdateSessionAsync(SelectedSession);
             await LoadSessionsAsync();
         }
+    }
+
+    private async Task ExportSchedulePdfAsync()
+    {
+        if (_printService == null) return;
+        var sessions = Sessions.ToList();
+        var centerName = await _dbService.GetSettingAsync("CenterName") ?? "Rehab Center";
+        var filePath = await _printService.ExportDailyScheduleToPdfAsync(sessions, SelectedDate, centerName);
+        if (_dialogService != null)
+            await _dialogService.ShowInfoAsync("✓", $"PDF exported to:\n{filePath}");
+    }
+
+    private async Task ExportScheduleExcelAsync()
+    {
+        var sessions = Sessions.ToList();
+        var centerName = await _dbService.GetSettingAsync("CenterName") ?? "Rehab Center";
+        var filePath = await ExcelExporter.ExportDailyScheduleAsync(sessions, SelectedDate, centerName);
+        if (_dialogService != null)
+            await _dialogService.ShowInfoAsync("✓", $"Excel exported to:\n{filePath}");
     }
 }

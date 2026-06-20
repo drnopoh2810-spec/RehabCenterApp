@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using RehabCenterApp.Services;
 using RehabCenterApp.Models;
@@ -79,6 +80,28 @@ public class SettingsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _newRole, value);
     }
 
+    // LAN Settings
+    private string _allowedSubnet = "192.168.";
+    public string AllowedSubnet
+    {
+        get => _allowedSubnet;
+        set => this.RaiseAndSetIfChanged(ref _allowedSubnet, value);
+    }
+
+    private bool _therapistPortalEnabled = true;
+    public bool TherapistPortalEnabled
+    {
+        get => _therapistPortalEnabled;
+        set => this.RaiseAndSetIfChanged(ref _therapistPortalEnabled, value);
+    }
+
+    private string _currentIp = string.Empty;
+    public string CurrentIp
+    {
+        get => _currentIp;
+        set => this.RaiseAndSetIfChanged(ref _currentIp, value);
+    }
+
     // Categories
     public ObservableCollection<string> DisabilityTypes { get; } = new();
     public ObservableCollection<string> SessionTypes { get; } = new();
@@ -113,6 +136,7 @@ public class SettingsViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddDisabilityTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> AddSessionTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> AddExpenseCategoryCommand { get; }
+    public ReactiveCommand<Unit, Unit> SaveLanSettingsCommand { get; }
 
     public SettingsViewModel(DatabaseService dbService, BackupService backupService, DialogService dialogService)
     {
@@ -122,6 +146,7 @@ public class SettingsViewModel : ViewModelBase
 
         LoadCommand = ReactiveCommand.CreateFromTask(LoadAsync);
         SaveCenterInfoCommand = ReactiveCommand.CreateFromTask(SaveCenterInfoAsync);
+        SaveLanSettingsCommand = ReactiveCommand.CreateFromTask(SaveLanSettingsAsync);
         AddUserCommand = ReactiveCommand.CreateFromTask(AddUserAsync);
         DeleteUserCommand = ReactiveCommand.CreateFromTask(DeleteUserAsync);
         BackupCommand = ReactiveCommand.CreateFromTask(BackupAsync);
@@ -159,6 +184,26 @@ public class SettingsViewModel : ViewModelBase
         CenterAddress = await _dbService.GetSettingAsync("CenterAddress") ?? "";
         CenterPhone = await _dbService.GetSettingAsync("CenterPhone") ?? "";
         CenterEmail = await _dbService.GetSettingAsync("CenterEmail") ?? "";
+
+        AllowedSubnet = await _dbService.GetSettingAsync("AllowedSubnet") ?? "192.168.";
+        TherapistPortalEnabled = (await _dbService.GetSettingAsync("TherapistPortalEnabled") ?? "True") == "True";
+
+        try
+        {
+            var lanService = App.Services.GetService(typeof(LanAccessService)) as LanAccessService;
+            CurrentIp = lanService?.GetPrimaryLocalIp() ?? "N/A";
+        }
+        catch
+        {
+            CurrentIp = "N/A";
+        }
+    }
+
+    private async Task SaveLanSettingsAsync()
+    {
+        await _dbService.SetSettingAsync("AllowedSubnet", AllowedSubnet.Trim());
+        await _dbService.SetSettingAsync("TherapistPortalEnabled", TherapistPortalEnabled ? "True" : "False");
+        await _dialogService.ShowInfoAsync("✓", LocalizationService.Instance["LanSettingsSaved"]);
     }
 
     private async Task SaveCenterInfoAsync()

@@ -50,6 +50,10 @@ public class AppDbContext : DbContext
     public DbSet<LeaveRequest> LeaveRequests => Set<LeaveRequest>();
     public DbSet<TherapistEvaluation> TherapistEvaluations => Set<TherapistEvaluation>();
 
+    // Therapist Portal
+    public DbSet<TherapistReport> TherapistReports => Set<TherapistReport>();
+    public DbSet<SessionWorksheet> SessionWorksheets => Set<SessionWorksheet>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var dbPath = System.IO.Path.Combine(
@@ -84,7 +88,9 @@ public class AppDbContext : DbContext
             new AppSetting { Key = "Theme", Value = "Light" },
             new AppSetting { Key = "AutoBackup", Value = "True" },
             new AppSetting { Key = "WhatsAppEnabled", Value = "False" },
-            new AppSetting { Key = "SMSApiKey", Value = "" }
+            new AppSetting { Key = "SMSApiKey", Value = "" },
+            new AppSetting { Key = "AllowedSubnet", Value = "192.168." },
+            new AppSetting { Key = "TherapistPortalEnabled", Value = "True" }
         );
     }
 }

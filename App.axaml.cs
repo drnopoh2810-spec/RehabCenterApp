@@ -28,6 +28,7 @@ public partial class App : Application
         {
             var loginVm = new ViewModels.LoginViewModel(
                 Services.GetRequiredService<DatabaseService>(),
+                Services.GetRequiredService<LanAccessService>(),
                 () =>
                 {
                     var mainWindow = new MainWindow
@@ -39,6 +40,53 @@ public partial class App : Application
 
                     desktop.MainWindow = mainWindow;
                     mainWindow.Show();
+
+                    var loginWindow = desktop.Windows.FirstOrDefault(w => w is LoginWindow);
+                    loginWindow?.Close();
+                },
+                (therapistUsername) =>
+                {
+                    var therapistVm = new ViewModels.TherapistDashboardViewModel(
+                        Services.GetRequiredService<DatabaseService>(),
+                        Services.GetRequiredService<PrintService>(),
+                        Services.GetRequiredService<WordExportService>(),
+                        Services.GetRequiredService<DialogService>(),
+                        therapistUsername,
+                        () =>
+                        {
+                            var newLoginWindow = new LoginWindow();
+                            var newLoginVm = new ViewModels.LoginViewModel(
+                                Services.GetRequiredService<DatabaseService>(),
+                                Services.GetRequiredService<LanAccessService>(),
+                                () =>
+                                {
+                                    var mw = new MainWindow
+                                    {
+                                        DataContext = Services.GetRequiredService<ViewModels.MainWindowViewModel>()
+                                    };
+                                    Services.GetRequiredService<DialogService>().SetOwner(mw);
+                                    desktop.MainWindow = mw;
+                                    mw.Show();
+                                    desktop.Windows.FirstOrDefault(w => w is LoginWindow)?.Close();
+                                    desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
+                                },
+                                (u) => { }
+                            );
+                            newLoginWindow.DataContext = newLoginVm;
+                            desktop.MainWindow = newLoginWindow;
+                            newLoginWindow.Show();
+                            desktop.Windows.FirstOrDefault(w => w is TherapistWindow)?.Close();
+                        }
+                    );
+
+                    var therapistWindow = new TherapistWindow
+                    {
+                        DataContext = therapistVm
+                    };
+
+                    Services.GetRequiredService<DialogService>().SetOwner(therapistWindow);
+                    desktop.MainWindow = therapistWindow;
+                    therapistWindow.Show();
 
                     var loginWindow = desktop.Windows.FirstOrDefault(w => w is LoginWindow);
                     loginWindow?.Close();
@@ -64,6 +112,8 @@ public partial class App : Application
         services.AddSingleton<PrintService>();
         services.AddSingleton<NotificationService>();
         services.AddSingleton<BackupService>();
+        services.AddSingleton<LanAccessService>();
+        services.AddSingleton<WordExportService>();
 
         // ViewModels - Core
         services.AddSingleton<ViewModels.MainWindowViewModel>();
@@ -93,5 +143,6 @@ public partial class App : Application
         services.AddTransient<ViewModels.GovernmentReportsViewModel>();
         services.AddTransient<ViewModels.DocumentArchiveViewModel>();
         services.AddTransient<ViewModels.HRManagementViewModel>();
+        services.AddTransient<ViewModels.TherapistDashboardViewModel>();
     }
 }

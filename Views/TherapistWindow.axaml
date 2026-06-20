@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RehabCenterApp.ViewModels"
+        xmlns:views="using:RehabCenterApp.Views"
+        x:Class="RehabCenterApp.Views.TherapistWindow"
+        x:DataType="vm:TherapistDashboardViewModel"
+        Title="Therapist Portal"
+        Width="1280" Height="800"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="{Binding L.FlowDir}">
+
+    <views:TherapistDashboardView DataContext="{Binding}"/>
+</Window>

@@ -11,7 +11,7 @@
 
     <Grid RowDefinitions="Auto,*">
         <Border Classes="Card" Grid.Row="0" Margin="16,16,16,0">
-            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                 <DatePicker Grid.Column="0"
                             SelectedDate="{Binding SelectedDate}"
                             Margin="0,0,16,0"/>
@@ -43,6 +43,20 @@
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <materialIcons:MaterialIcon Kind="Cancel" Width="18"/>
                         <TextBlock Text="{Binding L[Cancelled]}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="6" Classes="Accent" Command="{Binding ExportPdfCommand}" Margin="4,0" ToolTip.Tip="{Binding L[PrintSchedule]}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
+                        <TextBlock Text="{Binding L[ExportPDF]}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="7" Classes="Primary" Command="{Binding ExportExcelCommand}" Margin="4,0" ToolTip.Tip="{Binding L[ExportExcel]}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <materialIcons:MaterialIcon Kind="MicrosoftExcel" Width="18"/>
+                        <TextBlock Text="{Binding L[ExportExcel]}"/>
                     </StackPanel>
                 </Button>
             </Grid>

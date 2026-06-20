@@ -833,4 +833,112 @@ public class DatabaseService
         await _context.SaveChangesAsync();
         return photo;
     }
+
+    // Therapist Reports
+    public async Task<List<TherapistReport>> GetTherapistReportsAsync(int? therapistId = null, int? beneficiaryId = null)
+    {
+        var query = _context.TherapistReports
+            .Include(r => r.Session)
+                .ThenInclude(s => s.Beneficiary)
+            .Include(r => r.Session)
+                .ThenInclude(s => s.Therapist)
+            .Include(r => r.Therapist)
+            .Where(r => !r.IsDeleted)
+            .AsNoTracking();
+
+        if (therapistId.HasValue)
+            query = query.Where(r => r.TherapistId == therapistId.Value);
+        if (beneficiaryId.HasValue)
+            query = query.Where(r => r.Session.BeneficiaryId == beneficiaryId.Value);
+
+        return await query.OrderByDescending(r => r.ReportDate).ToListAsync();
+    }
+
+    public async Task<TherapistReport?> GetTherapistReportBySessionAsync(int sessionId)
+    {
+        return await _context.TherapistReports
+            .Include(r => r.Session)
+                .ThenInclude(s => s.Beneficiary)
+            .Include(r => r.Therapist)
+            .FirstOrDefaultAsync(r => r.SessionId == sessionId && !r.IsDeleted);
+    }
+
+    public async Task<TherapistReport> AddTherapistReportAsync(TherapistReport report)
+    {
+        _context.TherapistReports.Add(report);
+        await _context.SaveChangesAsync();
+        return report;
+    }
+
+    public async Task UpdateTherapistReportAsync(TherapistReport report)
+    {
+        report.UpdatedAt = DateTime.Now;
+        _context.TherapistReports.Update(report);
+        await _context.SaveChangesAsync();
+    }
+
+    // Session Worksheets
+    public async Task<List<SessionWorksheet>> GetSessionWorksheetsAsync(int sessionId)
+    {
+        return await _context.SessionWorksheets
+            .Where(w => w.SessionId == sessionId && !w.IsDeleted)
+            .AsNoTracking()
+            .OrderByDescending(w => w.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<SessionWorksheet> AddSessionWorksheetAsync(SessionWorksheet worksheet)
+    {
+        _context.SessionWorksheets.Add(worksheet);
+        await _context.SaveChangesAsync();
+        return worksheet;
+    }
+
+    public async Task UpdateSessionWorksheetAsync(SessionWorksheet worksheet)
+    {
+        worksheet.UpdatedAt = DateTime.Now;
+        _context.SessionWorksheets.Update(worksheet);
+        await _context.SaveChangesAsync();
+    }
+
+    // Child History (sessions + reports for a beneficiary)
+    public async Task<List<Session>> GetChildHistorySessionsAsync(int beneficiaryId)
+    {
+        return await _context.Sessions
+            .Include(s => s.Therapist)
+            .Where(s => s.BeneficiaryId == beneficiaryId && !s.IsDeleted)
+            .OrderByDescending(s => s.Date)
+            .ThenByDescending(s => s.Time)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    // Get sessions for a specific therapist by employee linked user
+    public async Task<List<Session>> GetTherapistSessionsAsync(int therapistId, DateTime? date = null)
+    {
+        var query = _context.Sessions
+            .Include(s => s.Beneficiary)
+            .Include(s => s.Therapist)
+            .Where(s => s.TherapistId == therapistId && !s.IsDeleted)
+            .AsNoTracking();
+
+        if (date.HasValue)
+            query = query.Where(s => s.Date.Date == date.Value.Date);
+
+        return await query.OrderBy(s => s.Time).ToListAsync();
+    }
+
+    // Get employee linked to a user account (by matching name or username)
+    public async Task<Employee?> GetEmployeeByUsernameAsync(string username)
+    {
+        var usernameLower = username.ToLower();
+        var allTherapists = await _context.Employees
+            .Where(e => e.IsActive && !e.IsDeleted && e.Role == "Therapist")
+            .AsNoTracking()
+            .ToListAsync();
+
+        return allTherapists.FirstOrDefault(e =>
+            e.Name.ToLower().Contains(usernameLower) ||
+            usernameLower.Contains(e.Name.ToLower().Split(' ')[0]));
+    }
 }
