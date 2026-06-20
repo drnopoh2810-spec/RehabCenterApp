@@ -3,6 +3,7 @@
              xmlns:vm="using:RehabCenterApp.ViewModels"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="RehabCenterApp.Views.SessionsView"
+             x:CompileBindings="False"
              x:DataType="vm:SessionsViewModel">
 
     <Design.DataContext>
@@ -47,17 +48,11 @@
                 </Button>
 
                 <Button Grid.Column="6" Classes="Accent" Command="{Binding ExportPdfCommand}" Margin="4,0" ToolTip.Tip="{Binding L[PrintSchedule]}">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
-                        <TextBlock Text="{Binding L[ExportPDF]}"/>
-                    </StackPanel>
+                    <TextBlock Text="{Binding L[ExportPDF]}"/>
                 </Button>
 
                 <Button Grid.Column="7" Classes="Primary" Command="{Binding ExportExcelCommand}" Margin="4,0" ToolTip.Tip="{Binding L[ExportExcel]}">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <materialIcons:MaterialIcon Kind="MicrosoftExcel" Width="18"/>
-                        <TextBlock Text="{Binding L[ExportExcel]}"/>
-                    </StackPanel>
+                    <TextBlock Text="{Binding L[ExportExcel]}"/>
                 </Button>
             </Grid>
         </Border>

@@ -3,6 +3,7 @@
              xmlns:vm="using:RehabCenterApp.ViewModels"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="RehabCenterApp.Views.TherapistDashboardView"
+             x:CompileBindings="False"
              x:DataType="vm:TherapistDashboardViewModel">
 
     <Grid RowDefinitions="Auto,*">
@@ -254,16 +255,10 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
                             <Button Classes="Accent" Command="{Binding ExportHistoryPdfCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <materialIcons:MaterialIcon Kind="FilePdf" Width="18"/>
-                                    <TextBlock Text="{Binding L[ExportPDF]}"/>
-                                </StackPanel>
+                                <TextBlock Text="{Binding L[ExportPDF]}"/>
                             </Button>
                             <Button Classes="Primary" Command="{Binding ExportHistoryWordCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <materialIcons:MaterialIcon Kind="FileWord" Width="18"/>
-                                    <TextBlock Text="{Binding L[ExportWord]}"/>
-                                </StackPanel>
+                                <TextBlock Text="{Binding L[ExportWord]}"/>
                             </Button>
                             <Button Command="{Binding CloseHistoryCommand}" Padding="8">
                                 <materialIcons:MaterialIcon Kind="Close" Width="18"/>
